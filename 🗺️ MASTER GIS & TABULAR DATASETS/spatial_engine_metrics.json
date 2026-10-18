@@ -1,0 +1,18 @@
+{
+  "total_fixed_assets_spatialized": 465,
+  "total_surveyed_corridors": 10,
+  "cumulative_road_network_surveyed_m": 2489.2,
+  "reference_matching_summary": {
+    "total_matched_assets": 62,
+    "total_unmatched_new_discoveries": 403,
+    "match_percentage": 13.33,
+    "unmatched_percentage": 86.67
+  },
+  "spatial_graph_metrics": {
+    "mean_building_to_pole_distance_m": 14.99,
+    "min_building_to_pole_distance_m": 9.44,
+    "max_building_to_pole_distance_m": 19.0,
+    "mean_building_to_transformer_distance_m": 56.87,
+    "mean_building_to_streetlight_distance_m": 14.94
+  }
+}

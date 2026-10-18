@@ -1,0 +1,93 @@
+{
+  "total_buildings_inventoried": 108,
+  "unique_streets_surveyed": 10,
+  "floor_count_distribution": {
+    "G+2": 37,
+    "G+1": 28,
+    "G+3": 18,
+    "G": 16,
+    "G+4": 9
+  },
+  "height_statistics_m": {
+    "mean_height_m": 9.72,
+    "min_height_m": 3.5,
+    "max_height_m": 17.5,
+    "median_height_m": 10.5
+  },
+  "usage_distribution": {
+    "Commercial Hotel & Banquet Hall": 7,
+    "Commercial Banking & Financial Services": 7,
+    "Commercial Retail Hardware & Paints": 6,
+    "Mixed Residential & Small Enterprise": 5,
+    "Residential Multi-Family Dwelling": 4,
+    "Mixed Residential & Convenience Store": 4,
+    "Commercial Textile Wholesale & Retail": 4,
+    "Mixed Commercial / Residential": 4,
+    "Industrial / Commercial Workshop": 4,
+    "Commercial Auto Electrics": 4,
+    "Commercial Pharmacy & Clinic": 4,
+    "Commercial Bakery & Confectionery": 4,
+    "Religious Heritage Temple": 4,
+    "Religious Temple": 3,
+    "Commercial Hotel & Dining": 3,
+    "Commercial Textile Showroom": 3,
+    "Commercial Hotel & Restaurant": 3,
+    "Traditional Heritage Residential": 3,
+    "Commercial Healthcare & Offices": 3,
+    "Residential Independent Villa": 3,
+    "Commercial Fuel & Mobility": 3,
+    "Commercial Business Services": 3,
+    "Commercial Temple Utility": 3,
+    "Commercial Auto Parts Wholesale": 3,
+    "Commercial Automobile & Corporate": 2,
+    "Commercial Retail & Banking": 2,
+    "Institutional Community Facility": 2,
+    "Residential Luxury Villa": 2,
+    "Residential Duplex": 2,
+    "Commercial Hotel & Residency": 2,
+    "Industrial Foundry & Machine Works": 2
+  },
+  "facade_type_distribution": {
+    "Glass Curtain Wall & ACP Cladding": 22,
+    "Reinforced Concrete Plaster & Commercial Paint": 16,
+    "Commercial Glazed Display Facade & Signboard Fascia": 13,
+    "Traditional Dravidian Gopuram Stucco & Carved Granite Pillars": 10,
+    "Glazed Commercial Tile & Painted Concrete Plaster": 9,
+    "Painted Cement Plaster & Roll-Down Steel Shutter Front": 8,
+    "Modern ACP Composite & Tinted Glass Ribbon Windows": 7,
+    "Industrial Pre-Engineered Steel Frame & Corrugated Sheet Roofing": 6,
+    "Reinforced Concrete Frame & Weatherproof Acrylic Paint": 5,
+    "Plastered Masonry with External Balconies & MS Railings": 4,
+    "Structural Steel Canopy & Aluminum Composite Fascia": 3,
+    "Pitched Terracotta Mangalore Tile Roof & Timber Veranda": 3,
+    "Double-Height Glass Showroom Facade with Steel Truss": 2
+  },
+  "ground_floor_activity_distribution": {
+    "Hotel Reception Lobby & Multi-Cuisine Dining Hall": 22,
+    "Commercial Ground Retail Shutter Front": 21,
+    "Mandapam Entrance & Devotional Walkway": 10,
+    "Core Banking Customer Hall & 24/7 ATM Vestibule": 9,
+    "Wholesale Textile Display & Counter Sales": 7,
+    "Outpatient Registration & Pharmacy Counter": 7,
+    "Hardware Retail Display & Heavy Goods Storage": 6,
+    "Heavy Machinery Lathe Bay & Workshop Floor": 6,
+    "Covered Carport & Gated Pedestrian Entrance": 5,
+    "Stilt Covered Parking & Security Entry Gate": 4,
+    "Fresh Confectionery Display & Sit-Out Tea Counter": 4,
+    "Fuel Forecourt, Dispenser Islands & 24h Convenience Mart": 3,
+    "Automobile Showroom Display & Customer Service Desk": 2,
+    "Community Reception & Resident Assembly Office": 2
+  },
+  "density_distribution": {
+    "High-Density Mixed-Use Arterial Strip": 38,
+    "High-Density Continuous Commercial Corridor": 30,
+    "Medium-Density Residential Colony Corridor": 21,
+    "High-Density Mixed Light-Industrial & Residential Strip": 13,
+    "Low-to-Medium Density Planned Residential Layout": 6
+  },
+  "ocr_correlation": {
+    "buildings_with_detected_signage": 108,
+    "total_signboards_linked": 201,
+    "average_signboards_per_building": 1.86
+  }
+}

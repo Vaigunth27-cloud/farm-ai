@@ -1,0 +1,11 @@
+Street_ID,Street_Name,Zone_Type,Road_Type,Length_m,Length_km,Total_Fixed_Assets,Asset_Density_per_km,Buildings_Count,Poles_Count,Pole_Density_per_km,Streetlights_Count,Streetlight_Density_per_km,Average_Luminaire_Spacing_m,Commercial_Signs_Count,Transformers_Count,Traffic_Signals_Count
+ST01,Sathy Road (NH 948),Commercial Highway Corridor,4-Lane Divided Asphalt Highway,292.5,0.292,46,157.5,10,10,34.2,10,34.2,29.2,10,3,3
+ST02,"4th Street, Sridevi Nagar",Residential Colony,Paved Concrete Colony Road,296.2,0.296,44,148.6,11,11,37.2,11,37.2,26.9,11,0,0
+ST03,Ganapathy Pudur 3rd Street,Mixed (Commercial Ground Floor + Residential),2-Lane Bitumen Road,205.7,0.206,43,208.7,10,10,48.5,10,48.5,20.6,10,3,0
+ST04,Gandhi Nagar Street,Mixed Commercial & Institutional,2-Lane Bitumen Road,196.0,0.196,47,239.8,11,11,56.1,11,56.1,17.8,11,3,0
+ST05,Gopalasamy Kovil Street,Traditional Residential & Temple Zone,Narrow Bitumen Street,149.7,0.15,40,266.7,10,10,66.7,10,66.7,15.0,10,0,0
+ST06,KRG Nagar - Kattabomman Street,Dense Residential & Small Workshops,Paved Concrete & Bitumen,237.9,0.238,56,235.3,13,13,54.6,13,54.6,18.3,13,4,0
+ST07,PN Palayam Street,Mixed Residential & Textile Retail,2-Lane Bitumen Road,275.8,0.276,46,166.7,10,10,36.2,10,36.2,27.6,10,3,3
+ST08,Raja Street - Sanganur Road,Primary Commercial Collector Road,2-Lane High Capacity Bitumen,363.9,0.364,89,244.5,20,20,54.9,20,54.9,18.2,20,6,3
+ST09,Sri Ganapathy Gardens 3rd Street,Planned Residential Layout,Paved Concrete Residential Way,156.4,0.156,24,153.8,6,6,38.5,6,38.5,26.1,6,0,0
+ST10,Ganapathy - Avarampalayam Road,Commercial & Industrial Fringe,2-Lane Bitumen Road,315.1,0.315,30,95.2,7,7,22.2,7,22.2,45.0,7,2,0

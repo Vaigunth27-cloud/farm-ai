@@ -1,0 +1,104 @@
+{
+  "1_Buildings": [
+    "Building_ID",
+    "Building_Floors",
+    "Floor_Notation",
+    "Estimated_Height_m",
+    "Building_Usage",
+    "Facade_Type",
+    "Construction_Stage",
+    "Visible_Ground_Floor_Activity",
+    "Building_Density_Per_km",
+    "Establishment_Name",
+    "Official_Link"
+  ],
+  "2_Electrical": [
+    "Pole_ID",
+    "Transformer_ID",
+    "Wiring_Burden_Index",
+    "Cable_Clutter_Score",
+    "Pole_Material",
+    "Pole_Condition",
+    "Pole_Mounted_Equipment",
+    "Pole_Spacing_Avg_m"
+  ],
+  "3_Lighting": [
+    "Streetlight_ID",
+    "Luminaire_Type",
+    "Lighting_Spacing_m",
+    "Illumination_Condition",
+    "Operational_Status"
+  ],
+  "4_Roads": [
+    "Road_Surface_Type",
+    "Lane_Markings",
+    "Pothole_Indicator",
+    "Speed_Breakers_Present",
+    "Median_Type",
+    "Road_Condition_Index",
+    "Drainage_Type",
+    "Drain_Condition"
+  ],
+  "5_Pedestrian": [
+    "Sidewalk_Presence",
+    "Sidewalk_Width_m",
+    "Pedestrian_Crossing_Present",
+    "Accessibility_Rating"
+  ],
+  "6_Traffic": [
+    "Traffic_Signal_ID",
+    "Signal_Aspects",
+    "Road_Sign_Type",
+    "Traffic_Density_Level"
+  ],
+  "7_Commercial": [
+    "Shop_Name",
+    "Business_Category",
+    "Advertisement_Present",
+    "OCR_Text_Extracted",
+    "Language_Detected"
+  ],
+  "8_Public_Assets": [
+    "Waste_Bin_Present",
+    "Public_Bench_Present",
+    "Bus_Stop_Bay",
+    "Fire_Hydrant_Status"
+  ],
+  "9_Safety": [
+    "Safety_Barriers_Present",
+    "CCTV_Surveillance_Indicator",
+    "Night_Visibility_Indicator"
+  ],
+  "10_Geography": [
+    "Latitude",
+    "Longitude",
+    "Street_ID",
+    "Street_Name",
+    "Ward_Number",
+    "Distance_To_Centerline_m",
+    "Ground_Elevation_AMSL_m"
+  ],
+  "11_AI_Metadata": [
+    "Confidence_Score",
+    "Model_Version",
+    "Model_Routing",
+    "Evidence_Image_Path",
+    "Bounding_Box"
+  ],
+  "12_Spatial_Relationships": [
+    "Nearest_Electric_Pole_ID",
+    "Distance_To_Nearest_Pole_m",
+    "Nearest_Building_ID",
+    "Distance_To_Nearest_Building_m",
+    "Nearest_Transformer_ID",
+    "Distance_To_Nearest_Transformer_m",
+    "Nearest_Road_Name",
+    "Distance_To_Nearest_Road_m"
+  ],
+  "13_Temporal": [
+    "Capture_Timestamp",
+    "First_Observed_Date",
+    "Last_Observed_Date",
+    "Change_Detection_Status"
+  ]
+}
