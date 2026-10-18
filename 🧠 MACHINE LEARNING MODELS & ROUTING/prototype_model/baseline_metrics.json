@@ -1,0 +1,76 @@
+{
+  "urban_intelligence_summary": {
+    "focus": "Fixed Urban Infrastructure & Built Environment (Movable vehicles/pedestrians excluded)",
+    "total_images_analyzed": 108,
+    "total_urban_assets_detected": 465,
+    "average_assets_per_image": 4.31,
+    "average_confidence": 0.9155
+  },
+  "asset_distribution_by_category": {
+    "utility_infrastructure": 132,
+    "property_characteristics": 108,
+    "lighting_infrastructure": 108,
+    "signboards_signage": 108,
+    "traffic_control": 9
+  },
+  "asset_distribution_by_class": {
+    "building": 108,
+    "electric_pole": 108,
+    "streetlight": 108,
+    "commercial_sign": 108,
+    "transformer": 24,
+    "traffic_signal": 9
+  },
+  "building_intelligence_metrics": {
+    "total_buildings_profiled": 108,
+    "floor_distribution": {
+      "G+2": 37,
+      "G+1": 28,
+      "G+3": 18,
+      "G": 16,
+      "G+4": 9
+    },
+    "usage_distribution": {
+      "Commercial Hotel & Banquet Hall": 7,
+      "Commercial Banking & Financial Services": 7,
+      "Commercial Retail Hardware & Paints": 6,
+      "Mixed Residential & Small Enterprise": 5,
+      "Residential Multi-Family Dwelling": 4,
+      "Mixed Residential & Convenience Store": 4,
+      "Commercial Textile Wholesale & Retail": 4,
+      "Mixed Commercial / Residential": 4,
+      "Industrial / Commercial Workshop": 4,
+      "Commercial Auto Electrics": 4,
+      "Commercial Pharmacy & Clinic": 4,
+      "Commercial Bakery & Confectionery": 4,
+      "Religious Heritage Temple": 4,
+      "Religious Temple": 3,
+      "Commercial Hotel & Dining": 3,
+      "Commercial Textile Showroom": 3,
+      "Commercial Hotel & Restaurant": 3,
+      "Traditional Heritage Residential": 3,
+      "Commercial Healthcare & Offices": 3,
+      "Residential Independent Villa": 3,
+      "Commercial Fuel & Mobility": 3,
+      "Commercial Business Services": 3,
+      "Commercial Temple Utility": 3,
+      "Commercial Auto Parts Wholesale": 3,
+      "Commercial Automobile & Corporate": 2,
+      "Commercial Retail & Banking": 2,
+      "Institutional Community Facility": 2,
+      "Residential Luxury Villa": 2,
+      "Residential Duplex": 2,
+      "Commercial Hotel & Residency": 2,
+      "Industrial Foundry & Machine Works": 2
+    },
+    "average_building_height_m": 9.7,
+    "buildings_with_official_web_links": 108
+  },
+  "infrastructure_coverage": {
+    "electric_poles_detected": 108,
+    "streetlights_detected": 108,
+    "transformers_detected": 24,
+    "commercial_signboards_detected": 108,
+    "traffic_signals_detected": 9
+  }
+}

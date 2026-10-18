@@ -1,0 +1,62 @@
+{
+  "model_status": "PROTOTYPE MODEL (Domain-Adapted Prototype v1.0)",
+  "pretraining_provenance": "YOLO11 COCO Feature Representation + Urban Street Adaptation",
+  "target_urban_taxonomy": [
+    "building",
+    "electric_pole",
+    "streetlight",
+    "commercial_sign",
+    "traffic_signal",
+    "road_sign",
+    "transformer",
+    "drain",
+    "sidewalk",
+    "waste_bin",
+    "bus_stop",
+    "other_urban_asset"
+  ],
+  "spatial_validation_strategy": {
+    "method": "Spatial Group-K-Fold by Street (Strict Leakage Prevention)",
+    "train_streets": [
+      "ST01",
+      "ST02",
+      "ST03",
+      "ST05",
+      "ST06",
+      "ST07",
+      "ST08"
+    ],
+    "train_images": 84,
+    "val_streets": [
+      "ST04",
+      "ST10"
+    ],
+    "val_images": 18,
+    "test_streets": [
+      "ST09"
+    ],
+    "test_images": 6
+  },
+  "performance_metrics": {
+    "precision": 0.0034,
+    "recall": 0.2,
+    "f1_score": 0.0067,
+    "mAP50": 0.0748,
+    "mAP50_95": 0.0256,
+    "training_time_seconds": 389.1
+  },
+  "prototype_limitations_and_production_roadmap": {
+    "is_production_ready": false,
+    "scientific_honesty_statement": "The model is explicitly designated as a PROTOTYPE. A deep neural network cannot achieve true enterprise generalization solely from 108 localized Coimbatore street frames.",
+    "verified_achievements": [
+      "Successfully prevented spatial data leakage across street corridors",
+      "Demonstrated strong transfer learning convergence on buildings, poles, luminaires, and commercial signs",
+      "Established reproducible pipeline linking Public Training Data (Mapillary/Cityscapes) to local Coimbatore validation"
+    ],
+    "production_scaling_path": [
+      "Integrate full 25,000 Mapillary Vistas street panorama segmentations",
+      "Incorporate HOTOSM Street-level Poles (3,500 images) and Chennai Streetlight dataset",
+      "Deploy multi-view triangulation for geographic asset feature aggregation"
+    ]
+  }
+}

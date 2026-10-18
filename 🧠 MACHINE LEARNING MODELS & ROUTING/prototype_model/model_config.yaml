@@ -1,0 +1,26 @@
+engine_metadata:
+  name: Street View Urban Built-Environment & Infrastructure Intelligence Engine
+  version: 2.0-UrbanIntelligence
+  focus: Fixed Physical Urban Infrastructure (Excludes Transient Movable Objects)
+  framework: PyTorch Computer Vision & Multimodal Spatial Parser
+  device: CPU Optimized
+core_parameters_detected:
+- Buildings and Property Characteristics (Floors G, G+1..5+, Height, Typology, Usage,
+  Commercial Links)
+- Electric Utility Poles (Concrete, Tubular, Lattice, Cable Burden Clutter Index)
+- Streetlights & Overhead Luminaires
+- High-Voltage Transformers (11kV/415V Pole-Mounted & Plinth)
+- Traffic Signals & Road Intersection Controls
+- Commercial Signboards & Fascias (Bilingual English/Tamil text extraction)
+- Road Features (Divided Asphalt, Concrete Pavement, Kerb Drains)
+floor_estimation_taxonomy:
+  G: Ground Floor Only (~3.5m height)
+  G+1: Ground + 1 Floor (~7.0m height)
+  G+2: Ground + 2 Floors (~10.5m height)
+  G+3: Ground + 3 Floors (~14.0m height)
+  G+4: Ground + 4 Floors (~17.5m height)
+  5+: High-Rise Commercial / Residential Complex (>17.5m height)
+movable_object_filter:
+  status: EXCLUDED
+  rationale: Cars, motorcycles, buses, and pedestrians are transient movable clutter
+    that do not constitute static municipal urban infrastructure.

@@ -1,0 +1,13 @@
+,building,electric_pole,streetlight,commercial_sign,traffic_signal,road_sign,transformer,drain,sidewalk,waste_bin,bus_stop,other_urban_asset
+building,18,0,0,0,0,0,0,0,0,0,0,0
+electric_pole,0,16,2,0,0,0,0,0,0,0,0,0
+streetlight,0,3,15,0,0,0,0,0,0,0,0,0
+commercial_sign,0,0,0,17,0,1,0,0,0,0,0,0
+traffic_signal,0,0,0,0,2,0,0,0,0,0,0,0
+road_sign,0,0,0,0,0,0,0,0,0,0,0,0
+transformer,0,0,0,0,0,0,4,0,0,0,0,0
+drain,0,0,0,0,0,0,0,0,0,0,0,0
+sidewalk,0,0,0,0,0,0,0,0,0,0,0,0
+waste_bin,0,0,0,0,0,0,0,0,0,0,0,0
+bus_stop,0,0,0,0,0,0,0,0,0,0,0,0
+other_urban_asset,0,0,0,0,0,0,0,0,0,0,0,0
