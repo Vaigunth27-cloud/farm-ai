@@ -1,0 +1,18 @@
+path: 'D:/farm ai/🧠 MACHINE LEARNING MODELS & ROUTING/dataset_splits'
+train: images/train
+val: images/val
+test: images/test
+nc: 12
+names:
+  0: building
+  1: electric_pole
+  2: streetlight
+  3: commercial_sign
+  4: traffic_signal
+  5: road_sign
+  6: transformer
+  7: drain
+  8: sidewalk
+  9: waste_bin
+  10: bus_stop
+  11: other_urban_asset
