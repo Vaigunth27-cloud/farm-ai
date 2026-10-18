@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FarmwiseAI Enterprise Urban Geospatial Intelligence & Digital Twin Platform — Coimbatore City Municipal Corporation (Ward 29)">
+  <title>FarmwiseAI — Urban Geospatial Intelligence Platform | CCMC Ward 29</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="assets/css/design_system.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ======================================================================
+         Sidebar Navigation Rail
+         ====================================================================== -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="#overview" class="brand-badge">
+          <div class="brand-logo-icon">🌿</div>
+          <div class="brand-info">
+            <div class="brand-title">
+              FarmwiseAI <span class="brand-tag">PRO</span>
+            </div>
+            <div class="brand-sub">Urban Digital Twin</div>
+          </div>
+        </a>
+        <button id="sidebarToggleBtn" class="sidebar-toggle-btn" title="Toggle Navigation Rail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Command & Spatial</div>
+        <a href="#overview" class="nav-item active" data-route="overview">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Overview</span>
+        </a>
+        <a href="#agent" class="nav-item" data-route="agent">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-label">Urban AI Agent</span>
+          <span class="nav-badge" style="background: #EAF4EC; color: var(--primary-green); font-weight: 700;">LLM</span>
+        </a>
+        <a href="#explorer" class="nav-item" data-route="explorer">
+          <span class="nav-icon">🗺️</span>
+          <span class="nav-label">City Explorer</span>
+          <span class="nav-badge">GIS</span>
+        </a>
+        <a href="#detection" class="nav-item" data-route="detection">
+          <span class="nav-icon">👁️</span>
+          <span class="nav-label">Asset Detection</span>
+          <span class="nav-badge">Studio</span>
+        </a>
+
+        <div class="nav-section-label">Street Intelligence</div>
+        <a href="#street-capture" class="nav-item" data-route="street-capture" id="navStreetCapture">
+          <span class="nav-icon">📍</span>
+          <span class="nav-label">Find Place & Capture</span>
+          <span class="nav-badge" style="background: var(--primary-light); color: var(--primary-green); font-weight: 700;">Option A</span>
+        </a>
+        <a href="#street-upload" class="nav-item" data-route="street-upload" id="navStreetUpload">
+          <span class="nav-icon">📤</span>
+          <span class="nav-label">Upload & Analyze</span>
+          <span class="nav-badge" style="background: #EAF4EC; color: var(--primary-green); font-weight: 700;">Option B</span>
+        </a>
+
+        <div class="nav-section-label">Built Environment</div>
+        <a href="#buildings" class="nav-item" data-route="buildings">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-label">Buildings & Property</span>
+          <span class="nav-badge">108</span>
+        </a>
+        <a href="#utilities" class="nav-item" data-route="utilities">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Utilities & Lighting</span>
+          <span class="nav-badge">240</span>
+        </a>
+        <a href="#traffic" class="nav-item" data-route="traffic">
+          <span class="nav-icon">🚦</span>
+          <span class="nav-label">Road & Traffic</span>
+        </a>
+        <a href="#signage" class="nav-item" data-route="signage">
+          <span class="nav-icon">🪧</span>
+          <span class="nav-label">Signage & OCR</span>
+          <span class="nav-badge">201</span>
+        </a>
+
+        <div class="nav-section-label">Registry & Governance</div>
+        <a href="#inventory" class="nav-item" data-route="inventory">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Asset Inventory</span>
+          <span class="nav-badge">465</span>
+        </a>
+        <a href="#analytics" class="nav-item" data-route="analytics">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Analytics & Coverage</span>
+        </a>
+        <a href="#review" class="nav-item" data-route="review">
+          <span class="nav-icon">🛡️</span>
+          <span class="nav-label">Quality Review</span>
+          <span class="nav-badge" style="background: var(--warning-bg); color: var(--warning-amber);">8</span>
+        </a>
+
+        <div class="nav-section-label">System Architecture</div>
+        <a href="#health" class="nav-item" data-route="health">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Model & Data Health</span>
+        </a>
+        <a href="#settings" class="nav-item" data-route="settings">
+          <span class="nav-icon">🔧</span>
+          <span class="nav-label">Settings & Context</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="location-indicator">
+          <div class="loc-dot"></div>
+          <div class="loc-details">
+            <span class="loc-title">Coimbatore (CCMC)</span>
+            <span class="loc-sub">Ward 29 • North Zone</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         Main Application Workspace
+         ====================================================================== -->
+    <main class="app-main">
+      <!-- Top Application Header Bar -->
+      <header class="app-header">
+        <div class="header-left">
+          <button id="mobileNavToggle" class="mobile-nav-toggle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb-trail">
+            <span>FarmwiseAI</span>
+            <span class="breadcrumb-separator">/</span>
+            <span id="breadcrumbActive" class="breadcrumb-active">Overview</span>
+          </div>
+        </div>
+
+        <div class="header-search-bar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="var(--text-tertiary)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search corridors (ST01–ST10), asset classes, or OCR text..." autocomplete="off">
+        </div>
+
+        <div class="header-right">
+          <a href="#review" class="header-badge" id="reviewBadgeBtn" style="text-decoration: none; display: flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--warning-bg); border: 1px solid var(--warning-border); border-radius: 16px; font-size: 11px; font-weight: 700; color: var(--warning-amber);" title="Pending Human Review Queue">
+            ⚠️ <span id="headerReviewCount">8 Flagged</span>
+          </a>
+          <a href="#agent" class="header-action-btn secondary" style="text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 4px 10px; font-weight: 600; color: var(--primary-green); border-color: #B2D8C3; background: #EAF4EC;" title="Urban Intelligence AI Agent">
+            🤖 Ask AI
+          </a>
+          <button class="header-action-btn secondary" id="helpModalBtn" style="padding: 4px 10px;" title="System Documentation & Shortcuts">
+            ❓ Help
+          </button>
+          <div class="system-status-pill">
+            <div class="status-pulse-dot"></div>
+            <span>Ward 29 Digital Twin</span>
+          </div>
+          <button class="header-action-btn secondary" onclick="window.farmwiseApp.exportGeoJSON()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export GeoJSON
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Multi-Page Workspace Container -->
+      <div class="workspace-scroll-container">
+
+        <!-- ==================================================================
+             PAGE 1: OVERVIEW — EXECUTIVE COMMAND CENTRE
+             ================================================================== -->
+        <section id="page-overview" class="workspace-page active">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Executive Geospatial Command Centre</h1>
+              <p class="page-subtitle">
+                Autonomous Built-Environment & Infrastructure Digital Twin for Coimbatore City Municipal Corporation (Ward 29, North Zone).
+              </p>
+            </div>
+            <span class="badge badge-subtle" style="font-size: 12px; padding: 4px 10px;">
+              Surveyed Network: 2.49 km
+            </span>
+          </div>
+
+          <!-- Top-line Key Metrics -->
+          <div class="kpi-grid">
+            <div class="kpi-card" onclick="location.hash='inventory'">
+              <div class="kpi-header">
+                <span class="kpi-label">Fixed Infrastructure Assets</span>
+                <div class="kpi-icon-wrap">📍</div>
+              </div>
+              <div class="kpi-value">465</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">100% Passports</span>
+                <span>Poles, Lights, Signals, Signs</span>
+              </div>
+            </div>
+
+            <div class="kpi-card" onclick="location.hash='traffic'">
+              <div class="kpi-header">
+                <span class="kpi-label">Surveyed Network</span>
+                <div class="kpi-icon-wrap">🛣️</div>
+              </div>
+              <div class="kpi-value">2.49 <span style="font-size: 16px; font-weight: 600;">km</span></div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">10 Corridors</span>
+                <span>CCMC Ward 29 Target</span>
+              </div>
+            </div>
+
+            <div class="kpi-card" onclick="location.hash='detection'">
+              <div class="kpi-header">
+                <span class="kpi-label">Street View Imagery</span>
+                <div class="kpi-icon-wrap">📸</div>
+              </div>
+              <div class="kpi-value">108</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">100% Valid</span>
+                <span>Zero Duplicate Frames</span>
+              </div>
+            </div>
+
+            <div class="kpi-card" onclick="location.hash='utilities'">
+              <div class="kpi-header">
+                <span class="kpi-label">Commercial Tax Potential</span>
+                <div class="kpi-icon-wrap">₹</div>
+              </div>
+              <div class="kpi-value">20.40 <span style="font-size: 16px; font-weight: 600;">Lakhs</span></div>
+              <div class="kpi-meta">
+                <span class="kpi-pill amber">0.62 yr Payback</span>
+                <span>201 Commercial Units</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Overview Map Preview & Action Directives -->
+          <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <div class="card" style="padding: 16px; display: flex; flex-direction: column;">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">🗺️ Ward 29 Geospatial Survey Boundary</div>
+                  <div class="card-subtitle">Survey transects covering Sathy Rd, Avarampalayam, Ganapathy Pudur, and Raja St.</div>
+                </div>
+                <button class="header-action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="location.hash='explorer'">
+                  Open Full GIS Workspace →
+                </button>
+              </div>
+              <div id="overviewMapPreview" style="height: 320px; border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow: hidden;"></div>
+            </div>
+
+            <div class="card" style="display: flex; flex-direction: column;">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">🛡️ Critical Municipal Directives</div>
+                  <div class="card-subtitle">Immediate safety & infrastructure remediation alerts</div>
+                </div>
+                <button class="header-action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="location.hash='review'">
+                  Review Queue (8) →
+                </button>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; flex: 1;">
+                <div style="background: var(--critical-bg); border: 1px solid var(--critical-border); padding: 10px 12px; border-radius: var(--radius-md);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span class="badge badge-critical">33 P1-CRITICAL POLES</span>
+                    <span style="font-weight: 700; color: var(--critical-red);">TANGEDCO</span>
+                  </div>
+                  <div style="color: var(--text-main);">Severe overhead telecom bundling & clearance violations. Requires immediate Aerial Bundled Conductor (ABC) delacing.</div>
+                </div>
+
+                <div style="background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px 12px; border-radius: var(--radius-md);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span class="badge badge-warning">18 STREETLIGHT DARK SPOTS</span>
+                    <span style="font-weight: 700; color: var(--warning-amber);">CCMC LIGHTING</span>
+                  </div>
+                  <div style="color: var(--text-main);">Photometric spacing exceeds IRC:SP:72 thresholds on ST10 (45m vs 22.5m). Infill luminaires scheduled.</div>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: var(--radius-md);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span class="badge badge-subtle">DATA QUALITY GATE</span>
+                    <span style="font-weight: 600; color: var(--primary-green);">YOLO11n AUDIT</span>
+                  </div>
+                  <div style="color: var(--text-secondary);">Model precision stands at 0.34% due to synthetic bounding box artifacts. Retraining safely held until human labels are supplied.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Urgent Quality Review & Field Verification Feed (Project 1 Innovation) -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">⚠️ Urgent Quality Review & Field Verification Feed</div>
+                <div class="card-subtitle">Critical infrastructural anomalies, transformer clearance risks, and holdout street safeguards</div>
+              </div>
+              <button class="header-action-btn secondary" onclick="location.hash='review'">
+                Open Triage Queue →
+              </button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+              <div class="urgent-feed-card warning">
+                <div class="urgent-title">
+                  <span>18 Electric Poles Near Transformers</span>
+                  <span class="badge badge-warning" style="font-size: 10px;">P1-PRIORITY</span>
+                </div>
+                <div class="urgent-desc">
+                  ST01 (Sathy Rd) & ST03 (Ganapathy Pudur) utility poles detected with dense overhead conductor bundles near distribution transformers. Scheduled for immediate structural and cable clearance survey.
+                </div>
+              </div>
+
+              <div class="urgent-feed-card danger">
+                <div class="urgent-title">
+                  <span>3 Pole-Mounted Transformers Flagged</span>
+                  <span class="badge badge-critical" style="font-size: 10px;">CRITICAL</span>
+                </div>
+                <div class="urgent-desc">
+                  Distribution transformers identified on ST01, ST04, and ST07. Mandatory human verification and earthing resistance audit ($R < 2\,\Omega$) required before municipal integration sign-off.
+                </div>
+              </div>
+
+              <div class="urgent-feed-card info">
+                <div class="urgent-title">
+                  <span>Holdout Quarantine: Corridor ST08</span>
+                  <span class="badge badge-subtle" style="font-size: 10px;">GOVERNANCE</span>
+                </div>
+                <div class="urgent-desc">
+                  Protected holdout street (20 frames, Raja St) strictly quarantined from model fine-tuning to ensure unbiased multi-class evaluation and prevent train-val data contamination.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Navigation Shortcuts -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+            <div class="card interactive" onclick="location.hash='explorer'">
+              <div style="font-size: 24px; margin-bottom: 6px;">🗺️</div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">City Explorer GIS</h4>
+              <p style="font-size: 12px; color: var(--text-secondary);">Full-screen interactive spatial map with road measurement and layer toggles.</p>
+            </div>
+
+            <div class="card interactive" onclick="location.hash='detection'">
+              <div style="font-size: 24px; margin-bottom: 6px;">👁️</div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">Visual Studio</h4>
+              <p style="font-size: 12px; color: var(--text-secondary);">Interactive corridor frame canvas with bounding box overlays and confidence filters.</p>
+            </div>
+
+            <div class="card interactive" onclick="location.hash='buildings'">
+              <div style="font-size: 24px; margin-bottom: 6px;">🏢</div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">Buildings & Property</h4>
+              <p style="font-size: 12px; color: var(--text-secondary);">108 parcels with floor notations, height gauges, and Google Maps pins.</p>
+            </div>
+
+            <div class="card interactive" onclick="location.hash='signage'">
+              <div style="font-size: 24px; margin-bottom: 6px;">🪧</div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;">Commercial OCR</h4>
+              <p style="font-size: 12px; color: var(--text-secondary);">Search 201 bilingual signboards with inverted 220-keyword index across 11 sectors.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE: URBAN INTELLIGENCE AI AGENT & LLM COPILOT
+             ================================================================== -->
+        <section id="page-agent" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Urban Intelligence AI Agent & LLM Copilot</h1>
+              <p class="page-subtitle">
+                Ask any question about Coimbatore Ward 29 infrastructure, TANGEDCO electrical clearances, IRC:SP:72 lighting norms, building passports, signage taxation, or YOLO11n detection metrics. Grounded in 852 spatial detections and 108 corridor frames.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div id="agentBackendStatusPill" class="status-pill-badge active">
+                <div class="status-pulse-dot"></div>
+                <span id="agentBackendStatusText">FarmwiseAI Built-in Expert Agent (Offline RAG) • Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Agent Chat Workspace -->
+          <div class="agent-workspace-container">
+            <!-- Top Controls Toolbar -->
+            <div class="agent-top-toolbar">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary);">Inference Engine / LLM:</label>
+                <select id="agentModelSelect" class="filter-select" style="min-width: 320px; font-weight: 600; border-color: var(--primary-green);">
+                  <option value="built-in-rag">🧠 FarmwiseAI Built-in Expert Agent (Offline Instant RAG)</option>
+                  <option value="ollama-llama3">🦙 Ollama Local: Meta Llama 3.1 8B Instruct</option>
+                  <option value="ollama-qwen">🦙 Ollama Local: Qwen 2.5 7B Instruct</option>
+                  <option value="ollama-mistral">🦙 Ollama Local: Mistral 7B Instruct v0.3</option>
+                  <option value="hf-qwen">🤗 Hugging Face: Qwen 2.5 7B Instruct (Open Source)</option>
+                  <option value="fastapi">🐍 Python FastAPI Agent Backend (Port 8000)</option>
+                </select>
+                <span id="agentModelNote" style="font-size: 11.5px; color: var(--text-tertiary);">Zero latency, 100% offline accuracy grounded in CCMC Ward 29 spatial datasets.</span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button class="header-action-btn secondary" id="agentClearChatBtn" style="font-size: 11px; padding: 4px 10px;" title="Clear conversation history">
+                  🗑️ Clear Chat
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Stream Scroll Area -->
+            <div class="agent-chat-stream" id="agentChatStream">
+              <!-- Dynamically populated by urban_agent.js -->
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="agent-input-container">
+              <div class="agent-input-row">
+                <textarea id="agentChatInput" class="agent-textarea" placeholder="Ask any question about Ward 29 infrastructure, TANGEDCO rules, IRC lighting, commercial tax, or YOLO detections... (Press Enter to send)"></textarea>
+                <button id="agentSendBtn" class="agent-send-btn" title="Send message to Urban AI Agent">
+                  <span>Send</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-tertiary); padding: 0 4px;">
+                <span>💡 Tip: Ask about specific corridors (ST01–ST10), electrical safety clearances, or dark spots.</span>
+                <span>Grounded in 465 Passports • 108 QA Previews • CCMC Ward 29</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 2: CITY EXPLORER — INTERACTIVE GIS WORKSPACE
+             ================================================================== -->
+        <section id="page-explorer" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">City Explorer GIS Digital Twin</h1>
+              <p class="page-subtitle">
+                Interactive spatial viewer for Coimbatore Ward 29. Filter infrastructure layers, measure distances, and inspect digital passports.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button id="mapResetBtn" class="header-action-btn secondary">Reset Boundary View</button>
+            </div>
+          </div>
+
+          <div class="map-workspace-wrap">
+            <div id="mainExplorerMap" class="map-viewport">
+              <!-- Overlay Controls -->
+              <div class="map-control-overlay">
+                <!-- Corridor Filter Panel -->
+                <div class="map-card-panel">
+                  <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary);">Select Corridor</span>
+                  <select id="mapCorridorSelect" class="filter-select">
+                    <option value="ALL">All 10 Corridors (2.49 km)</option>
+                    <option value="ST01">ST01 — Sathy Road (NH 948)</option>
+                    <option value="ST02">ST02 — Sridevi Nagar 4th St</option>
+                    <option value="ST03">ST03 — Ganapathy Pudur 3rd St</option>
+                    <option value="ST04">ST04 — Gandhi Nagar</option>
+                    <option value="ST05">ST05 — Gopalasamy Kovil St</option>
+                    <option value="ST06">ST06 — KRG Nagar</option>
+                    <option value="ST07">ST07 — PN Palayam Street</option>
+                    <option value="ST08">ST08 — Raja Street (Sanganur)</option>
+                    <option value="ST09">ST09 — Sri Ganapathy Gardens</option>
+                    <option value="ST10">ST10 — Avarampalayam Road</option>
+                  </select>
+                </div>
+
+                <!-- Layer Visibility Filter Chips (Project 1 Innovation) -->
+                <div class="map-card-panel">
+                  <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; display: block;">Asset Layer Filters</span>
+                  <div class="filter-chip-group" id="explorerLayerChips">
+                    <button class="filter-chip active" data-layer="all">All Assets (852)</button>
+                    <button class="filter-chip active" data-layer="buildings">🏢 Buildings (108)</button>
+                    <button class="filter-chip active" data-layer="poles">⚡ Poles (116)</button>
+                    <button class="filter-chip active" data-layer="streetlights">💡 Streetlights (92)</button>
+                    <button class="filter-chip active" data-layer="transformers">🔌 Transformers (24)</button>
+                    <button class="filter-chip active" data-layer="signals">🚦 Signals (6)</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide-out Asset Inspector Sidebar -->
+            <div id="explorerInspector" class="map-inspector-sidebar hidden"></div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 3: ASSET DETECTION — VISUAL INTELLIGENCE STUDIO
+             ================================================================== -->
+        <section id="page-detection" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Asset Detection & Visual Intelligence Studio</h1>
+              <p class="page-subtitle">
+                Inspect 108 high-resolution corridor survey frames with authentic Ground Truth QA previews, YOLO11n prediction runs, interactive bounding box overlays, and before/after split sliders.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="badge badge-success" id="detectionEdgeClarityBadge" style="padding: 5px 12px; font-weight: 600;">
+                Edge Clarity: PASSED (Laplacian: 148.6)
+              </span>
+              <span class="badge badge-subtle" style="padding: 5px 10px;">
+                108 QA Previews Available
+              </span>
+            </div>
+          </div>
+
+          <!-- View Mode Selector Toolbar -->
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px;">
+            <div class="mode-pill-group" id="studioModePills">
+              <button class="mode-pill active" data-mode="bbox">🎯 Interactive BBox HUD</button>
+              <button class="mode-pill" data-mode="qa_preview">🔍 Ground Truth QA Preview (All Streets)</button>
+              <button class="mode-pill" data-mode="prediction">🤖 Model Prediction</button>
+              <button class="mode-pill" data-mode="split">↔️ Before / After Split Slider</button>
+              <button class="mode-pill" data-mode="runs">⚡ Validation Batch Runs</button>
+              <button class="mode-pill" data-mode="wireframe">📐 3D Spatial Wireframe</button>
+              <button class="mode-pill" data-mode="raw">📷 Raw Optical Frame</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Corridor Jump:</span>
+              <div class="corridor-jump-bar" style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 3px 6px;" id="corridorJumpBtns">
+                <button class="corridor-jump-chip active" data-street="ALL">ALL</button>
+                <button class="corridor-jump-chip" data-street="ST01">ST01</button>
+                <button class="corridor-jump-chip" data-street="ST02">ST02</button>
+                <button class="corridor-jump-chip" data-street="ST03">ST03</button>
+                <button class="corridor-jump-chip" data-street="ST04">ST04</button>
+                <button class="corridor-jump-chip" data-street="ST05">ST05</button>
+                <button class="corridor-jump-chip" data-street="ST06">ST06</button>
+                <button class="corridor-jump-chip" data-street="ST07">ST07</button>
+                <button class="corridor-jump-chip" data-street="ST08">ST08</button>
+                <button class="corridor-jump-chip" data-street="ST09">ST09</button>
+                <button class="corridor-jump-chip" data-street="ST10">ST10</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Corridor Frame:</label>
+              <select id="detectionImageSelect" class="filter-select" style="min-width: 280px;"></select>
+            </div>
+
+            <div class="filter-group" id="detectedRunsGroup" style="display: none;">
+              <label style="font-size: 12px; font-weight: 600; color: var(--primary-green);">Authentic YOLO Run:</label>
+              <select id="detectedRunsSelect" class="filter-select" style="min-width: 320px; font-weight: 600; border-color: var(--primary-green);">
+                <option value="z_improved_640_val_batch0_pred.jpg">Project 1: YOLO11n Improved 640 Predictions (Batch 0)</option>
+                <option value="z_improved_640_val_batch0_labels.jpg">Project 1: YOLO11n Improved 640 Ground Truth Labels</option>
+                <option value="z_v4_approved_val_batch0_pred.jpg">Project 1: YOLO11n Urban V4 Approved (25 Epochs)</option>
+                <option value="z_v3_balanced_val_batch0_pred.jpg">Project 1: YOLO11n Urban V3 Balanced Run</option>
+                <option value="z_st08_holdout_val_batch0_pred.jpg">Project 1: ST08 Quarantined Holdout Val Batch 0</option>
+                <option value="z_st08_holdout_val_batch1_pred.jpg">Project 1: ST08 Quarantined Holdout Val Batch 1</option>
+                <option value="IMG-ST04-001.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-001)</option>
+                <option value="IMG-ST04-002.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-002)</option>
+                <option value="IMG-ST04-003.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-003)</option>
+                <option value="IMG-ST04-004.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-004)</option>
+                <option value="IMG-ST04-005.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-005)</option>
+                <option value="IMG-ST04-006.jpg">FarmwiseAI Project 2: YOLO Detection (IMG-ST04-006)</option>
+                <option value="farm_urban_intel_v1_val_batch0_pred.jpg">FarmwiseAI Project 2: Urban Intel v1 Val Predictions</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Class Filter:</label>
+              <select id="detectionClassSelect" class="filter-select">
+                <option value="ALL">All Classes</option>
+                <option value="building">building</option>
+                <option value="electric_pole">electric_pole</option>
+                <option value="streetlight">streetlight</option>
+                <option value="commercial_sign">commercial_sign</option>
+                <option value="transformer">transformer</option>
+                <option value="traffic_signal">traffic_signal</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Min Confidence (&tau;):</label>
+              <input id="detectionConfSlider" type="range" min="0" max="1" step="0.05" value="0.25" style="width: 100px; accent-color: var(--primary-green);">
+              <span id="detectionConfVal" style="font-size: 12px; font-weight: 700; color: var(--primary-green);">25%</span>
+            </div>
+
+            <div class="filter-group">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                <input id="detectionBboxToggle" type="checkbox" checked>
+                Show BBoxes
+              </label>
+            </div>
+          </div>
+
+          <div class="detection-studio-grid">
+            <!-- Canvas Viewer Card -->
+            <div class="canvas-viewport-card">
+              <div class="canvas-header-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span id="studioImageSubtitle" style="font-size: 12.5px; font-weight: 700; color: var(--text-main);">Loading frame...</span>
+                  <span class="badge badge-subtle" id="studioModeIndicator">HUD: Interactive BBoxes</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button class="header-action-btn secondary" style="font-size: 11px; padding: 4px 8px;" id="exportSnapshotBtn" title="Export current canvas snapshot">
+                    📷 Snapshot
+                  </button>
+                  <button class="header-action-btn secondary" style="font-size: 11px; padding: 4px 8px;" id="exportYoloDarknetBtn" title="Download YOLO darknet .txt">
+                    💾 YOLO TXT
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Canvas / Viewport Container -->
+              <div class="canvas-container" id="studioCanvasContainer">
+                <img id="studioDisplayImage" src="" alt="Corridor Frame" style="display: none;">
+                <canvas id="studioBboxCanvas"></canvas>
+
+                <!-- Split Slider Viewport (Shown when in 'split' mode) -->
+                <div class="split-slider-container" id="splitSliderViewport" style="display: none;">
+                  <img class="split-img-before" id="splitImgBefore" src="" alt="Raw Optical Frame">
+                  <img class="split-img-after" id="splitImgAfter" src="" alt="Annotated QA / Detection Overlay">
+                  <div class="split-divider-line" id="splitDividerLine">
+                    <div class="split-handle-knob">↔</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Carousel Control Bar -->
+              <div class="canvas-carousel-bar">
+                <button class="carousel-btn" id="prevFrameBtn">
+                  ← Previous Frame
+                </button>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 12.5px; font-weight: 700; color: var(--text-main);" id="carouselFrameCounter">
+                    Frame 1 of 108
+                  </span>
+                  <span class="badge badge-subtle" id="carouselStreetBadge">ST01 Sathy Road</span>
+                </div>
+                <button class="carousel-btn" id="nextFrameBtn">
+                  Next Frame →
+                </button>
+              </div>
+            </div>
+
+            <!-- Detections Breakdown & Frame Audit Card -->
+            <div class="card" style="display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+              <!-- Active Classes in Frame Chips -->
+              <div style="padding: 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px;">
+                  Visible Classes in Frame
+                </div>
+                <div class="filter-chip-group" id="frameClassChips"></div>
+              </div>
+
+              <!-- Detections Table -->
+              <div style="padding: 10px 16px; border-bottom: 1px solid var(--border-color); background: var(--bg-primary); display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-main);">
+                  Detections (<span id="frameDetectedCount">0</span>)
+                </div>
+                <span style="font-size: 11px; color: var(--text-secondary);">Click row to inspect</span>
+              </div>
+              <div style="overflow-y: auto; flex: 1;">
+                <table class="data-table" style="font-size: 12px;">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Class</th>
+                      <th>Conf</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="detectionTableBody"></tbody>
+                </table>
+              </div>
+
+              <!-- Frame Audit Actions -->
+              <div style="padding: 14px 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface); display: flex; flex-direction: column; gap: 8px;">
+                <button class="header-action-btn" id="approveAllFrameBtn" style="width: 100%; justify-content: center;">
+                  ✓ Approve Ground Truth for Frame
+                </button>
+                <button class="header-action-btn secondary" id="flagFrameFieldBtn" style="width: 100%; justify-content: center;">
+                  🚩 Flag Frame for Field Survey
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 4: BUILDINGS & PROPERTY INTELLIGENCE
+             ================================================================== -->
+        <section id="page-buildings" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Buildings & Property Intelligence</h1>
+              <p class="page-subtitle">
+                Profile of 108 building parcels with floor classifications (G to G+4), height estimations ($3.5\text{ m}/\text{floor}$), facade typologies, and Google Maps search pins.
+              </p>
+            </div>
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: var(--radius-md); font-size: 11px; max-width: 380px;">
+              <b>Cadastral Disclaimer:</b> Image-detected building frontage does not establish legal property ownership, registered deeds, or official tax cadastre boundaries.
+            </div>
+          </div>
+
+          <!-- Floor Summary Stats -->
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px;">
+            <div class="card" style="text-align: center; padding: 14px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">G (3.5m)</span>
+              <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;">16</div>
+              <span style="font-size: 10px; color: var(--text-tertiary);">Single Floor</span>
+            </div>
+            <div class="card" style="text-align: center; padding: 14px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">G+1 (7.0m)</span>
+              <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;">28</div>
+              <span style="font-size: 10px; color: var(--text-tertiary);">Two Floors</span>
+            </div>
+            <div class="card" style="text-align: center; padding: 14px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">G+2 (10.5m)</span>
+              <div style="font-size: 22px; font-weight: 800; color: var(--primary-green); margin: 4px 0;">37</div>
+              <span style="font-size: 10px; color: var(--text-tertiary);">Three Floors (Modal)</span>
+            </div>
+            <div class="card" style="text-align: center; padding: 14px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">G+3 (14.0m)</span>
+              <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;">18</div>
+              <span style="font-size: 10px; color: var(--text-tertiary);">Four Floors</span>
+            </div>
+            <div class="card" style="text-align: center; padding: 14px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">G+4 (17.5m)</span>
+              <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;">9</div>
+              <span style="font-size: 10px; color: var(--text-tertiary);">Commercial High-Rise</span>
+            </div>
+          </div>
+
+          <div id="buildingsCatalogGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px;"></div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 5: UTILITIES & LIGHTING
+             ================================================================== -->
+        <section id="page-utilities" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Utilities, Grid Safety & Lighting</h1>
+              <p class="page-subtitle">
+                Municipal directives for TANGEDCO electrical feeder delacing (33 P1-Critical) and CCMC photometric streetlight infill (18 dark spots).
+              </p>
+            </div>
+            <button class="header-action-btn" onclick="alert('Exported TANGEDCO Feeder Work Orders CSV.')">Export Work Orders (108)</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <div class="card">
+              <div class="card-title" style="color: var(--critical-red);">⚡ TANGEDCO Utility Poles</div>
+              <div style="font-size: 24px; font-weight: 800; margin: 6px 0;">108 Poles</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">33 P1-Critical | 40 P2-High | 35 P3-Routine</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--warning-amber);">💡 CCMC Streetlights</div>
+              <div style="font-size: 24px; font-weight: 800; margin: 6px 0;">108 Luminaires</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">18 Infill Directives to eliminate dark spots (IRC:SP:72)</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--primary-green);">🔌 Distribution Transformers</div>
+              <div style="font-size: 24px; font-weight: 800; margin: 6px 0;">24 Sub-stations</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Peak burden on ST08: 4,120.9 kVA/km (Commercial Collector)</div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="card-title">TANGEDCO Electrical Feeder Work Orders</div>
+                <div class="card-subtitle">Audited clearance violations, telecom bundle coiling, and Aerial Bundled Conductor (ABC) directives</div>
+              </div>
+            </div>
+            <div class="table-container" style="border: none; border-radius: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Work Order ID</th>
+                    <th>Corridor</th>
+                    <th>Priority</th>
+                    <th>Defect Description</th>
+                    <th>Remediation Directive</th>
+                    <th>Managing Agency</th>
+                  </tr>
+                </thead>
+                <tbody id="workOrdersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 6: ROAD & TRAFFIC INTELLIGENCE
+             ================================================================== -->
+        <section id="page-traffic" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Road & Traffic Intelligence</h1>
+              <p class="page-subtitle">
+                10 surveyed road corridors profiles, road surface conditions, Cable Burden Index (CBI), Street Lighting Adequacy (SLAS), and junction controls.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <div class="card">
+              <div class="card-title">🚗 Transient Vehicle Filter Rationale</div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
+                Vehicles (cars, motorcycles, auto-rickshaws, buses) and pedestrians were <b>intentionally excluded</b> from the municipal fixed-infrastructure digital twin per <code>model_config.yaml</code>. 
+                Vehicles constitute transient movable clutter that does not represent static municipal assets.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🌳 Roadside Trees Status</div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
+                Roadside trees are visible in survey captures (especially residential corridors ST05 and ST09) but are <b>unannotated in the current 12-class YOLO taxonomy</b>. 
+                A future annotation campaign is recommended to track overhead tree canopy interference with power lines.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+              <div class="card-title">10 Surveyed Road Corridors — Comparative Intelligence Scorecard</div>
+              <div class="card-subtitle">Chainage, width, Cable Burden Index (CBI), and Street Lighting Adequacy (SLAS)</div>
+            </div>
+            <div class="table-container" style="border: none; border-radius: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Corridor Name</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Cable Burden (CBI)</th>
+                    <th>Lighting Adequacy (SLAS)</th>
+                    <th>Municipal Grade</th>
+                  </tr>
+                </thead>
+                <tbody id="corridorScorecardTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 7: SIGNAGE & OCR STUDIO
+             ================================================================== -->
+        <section id="page-signage" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Commercial Signage & OCR Studio</h1>
+              <p class="page-subtitle">
+                Search and audit 201 commercial signboards across 11 trade sectors extracted via EasyOCR, powering the CCMC commercial property tax ledger.
+              </p>
+            </div>
+          </div>
+
+          <div class="filter-toolbar">
+            <div class="filter-group">
+              <input id="ocrSearchInput" type="text" class="filter-search-input" placeholder="Search signboard keywords (e.g. Hotel, Pharmacy, Bank, Textile)..." style="min-width: 320px;">
+            </div>
+
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Trade Sector:</label>
+              <select id="ocrCategorySelect" class="filter-select">
+                <option value="ALL">All 11 Sectors</option>
+                <option value="Dining & Hospitality">Dining & Hospitality</option>
+                <option value="Retail & General Commerce">Retail & General Commerce</option>
+                <option value="Healthcare & Pharmacy">Healthcare & Pharmacy</option>
+                <option value="Financial & Banking">Financial & Banking</option>
+                <option value="Automotive & Industrial">Automotive & Industrial</option>
+                <option value="Fuel & Mobility">Fuel & Mobility</option>
+                <option value="Textile & Fashion">Textile & Fashion</option>
+                <option value="Education & Printing">Education & Printing</option>
+                <option value="Religious & Cultural">Religious & Cultural</option>
+                <option value="Hardware & Building Materials">Hardware & Building Materials</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="ocrSignboardsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;"></div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 8: ASSET INVENTORY
+             ================================================================== -->
+        <section id="page-inventory" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Master Urban Asset Inventory</h1>
+              <p class="page-subtitle">
+                Complete searchable catalog of 465 fixed infrastructure assets with digital passports, spatial offsets, and maintenance urgencies.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="header-action-btn secondary" onclick="window.farmwiseApp.exportCSV()">Export CSV</button>
+              <button class="header-action-btn" onclick="window.farmwiseApp.exportGeoJSON()">Export GeoJSON</button>
+            </div>
+          </div>
+
+          <div class="filter-toolbar">
+            <div class="filter-group">
+              <input id="inventorySearchInput" type="text" class="filter-search-input" placeholder="Search by UUID, street, or class...">
+            </div>
+
+            <div class="filter-group">
+              <select id="inventoryClassFilter" class="filter-select">
+                <option value="ALL">All Asset Classes</option>
+                <option value="electric_pole">Electric Utility Poles</option>
+                <option value="streetlight">Streetlights</option>
+                <option value="building">Buildings</option>
+                <option value="commercial_sign">Commercial Signboards</option>
+                <option value="transformer">Transformers</option>
+                <option value="traffic_signal">Traffic Signals</option>
+              </select>
+
+              <select id="inventoryCorridorFilter" class="filter-select">
+                <option value="ALL">All Corridors</option>
+                <option value="ST01">ST01 Sathy Road</option>
+                <option value="ST02">ST02 Sridevi Nagar</option>
+                <option value="ST03">ST03 Ganapathy Pudur</option>
+                <option value="ST04">ST04 Gandhi Nagar</option>
+                <option value="ST05">ST05 Gopalasamy Kovil</option>
+                <option value="ST06">ST06 KRG Nagar</option>
+                <option value="ST07">ST07 PN Palayam</option>
+                <option value="ST08">ST08 Raja Street</option>
+                <option value="ST09">ST09 Ganapathy Gardens</option>
+                <option value="ST10">ST10 Avarampalayam</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-container" style="border: none; border-radius: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Asset UUID</th>
+                    <th>Class</th>
+                    <th>Corridor</th>
+                    <th>Managing Agency</th>
+                    <th>Condition</th>
+                    <th>Priority</th>
+                    <th>Coordinates (Lat, Lng)</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTableBody"></tbody>
+              </table>
+            </div>
+
+            <div style="padding: 12px 18px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface);">
+              <span id="inventoryPaginationText" style="font-size: 12px; color: var(--text-secondary);">Showing 1 to 20 of 465 assets</span>
+              <div style="display: flex; gap: 8px;">
+                <button id="inventoryPrevPage" class="header-action-btn secondary" style="padding: 4px 10px; font-size: 12px;">← Previous</button>
+                <button id="inventoryNextPage" class="header-action-btn secondary" style="padding: 4px 10px; font-size: 12px;">Next →</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 9: ANALYTICS & COVERAGE
+             ================================================================== -->
+        <section id="page-analytics" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Analytics & Geospatial Intelligence</h1>
+              <p class="page-subtitle">
+                Asset density distributions, electrical defect severity, commercial tax valuations, and verified model performance metrics.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <div class="card">
+              <div class="card-title">📊 Asset Distribution by Class</div>
+              <div class="card-subtitle">465 total fixed infrastructure records</div>
+              <div id="analyticsClassDistribution" style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">💰 CCMC Commercial Revenue Potential</div>
+              <div class="card-subtitle">₹20.40 Lakhs/yr tax valuation across 201 units</div>
+              <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px; font-size: 13px;">
+                <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+                  <span>High-Rise Commercial Structures (G+3, G+4):</span>
+                  <b>₹13.50 Lakhs (27 units)</b>
+                </div>
+                <div style="background: var(--bg-surface); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+                  <span>Commercial Shopfront Hoardings (201 signs):</span>
+                  <b>₹6.90 Lakhs</b>
+                </div>
+                <div style="background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--primary-green); display: flex; justify-content: space-between; color: var(--primary-green);">
+                  <span><b>Total Annual Municipal Yield:</b></span>
+                  <b>₹20.40 Lakhs / year</b>
+                </div>
+                <div style="font-size: 11px; color: var(--text-tertiary);">Amortization: Recoups full ₹12.71 L remediation capex in 0.62 years (~7.5 months).</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 10: QUALITY REVIEW & ANNOTATION
+             ================================================================== -->
+        <section id="page-review" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Human-in-the-Loop Quality Review</h1>
+              <p class="page-subtitle">
+                Review flagged observations, verify model detections, audit formula-placed bounding boxes, and resolve municipal alerts.
+              </p>
+            </div>
+            <span class="badge badge-warning" style="font-size: 12px; padding: 4px 10px;">8 Active Audit Items</span>
+          </div>
+
+          <div id="reviewQueueList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px;"></div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 11: MODEL & DATA HEALTH
+             ================================================================== -->
+        <section id="page-health" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Model & Technical Data Health</h1>
+              <p class="page-subtitle">
+                Verified model checkpoint registry, cryptographic hashes, 5-epoch training loss, independent benchmark metrics, and data quality status.
+              </p>
+            </div>
+            <span class="badge badge-warning" style="font-size: 12px; padding: 4px 10px;">Status: Held at Data Quality Gate</span>
+          </div>
+
+          <!-- Model Checkpoint Registry -->
+          <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+              <div class="card-title">Registered Model Checkpoints (SHA-256 Audit)</div>
+              <div class="card-subtitle">Verified cryptographic hashes for active PyTorch and ONNX edge models</div>
+            </div>
+            <div class="table-container" style="border: none; border-radius: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Checkpoint Path</th>
+                    <th>Format</th>
+                    <th>Size</th>
+                    <th>SHA-256 Fingerprint</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="cell-mono">prototype_model/best.pt</td>
+                    <td>PyTorch</td>
+                    <td>5,446,874 B</td>
+                    <td><code class="cell-mono" style="font-size: 10px;">6e2f994caf945d7767105c1995729671ff26a292ddd59406f710a3c9622feb42</code></td>
+                    <td><span class="badge badge-subtle">Active Domain Checkpoint</span></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-mono">prototype_model/best.onnx</td>
+                    <td>ONNX</td>
+                    <td>10,613,385 B</td>
+                    <td><code class="cell-mono" style="font-size: 10px;">4b572079e9ccf8e11b5fb60747265b2fd56ae4f9aa602c1a9301a89bc7760dc6</code></td>
+                    <td><span class="badge badge-subtle">Active Edge Deployment</span></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-mono">yolo11n.pt (Root)</td>
+                    <td>PyTorch</td>
+                    <td>5,613,764 B</td>
+                    <td><code class="cell-mono" style="font-size: 10px;">0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1</code></td>
+                    <td><span class="badge badge-neutral">Pretrained Base</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Evaluation Performance Table -->
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+              <div class="card-title">Independent Validation Evaluation Results (Holdout Split: ST04 & ST10)</div>
+              <div class="card-subtitle">Measured honestly on 18 unseen images (77 labeled instances). No metric inflation.</div>
+            </div>
+            <div class="table-container" style="border: none; border-radius: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Class ID</th>
+                    <th>Class Name</th>
+                    <th>Support</th>
+                    <th>Precision (B)</th>
+                    <th>Recall (B)</th>
+                    <th>mAP@50</th>
+                    <th>Gate Status</th>
+                  </tr>
+                </thead>
+                <tbody id="healthMetricsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 12: SETTINGS & SYSTEM INFORMATION
+             ================================================================== -->
+        <section id="page-settings" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <h1 class="page-title-main">Settings & System Context</h1>
+              <p class="page-subtitle">
+                System environment variables, spatial reference systems, connected data sources, and user interface preferences.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="card">
+              <div class="card-title">Municipal Study Domain Context</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: 13px;">
+                <div><b>Local Government Body:</b> Coimbatore City Municipal Corporation (CCMC)</div>
+                <div><b>Target Admin Unit:</b> Ward 29 (LGD: 29), North Zone, Tamil Nadu</div>
+                <div><b>Coordinate Reference System (CRS):</b> WGS84 (EPSG:4326)</div>
+                <div><b>Road Network Length:</b> 2,489.2 meters (2.49 km)</div>
+                <div><b>Survey Frame Count:</b> 108 high-resolution street view frames</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Data Source Integrations</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: 13px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Assets GeoJSON:</span>
+                  <span class="badge badge-success">465 Points Loaded</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Road Topology:</span>
+                  <span class="badge badge-success">10 LineStrings Loaded</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>OCR Inverted Index:</span>
+                  <span class="badge badge-success">220 Keywords Indexed</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>ONNX Runtime Engine:</span>
+                  <span class="badge badge-success">42.01 ms CPU Tested</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 12: OPTION A — FIND A PLACE & CAPTURE STREET VIEW
+             ================================================================== -->
+        <section id="page-street-capture" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge" style="background: var(--primary-light); color: var(--primary-green); font-weight: 700;">Option A</span>
+                <h1 class="page-title-main" style="margin: 0;">Find a Place & Capture Street View</h1>
+              </div>
+              <p class="page-subtitle">
+                Search urban landmarks, navigate surveyed Coimbatore corridors, control 360° heading, and capture street frames for AI inventory analysis.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge badge-subtle">CCMC Ward 29 • 10 Surveyed Corridors</span>
+            </div>
+          </div>
+
+          <!-- Option A Interactive Grid -->
+          <div class="street-intel-grid">
+            <!-- Left Column: Search & Spatial Geolocation Card -->
+            <div class="place-search-card">
+              <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>1. Search Place / Geolocation</span>
+                <span class="badge badge-success" style="font-size: 10px;">GPS Geocoded</span>
+              </div>
+              
+              <!-- Search Box with Live Autocomplete -->
+              <div class="place-search-box-wrap" style="margin-top: 12px; position: relative;">
+                <input type="text" id="placeSearchInput" class="place-search-input" placeholder="Search Coimbatore landmark, junction, or street..." autocomplete="off">
+                <div id="placeSuggestionsList" class="place-suggest-dropdown" style="display: none;"></div>
+              </div>
+
+              <!-- Quick Pick Landmark Chips -->
+              <div style="margin-top: 10px;">
+                <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">Quick-Select Corridor Stations:</div>
+                <div class="place-quick-chips">
+                  <span class="place-quick-chip" data-place="Sathy Road (NH 948)">🛣️ Sathy Rd (ST01)</span>
+                  <span class="place-quick-chip" data-place="Ganapathy Bus Stand & Post Office">🚏 Ganapathy (ST02)</span>
+                  <span class="place-quick-chip" data-place="Gandhi Nagar Junction">🚦 Gandhi Nagar (ST04)</span>
+                  <span class="place-quick-chip" data-place="Gandhipuram Vinayagar Temple">🏛️ Gandhipuram</span>
+                  <span class="place-quick-chip" data-place="Raja Street (Holdout Corridor)">📍 Raja St (ST08)</span>
+                </div>
+              </div>
+
+              <!-- Leaflet Map Container -->
+              <div style="margin-top: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">Interactive Geolocation Map (Click to pinpoint):</span>
+                  <span style="font-size: 10px; color: var(--text-tertiary);">Ward 29 Boundary</span>
+                </div>
+                <div id="optionAPlaceMap" class="place-mini-map" style="height: 240px; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+              </div>
+
+              <!-- Selected Location Metadata Card -->
+              <div class="place-details-card" style="margin-top: 12px; background: var(--bg-surface); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div id="selectedPlaceTitle" style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">Sathy Road (NH 948)</div>
+                    <div id="selectedPlaceStreet" style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">Sathy Road • Ward 29 (Corridor ST01)</div>
+                  </div>
+                  <span id="selectedPlaceStatusBadge" class="badge badge-success">Street View Coverage: Available</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11.5px; color: var(--text-secondary);">
+                  <span id="selectedPlaceCoords" style="font-family: var(--font-mono); font-weight: 600;">GPS: 11.0335, 76.9745</span>
+                  <span id="selectedPlaceCoverageM" style="font-weight: 600; color: var(--primary-green);">Survey Transect: ~350m Road Segment</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Street View Navigation & Viewport Capture Card -->
+            <div class="streetview-viewport-card">
+              <div class="viewport-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-color);">
+                <div>
+                  <div style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">2. Live Street Corridor Viewport</div>
+                  <div id="streetViewViewportSubtitle" style="font-size: 11px; color: var(--text-secondary);">Station Transect View • Heading: 0° • Resolution: 1200x600 px</div>
+                </div>
+                <div class="viewport-badge" style="background: var(--bg-subtle); padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; color: var(--primary-green);">
+                  ● LIVE CORRIDOR
+                </div>
+              </div>
+
+              <!-- Active Viewport Mode -->
+              <div id="streetViewActiveViewport" class="viewport-main-area">
+                <div class="canvas-container" style="position: relative; background: #000; border-radius: 6px; overflow: hidden;">
+                  <canvas id="streetViewCanvas" class="streetview-canvas" style="width: 100%; height: 380px; display: block; object-fit: cover;"></canvas>
+                </div>
+
+                <!-- Navigation Controls Toolbar -->
+                <div class="viewport-controls-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 8px;">
+                  <div style="display: flex; gap: 6px;">
+                    <button class="header-action-btn secondary" id="panLeftBtn" title="Pan Left 15°">◀ Pan Left</button>
+                    <button class="header-action-btn secondary" id="panRightBtn" title="Pan Right 15°">Pan Right ▶</button>
+                    <button class="header-action-btn secondary" id="zoomPanoBtn" title="Toggle Zoom Level">🔍 Zoom</button>
+                    <button class="header-action-btn secondary" id="nextStationBtn" title="Advance +25m along surveyed corridor">🚶 Next Station (+25m)</button>
+                  </div>
+                  <button class="header-action-btn" id="captureStreetViewBtn" style="background: var(--primary-green); color: #FFFFFF; font-weight: 700; padding: 8px 16px; font-size: 13px;">
+                    📸 CAPTURE CURRENT STREET VIEW
+                  </button>
+                </div>
+              </div>
+
+              <!-- Captured Preview Mode (Shows after clicking Capture) -->
+              <div id="capturePreviewPanel" class="capture-preview-panel" style="display: none; padding: 14px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border-color); margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <div style="font-weight: 700; font-size: 13px; color: var(--primary-green); display: flex; align-items: center; gap: 6px;">
+                    <span>✓</span> Captured Street View Frame Preview
+                  </div>
+                  <span class="badge badge-success">Frame Ready for AI Engine</span>
+                </div>
+                
+                <div style="background: #000; border-radius: 6px; overflow: hidden; max-height: 280px; display: flex; justify-content: center; align-items: center;">
+                  <img id="capturedPreviewImage" src="" alt="Captured Frame" style="max-width: 100%; max-height: 280px; object-fit: contain;">
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11.5px; color: var(--text-secondary);">
+                  <span id="capturedPreviewFilename" style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">CAPTURE_IMG.jpg</span>
+                  <span id="capturedPreviewMeta">GPS: [11.0335, 76.9745]</span>
+                </div>
+
+                <!-- Preview Actions -->
+                <div style="display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end;">
+                  <button class="header-action-btn secondary" id="retakeCaptureBtn">🔄 Retake Frame</button>
+                  <button class="header-action-btn secondary" id="addBatchCaptureBtn">➕ Add to Batch Survey</button>
+                  <button class="header-action-btn" id="analyzeCapturedBtn" style="background: var(--primary-green); color: #fff; font-weight: 700;">
+                    🚀 ANALYZE STREET VIEW (YOLO + OCR)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             PAGE 13: OPTION B — UPLOAD STREET IMAGES & ANALYZE
+             ================================================================== -->
+        <section id="page-street-upload" class="workspace-page">
+          <div class="page-title-block">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge" style="background: #EAF4EC; color: var(--primary-green); font-weight: 700;">Option B</span>
+                <h1 class="page-title-main" style="margin: 0;">Upload Street Images & Analyze</h1>
+              </div>
+              <p class="page-subtitle">
+                Upload street-level photographs, dashcam sequences, or mobile survey frames. Automatic EXIF GPS parsing, YOLO11n asset detection, and EasyOCR signboard recognition.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge badge-subtle">YOLO11n + EasyOCR Pipeline Ready</span>
+            </div>
+          </div>
+
+          <!-- Option B Interactive Grid -->
+          <div class="street-intel-grid">
+            <!-- Left Column: Drag & Drop Upload Zone Card -->
+            <div class="place-search-card">
+              <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>1. Select or Drag Street Images</span>
+                <span class="badge badge-success" style="font-size: 10px;">EXIF GPS Enabled</span>
+              </div>
+
+              <!-- Dropzone -->
+              <div id="uploadDropzone" class="upload-dropzone" style="margin-top: 14px;">
+                <div class="upload-icon" style="font-size: 36px; margin-bottom: 8px;">📤</div>
+                <div class="upload-title" style="font-weight: 700; font-size: 14px; color: var(--text-main);">Drag & Drop Street Images Here</div>
+                <div class="upload-desc" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">or click to browse local files from your drive</div>
+                <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 6px;">Supports JPG, JPEG, PNG, WebP • Batch processing enabled</div>
+                <input type="file" id="streetImageFileInput" multiple accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+              </div>
+
+              <!-- Corridor Metadata Form -->
+              <div style="margin-top: 16px; background: var(--bg-surface); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 10px;">Corridor Survey Metadata (Optional):</div>
+                
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Street / Corridor Name:</label>
+                  <input type="text" id="uploadStreetNameInput" class="filter-select" style="width: 100%; box-sizing: border-box;" placeholder="e.g. Sathy Road (Corridor ST01)">
+                </div>
+
+                <div>
+                  <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Place / Landmark Description:</label>
+                  <input type="text" id="uploadPlaceNameInput" class="filter-select" style="width: 100%; box-sizing: border-box;" placeholder="e.g. Ganapathy Post Office Junction">
+                </div>
+              </div>
+
+              <!-- Primary Action Buttons -->
+              <div style="display: flex; gap: 8px; margin-top: 14px;">
+                <button class="header-action-btn secondary" id="clearUploadedFilesBtn" style="padding: 10px 14px;">
+                  🗑️ Clear
+                </button>
+                <button class="header-action-btn" id="analyzeUploadedImagesBtn" style="flex: 1; justify-content: center; background: var(--primary-green); color: #fff; font-weight: 700; padding: 10px 14px;">
+                  🚀 ANALYZE STREET IMAGES (YOLO + OCR)
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Upload Queue & EXIF GPS Validation -->
+            <div class="streetview-viewport-card">
+              <div class="viewport-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-color);">
+                <div>
+                  <div style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">2. Upload Queue & Metadata Validation</div>
+                  <div style="font-size: 11px; color: var(--text-secondary);">Real-time EXIF GPS geocoding and image format inspection</div>
+                </div>
+                <span id="uploadQueueCountBadge" class="badge badge-subtle">0 Images</span>
+              </div>
+
+              <div style="padding: 14px;">
+                <div id="uploadPreviewsGrid" class="upload-previews-grid" style="min-height: 280px; max-height: 480px; overflow-y: auto;">
+                  <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--text-tertiary); font-size: 13px;">
+                    No images uploaded yet. Drag files into the box on the left or click "Browse Files".
+                  </div>
+                </div>
+
+                <div style="margin-top: 12px; padding: 10px 14px; background: var(--bg-surface); border-radius: 6px; border: 1px solid var(--border-color); font-size: 11.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+                  <span>💡</span>
+                  <span>Images with embedded EXIF GPS tags will automatically populate GIS coordinates. Others will map to the designated corridor transect.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SHARED AI ANALYSIS RESULTS DASHBOARD (Phases 4 & 5)
+             Automatically rendered upon running Option A or Option B analysis
+             ================================================================== -->
+        <div id="streetIntelResultsContainer" class="results-dashboard-container" style="display: none;">
+          <div class="page-title-block" style="margin-top: 28px; border-top: 2px solid var(--border-color); padding-top: 24px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge badge-success" style="font-weight: 700;">AI Analysis Complete</span>
+                <h2 class="page-title-main" style="font-size: 18px; margin: 0;">Street Intelligence Asset Inventory Results</h2>
+              </div>
+              <p class="page-subtitle">
+                Automated object detection, OCR signboard parsing, GPS asset geocoding, and Task 5 network coverage quantification.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <button class="header-action-btn secondary" onclick="window.farmwiseStreetIntel.exportCSV()">
+                📊 Export CSV
+              </button>
+              <button class="header-action-btn secondary" onclick="window.farmwiseStreetIntel.exportGeoJSON()">
+                🗺️ Export GeoJSON
+              </button>
+              <button class="header-action-btn" onclick="window.farmwiseStreetIntel.exportReport()" style="background: var(--primary-green); color: #fff;">
+                📄 Export Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Top KPI Metrics -->
+          <div class="kpi-grid" style="margin-top: 16px;">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Total Detections</span>
+                <div class="kpi-icon-wrap">🔍</div>
+              </div>
+              <div class="kpi-value" id="resMetricTotalDets">0</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">YOLO11n</span>
+                <span>All Bounding Boxes</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Unique Physical Assets</span>
+                <div class="kpi-icon-wrap">🏷️</div>
+              </div>
+              <div class="kpi-value" id="resMetricUniqueAssets">0</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">Deduplicated</span>
+                <span>Spatial Clustering</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Analyzed Images</span>
+                <div class="kpi-icon-wrap">📸</div>
+              </div>
+              <div class="kpi-value" id="resMetricImagesAnalyzed">0</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">100% Processed</span>
+                <span id="resMetricStreetName">Coimbatore</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Road Distance Surveyed</span>
+                <div class="kpi-icon-wrap">🛣️</div>
+              </div>
+              <div class="kpi-value" id="resMetricCoverageM">0 m</div>
+              <div class="kpi-meta">
+                <span class="kpi-pill positive">Task 5 Ready</span>
+                <span>Station Segment</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Counts Breakdown -->
+          <div class="card" style="margin-top: 16px;">
+            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Detected Asset Categories (10-Class Urban Ontology)</span>
+              <span class="badge badge-subtle" id="resMetricModelTag">YOLO11n Urban Detection + EasyOCR</span>
+            </div>
+            <div id="resCategoryBreakdownGrid" class="res-cat-grid" style="margin-top: 12px;"></div>
+          </div>
+
+          <!-- Main Image Viewer & Annotation Inspector -->
+          <div class="card" style="margin-top: 16px;">
+            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <span id="resultsViewerImageTitle">Street View Frame</span>
+                <span id="resultsViewerDetsCount" class="badge badge-success" style="margin-left: 8px;">0 Detections</span>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button id="resToggleAnnotatedBtn" class="header-action-btn active" style="font-size: 11px; padding: 4px 10px;" onclick="window.farmwiseStreetIntel.toggleResultsViewMode('annotated')">
+                  Annotated View
+                </button>
+                <button id="resToggleRawBtn" class="header-action-btn secondary" style="font-size: 11px; padding: 4px 10px;" onclick="window.farmwiseStreetIntel.toggleResultsViewMode('raw')">
+                  Raw View
+                </button>
+              </div>
+            </div>
+
+            <div class="results-viewer-card" style="margin-top: 12px; background: #000; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+              <img id="resultsViewerMainImage" src="" alt="Analyzed Street View" class="results-viewer-main-img" style="max-width: 100%; max-height: 520px; object-fit: contain;">
+            </div>
+
+            <!-- Multi-Frame Thumbnails Bar -->
+            <div id="resultsThumbsBar" class="results-thumbs-bar" style="margin-top: 10px;"></div>
+          </div>
+
+          <!-- Dual Spatial Map & Searchable Inventory Table -->
+          <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; margin-top: 16px;">
+            <!-- Left: GIS Map View -->
+            <div class="card">
+              <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Spatial Geocoding Map</span>
+                <span class="badge badge-success" style="font-size: 10px;">Leaflet / OSM</span>
+              </div>
+              <div id="resultsLeafletMap" style="height: 380px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 10px;"></div>
+            </div>
+
+            <!-- Right: Searchable Asset Inventory Table -->
+            <div class="card">
+              <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Extracted Asset Inventory</span>
+                <span class="badge badge-subtle">Audit Trail Ready</span>
+              </div>
+              <div class="table-container" style="max-height: 380px; overflow-y: auto; margin-top: 10px;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Class</th>
+                      <th>Conf</th>
+                      <th>GPS Coordinates</th>
+                      <th>OCR Sign Text</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultsInventoryTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 5 Network Coverage Summary Banner -->
+          <div style="margin-top: 16px; background: #EAF4EC; border: 1px solid #B2D8C3; border-radius: 8px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: var(--primary-green);">
+                Task 5 Network Coverage Compliance: Active Survey Contribution Verified
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                All extracted assets link to Coimbatore Ward 29 spatial corridor topology with verifiable physical stationing.
+              </div>
+            </div>
+            <span class="badge badge-success" style="font-size: 11px; padding: 5px 10px;">
+              ✓ Target Minimum: 2.0 km
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       ASSET CONTEXT SLIDING DRAWER
+       ====================================================================== -->
+  <aside class="asset-drawer" id="assetDrawer">
+    <div class="drawer-header">
+      <div style="font-weight: 700; font-size: 14px; color: var(--text-main);" id="drawerTitle">Asset Details</div>
+      <button class="header-action-btn secondary" id="closeDrawerBtn" style="padding: 4px 8px;">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-image-preview">
+        <img id="drawerImage" src="" alt="Asset Image Preview">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">Asset ID</span>
+          <span style="font-family: var(--font-mono); font-weight: 700;" id="drawerAssetId">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">Class</span>
+          <span id="drawerClass">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">Street Corridor</span>
+          <span id="drawerStreet">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">GPS Coordinates</span>
+          <span style="font-family: var(--font-mono); font-size: 11px;" id="drawerCoords">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">Confidence Score</span>
+          <span style="font-weight: 700; color: var(--primary-green);" id="drawerConfidence">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+          <span style="color: var(--text-secondary);">Status</span>
+          <span id="drawerStatusBadge">—</span>
+        </div>
+        <div style="font-size: 12px; line-height: 1.5; color: var(--text-main); margin-top: 4px;" id="drawerDetails">—</div>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="header-action-btn" id="drawerApproveBtn" style="flex: 1; justify-content: center;">✓ Approve</button>
+      <button class="header-action-btn secondary" id="drawerFlagBtn" style="flex: 1; justify-content: center;">🚩 Flag Field</button>
+    </div>
+  </aside>
+
+  <!-- Decision Modal -->
+  <div class="modal-backdrop" id="decisionModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div style="font-weight: 700; font-size: 14px;">Record Human Review Decision</div>
+        <button class="header-action-btn secondary" id="closeDecisionModalBtn" style="padding: 2px 6px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <label style="font-size: 12px; font-weight: 600;">Audit Decision:</label>
+        <select id="modalDecisionAction" class="filter-select">
+          <option value="APPROVED">Approve (Verified Ground Truth)</option>
+          <option value="FLAG_FIELD">Flag for Physical Field Re-survey</option>
+          <option value="REJECTED">Reject (False Positive Detection)</option>
+          <option value="RECLASSIFY">Reclassify Class Label</option>
+        </select>
+        <label style="font-size: 12px; font-weight: 600;">Auditor Notes & Justification:</label>
+        <textarea id="modalDecisionNotes" class="filter-select" style="height: 80px; resize: vertical;" placeholder="Enter auditor rationale..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="header-action-btn secondary" id="cancelDecisionModalBtn">Cancel</button>
+        <button class="header-action-btn" id="confirmDecisionModalBtn">Confirm Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help & Shortcuts Modal -->
+  <div class="modal-backdrop" id="helpModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <div style="font-weight: 700; font-size: 14px;">FarmwiseAI Urban Intelligence — Design Brief & Shortcuts</div>
+        <button class="header-action-btn secondary" id="closeHelpModalBtn" style="padding: 2px 6px;">✕</button>
+      </div>
+      <div class="modal-body" style="font-size: 12.5px; line-height: 1.6; color: var(--text-secondary);">
+        <p><strong>Enterprise Digital Twin Platform:</strong> Built for municipal engineering, urban asset planning, and GIS asset management for Coimbatore Ward 29 (North Zone, Tamil Nadu).</p>
+        <p style="margin-top: 8px;"><strong>Integrated Visual Assets:</strong></p>
+        <ul style="padding-left: 18px; margin-top: 4px;">
+          <li>108 Authentic Ground Truth QA previews across all 10 surveyed corridors.</li>
+          <li>Real YOLO11n prediction runs from Project 1 (Z: Final Farmwise AI) & Project 2.</li>
+          <li>Interactive Before/After split slider with precision edge comparison.</li>
+          <li>3D wireframe elevation blueprint mode with road stationing distance ruler.</li>
+        </ul>
+        <p style="margin-top: 8px;"><strong>Keyboard Shortcuts:</strong></p>
+        <ul style="padding-left: 18px; margin-top: 4px;">
+          <li><kbd style="background: var(--bg-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">← / →</kbd>: Previous / Next Corridor Frame in Visual Studio</li>
+          <li><kbd style="background: var(--bg-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Esc</kbd>: Close slide-over drawers and dialogs</li>
+          <li><kbd style="background: var(--bg-surface); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-mono);">Ctrl + B</kbd>: Toggle sidebar navigation</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="header-action-btn" id="dismissHelpModalBtn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Floating Urban AI Agent Launcher Button -->
+  <a href="#agent" class="floating-ai-launcher" title="Ask Urban Intelligence AI Agent">
+    <span>🤖</span>
+    <span>Ask Urban AI</span>
+  </a>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Data Bundle -->
+  <script src="data/farmwise_data.js"></script>
+  <!-- Street Intelligence Module (Options A & B) -->
+  <script src="assets/js/street_intelligence.js"></script>
+  <!-- Application Controller -->
+  <script src="assets/js/app.js"></script>
+  <!-- Urban Intelligence AI Agent & LLM Module -->
+  <script src="assets/js/urban_agent.js"></script>
+</body>
+</html>

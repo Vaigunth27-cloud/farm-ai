@@ -1,0 +1,25 @@
+Transformer_ID,Street_ID,Street_Name,Latitude,Longitude,Mounting,Condition,Feeder_Load_Density_kVA_km,Corridor_Total_Capacity_kVA,Operational_Status
+TRANS-ST01-003,ST01,Sathy Road (NH 948),11.03479,76.973588,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,2568.5,750,Nominal Operating Load
+TRANS-ST01-006,ST01,Sathy Road (NH 948),11.033942,76.973833,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,2568.5,750,Nominal Operating Load
+TRANS-ST01-009,ST01,Sathy Road (NH 948),11.033095,76.974079,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,2568.5,750,Nominal Operating Load
+TRANS-ST03-003,ST03,Ganapathy Pudur 3rd Street,11.033358,76.975115,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1456.3,300,Nominal Operating Load
+TRANS-ST03-006,ST03,Ganapathy Pudur 3rd Street,11.032948,76.975585,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1456.3,300,Nominal Operating Load
+TRANS-ST03-009,ST03,Ganapathy Pudur 3rd Street,11.032537,76.976055,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1456.3,300,Nominal Operating Load
+TRANS-ST04-003,ST04,Gandhi Nagar Street,11.03848,76.97472,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1530.6,300,Nominal Operating Load
+TRANS-ST04-006,ST04,Gandhi Nagar Street,11.0389,76.97505,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1530.6,300,Nominal Operating Load
+TRANS-ST04-009,ST04,Gandhi Nagar Street,11.03932,76.97538,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1530.6,300,Nominal Operating Load
+TRANS-ST06-003,ST06,KRG Nagar - Kattabomman Street,11.037584,76.980953,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1680.7,400,Nominal Operating Load
+TRANS-ST06-006,ST06,KRG Nagar - Kattabomman Street,11.037647,76.981494,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1680.7,400,Nominal Operating Load
+TRANS-ST06-009,ST06,KRG Nagar - Kattabomman Street,11.037711,76.982034,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1680.7,400,Nominal Operating Load
+TRANS-ST06-012,ST06,KRG Nagar - Kattabomman Street,11.037774,76.982575,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1680.7,400,Nominal Operating Load
+TRANS-ST07-003,ST07,PN Palayam Street,11.028089,76.97302,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1087.0,300,Nominal Operating Load
+TRANS-ST07-006,ST07,PN Palayam Street,11.027772,76.973798,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1087.0,300,Nominal Operating Load
+TRANS-ST07-009,ST07,PN Palayam Street,11.027455,76.974576,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,1087.0,300,Nominal Operating Load
+TRANS-ST08-003,ST08,Raja Street - Sanganur Road,11.035065,76.97426,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST08-006,ST08,Raja Street - Sanganur Road,11.034566,76.974409,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST08-009,ST08,Raja Street - Sanganur Road,11.034068,76.974558,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST08-012,ST08,Raja Street - Sanganur Road,11.03357,76.974708,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST08-015,ST08,Raja Street - Sanganur Road,11.033072,76.974857,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST08-018,ST08,Raja Street - Sanganur Road,11.032573,76.975006,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,4120.9,1500,Critical Load (Redistribution Needed)
+TRANS-ST10-003,ST10,Ganapathy - Avarampalayam Road,11.031965,76.978786,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,634.9,200,Nominal Operating Load
+TRANS-ST10-006,ST10,Ganapathy - Avarampalayam Road,11.033322,76.979228,Two-Pole H-Frame Galvanized Steel Channel Substation Platform,Good / Operational,634.9,200,Nominal Operating Load

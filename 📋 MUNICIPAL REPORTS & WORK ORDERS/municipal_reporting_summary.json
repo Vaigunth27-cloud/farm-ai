@@ -1,0 +1,54 @@
+{
+  "project": "FarmwiseAI Product Challenge - Task 5 (Team 24)",
+  "target_zone": "Coimbatore City Municipal Corporation (CCMC) - North Zone",
+  "target_ward": "Ward 29 (LGD: 29)",
+  "survey_date": "October 2026",
+  "road_network": {
+    "corridors_surveyed": 10,
+    "total_network_km": 2.49,
+    "total_fixed_assets": 465,
+    "total_building_parcels": 108,
+    "total_ocr_commercial_signs": 201,
+    "cadastre_matched_assets": 62,
+    "ai_discovered_assets": 403,
+    "discovery_ratio_percent": 86.67
+  },
+  "municipal_work_orders": {
+    "tangedco_electrical_orders": {
+      "total_poles_audited": 108,
+      "critical_p1_poles": 33,
+      "high_p2_poles": 40,
+      "routine_p3_poles": 35,
+      "total_estimated_capex_inr": 938500,
+      "transformers_audited": 24,
+      "overburdened_transformer_corridors": [
+        "ST08 Raja Street - Sanganur Road (4120.9 kVA/km)"
+      ]
+    },
+    "ccmc_streetlight_directives": {
+      "corridors_audited": 10,
+      "critical_hazard_corridors": [
+        "ST10 Ganapathy - Avarampalayam Road (45.0m spacing)"
+      ],
+      "suboptimal_corridors": [
+        "ST07 PN Palayam Street (33.3m spacing)",
+        "ST06 KRG Nagar (28.5m spacing)"
+      ],
+      "total_infill_luminaires_required": 18,
+      "total_estimated_lighting_capex_inr": 333000,
+      "target_standard": "Indian Road Congress IRC:SP:72 (20-25m Spacing, E2/E3 Class)"
+    },
+    "ccmc_revenue_tax_ledger": {
+      "total_commercial_records": 201,
+      "tall_commercial_structures_g3_g4": 27,
+      "total_assessed_annual_civic_revenue_inr": 2040150,
+      "annual_property_tax_inr": 1537650,
+      "annual_signboard_license_fee_inr": 502500
+    }
+  },
+  "composite_investment_model": {
+    "total_civic_remediation_capex_inr": 1271500,
+    "annual_projected_commercial_revenue_inr": 2040150,
+    "capex_payback_period_years": 0.62
+  }
+}

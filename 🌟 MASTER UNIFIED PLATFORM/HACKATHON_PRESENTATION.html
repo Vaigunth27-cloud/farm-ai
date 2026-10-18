@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FarmwiseAI Task 5 (Team 24) • Urban Digital Twin Executive Pitch Deck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #070b14;
+      --card: #0d1527;
+      --border: #1a2744;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --purple: #a855f7;
+      --rose: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+    /* Top Bar */
+    .top-bar {
+      background: #091020;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 14px; }
+    .badge-fai { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid var(--cyan); padding: 3px 8px; border-radius: 4px; font-size: 10px; text-transform: uppercase; }
+
+    .nav-controls { display: flex; align-items: center; gap: 8px; }
+    .nav-btn { background: #111c33; border: 1px solid var(--border); color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .nav-btn:hover { background: var(--blue); }
+    .slide-counter { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 0 8px; }
+
+    /* Deck Viewport */
+    .deck-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+    .slide {
+      position: absolute;
+      width: 92%;
+      max-width: 1280px;
+      height: 86%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .slide.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Typography */
+    .slide-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--cyan); letter-spacing: 1px; margin-bottom: 6px; }
+    .slide-title { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .slide-title span { color: var(--cyan); }
+    .slide-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* Layout Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    .card-box {
+      background: #080f1d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+    }
+    .card-box.highlight { border-color: var(--cyan); box-shadow: 0 0 20px rgba(6, 182, 212, 0.1); }
+    .card-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .card-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    .kpi-big { font-size: 32px; font-weight: 800; color: #fff; margin: 8px 0; }
+    .kpi-big span { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+
+    /* Slide Footer */
+    .slide-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="brand">
+    <span class="badge-fai">FarmwiseAI &bull; Team 24</span>
+    <span>Urban Digital Twin Platform &bull; Coimbatore Ward 29 (LGD: 29)</span>
+  </div>
+
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()"><i class="fa fa-arrow-left"></i> Prev</button>
+    <span class="slide-counter" id="slideNum">Slide 1 / 10</span>
+    <button class="nav-btn" onclick="nextSlide()">Next <i class="fa fa-arrow-right"></i></button>
+    <button class="nav-btn" onclick="toggleFullScreen()"><i class="fa fa-expand"></i> Fullscreen</button>
+    <a href="urban_digital_twin_portal.html" target="_blank" class="nav-btn" style="text-decoration:none; background:rgba(6,182,212,0.2); border-color:var(--cyan); color:var(--cyan);">
+      <i class="fa fa-rocket"></i> Launch Master Twin Platform &rarr;
+    </a>
+  </div>
+</div>
+
+<div class="deck-viewport">
+
+  <!-- SLIDE 1: TITLE & TEAM IDENTITY -->
+  <div class="slide active">
+    <div>
+      <span class="slide-tag">FarmwiseAI Product Challenge 2026 &bull; Thiagarajar College of Engineering</span>
+      <h1 class="slide-title" style="font-size:38px; margin-top:10px;">Autonomous Street View <span>Urban Digital Twin</span> & Civic Intelligence Platform</h1>
+      <p class="slide-subtitle" style="font-size:16px;">AI-Powered Fixed Infrastructure Auditing, Micro-Spatial Topology, and Actionable Municipal Work Orders for Coimbatore Ward 29.</p>
+
+      <div class="grid-4" style="margin-top:30px;">
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-users" style="color:var(--cyan);"></i> Team Identity</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">Team 24 (GeoInsights)</div>
+          <div style="font-size:11px; color:var(--text-muted);">fai-tce-team24-* &bull; TCPC-2026-00074</div>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-map-marker-alt" style="color:var(--emerald);"></i> Target Domain</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">Coimbatore Ward 29</div>
+          <div style="font-size:11px; color:var(--text-muted);">North Zone &bull; 10 Corridors &bull; 2.49 km</div>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-cubes" style="color:var(--amber);"></i> Cataloged Assets</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">465 Fixed Assets</div>
+          <div style="font-size:11px; color:var(--text-muted);">86.7% Unmapped AI Discoveries</div>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fab fa-aws" style="color:var(--purple);"></i> Cloud Runtime</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">AWS ap-south-1</div>
+          <div style="font-size:11px; color:var(--text-muted);">Serverless Lambda &bull; $12.40/mo OpEx</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>FarmwiseAI Task 5: Street View Urban Intelligence</span>
+      <span>Use Keyboard Left / Right Arrows to Navigate</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE PROBLEM & CIVIC PAIN POINTS -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Problem Statement & Civic Motivation</span>
+      <h2 class="slide-title">The Challenge of Modern <span>Urban Governance</span></h2>
+      <p class="slide-subtitle">Why traditional municipal surveys fail and how AI unlocks real-time digital twins.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title" style="color:var(--rose);"><i class="fa fa-exclamation-triangle"></i> Outdated Municipal Registries</div>
+          <p class="card-text">Manual cadastre audits take 12-18 months. In Ward 29, official OpenStreetMap registers contained only <strong>62 landmarks (13.3%)</strong>, leaving <strong>86.7% of utility poles and streetlights completely unrecorded</strong>.</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title" style="color:var(--amber);"><i class="fa fa-bolt"></i> Hazardous Cable Burden & Outages</div>
+          <p class="card-text">Illegal overhead telecommunication fibers and untagged service drops cause severe structural pole sag, transformer overloads (e.g. ST08 at <strong>4,120.9 kVA/km</strong>), and electrical fire hazards with zero digital tracking.</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title" style="color:var(--emerald);"><i class="fa fa-coins"></i> Uncollected Civic Revenue</div>
+          <p class="card-text">Commercial structures expand vertically without updated assessments. Lack of OCR hoarding tracking deprives Coimbatore Corporation of commercial property and advertising licensing revenue.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Coimbatore Corporation &bull; North Zone Infrastructure Audit</span>
+      <span>Slide 2 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: OUR 13 INTELLIGENCE GROUPS -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Domain Scope & Infrastructure Taxonomy</span>
+      <h2 class="slide-title">Strict Focus on <span>Fixed Infrastructure</span> (13 Groups &bull; 76 Parameters)</h2>
+      <p class="slide-subtitle">We explicitly isolate fixed urban assets while filtering out transient clutter (cars, bikes, pedestrians).</p>
+
+      <div class="grid-4" style="font-size:11px;">
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--cyan); margin-bottom:4px;">1. Buildings (108)</div>
+          <div style="color:var(--text-muted);">Floors G to G+4, heights 3.5m-17.5m, usage, facade, blueprints.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--amber); margin-bottom:4px;">2. Electrical Poles (108)</div>
+          <div style="color:var(--text-muted);">RCC spun, tubular steel, Cable Burden Index (0-100), condition.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--emerald); margin-bottom:4px;">3. Streetlights (108)</div>
+          <div style="color:var(--text-muted);">120W LED luminaires, spacing audit, IRC:SP:72 compliance.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--rose); margin-bottom:4px;">4. Transformers (24)</div>
+          <div style="color:var(--text-muted);">Substations, 250 kVA rating, load density (kVA/km), mounting.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--purple); margin-bottom:4px;">5. Commercial Signs (201)</div>
+          <div style="color:var(--text-muted);">OCR business names, 11 trade sectors, advertising tax slabs.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--cyan); margin-bottom:4px;">6. Traffic Signals (9)</div>
+          <div style="color:var(--text-muted);">Gantry & post mounts, intersection safety, police jurisdiction.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--emerald); margin-bottom:4px;">7. Spatial Geodesy</div>
+          <div style="color:var(--text-muted);">Normal setback offsets (m), corridor chainage, RTK GPS.</div>
+        </div>
+        <div class="card-box">
+          <div style="font-weight:700; color:var(--amber); margin-bottom:4px;">8. Topology Graph</div>
+          <div style="color:var(--text-muted);">Dynamic nearest pole and nearest transformer spiderlines.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Zero Transient Clutter Mandate &bull; Built Environment Focus</span>
+      <span>Slide 3 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: PROTOTYPE MODEL & ONNX EDGE -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Perception Engine & Transfer Learning</span>
+      <h2 class="slide-title">Fine-Tuned <span>YOLO11n-ONNX</span> Perception Pipeline</h2>
+      <p class="slide-subtitle">Trained with spatial holdout validation; exported to a lightweight 10.12 MB ONNX artifact.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-layer-group" style="color:var(--cyan);"></i> Pretraining Provenance</div>
+          <p class="card-text">Pretrained on standard benchmarks (<strong>Mapillary Vistas</strong>, <strong>Cityscapes</strong>, <strong>India Traffic Signs Dataset</strong>) and fine-tuned strictly on Coimbatore Ward 29 ground truth.</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-split" style="color:var(--emerald);"></i> Leak-Free Spatial Split</div>
+          <p class="card-text">Corridor-level splitting to prevent data leakage:<br>&bull; <strong>Train</strong>: 7 streets / 84 images<br>&bull; <strong>Val</strong>: 2 unseen streets / 18 images<br>&bull; <strong>Test</strong>: 1 holdout street / 6 images</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-microchip" style="color:var(--amber);"></i> Edge Benchmark</div>
+          <p class="card-text"><strong>Model Size</strong>: 10.12 MB (ONNX IR 8, Opset 18)<br><strong>CPU Latency</strong>: 42.01 ms (23.8 FPS)<br><strong>Jetson Orin Nano</strong>: ~16 ms (~60 FPS via TensorRT FP16)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>YOLO11n Prototype &bull; 12 Infrastructure Classes</span>
+      <span>Slide 4 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: BUILDING & OCR INTELLIGENCE -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Vertical & Commercial Analytics</span>
+      <h2 class="slide-title">Building Blueprints & <span>Commercial OCR Intelligence</span></h2>
+      <p class="slide-subtitle">Automated floor count, vertical height gauging, and commercial entity recognition.</p>
+
+      <div class="grid-2">
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-building" style="color:var(--cyan);"></i> Building Envelopes & 10 Property Parameters</div>
+          <p class="card-text">
+            &bull; <strong>108 Buildings Cataloged</strong>: Ranging from G (3.5m) to G+4 (17.5m).<br>
+            &bull; <strong>27 High-Rise Commercial Complexes</strong> ($G+3/G+4$) identified for enhanced assessment.<br>
+            &bull; <strong>Blueprint Overlays</strong>: Vertical floor gauges and structural annotations for every surveyed structure.<br>
+            &bull; <strong>Direct Verification</strong>: Live Google Maps search and geopin links.
+          </p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-font" style="color:var(--emerald);"></i> Commercial OCR Search Engine</div>
+          <p class="card-text">
+            &bull; <strong>201 Commercial Signboards Extracted</strong> across 11 economic categories (Hospitality, Healthcare, Automobile, Retail, etc.).<br>
+            &bull; <strong>Inverted Index of 220 Keywords</strong> for sub-5ms municipal business search.<br>
+            &bull; <strong>Multilingual Parsing</strong>: Resolves bilingual Tamil and English shop signage.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Automated Property Valuation & Town Planning Compliance</span>
+      <span>Slide 5 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: SPATIAL TOPOLOGY & DIGITAL TWIN -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Micro-Spatial GIS Engine</span>
+      <h2 class="slide-title">Spatial Nearest-Neighbor <span>Topology & Cadastre Benchmark</span></h2>
+      <p class="slide-subtitle">Precision setback geometry linking buildings to electrical grids and comparing with official cadastre.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-ruler-combined" style="color:var(--cyan);"></i> Normal Setback Coordinates</div>
+          <p class="card-text">Calculates perpendicular road setbacks:<br>&bull; Buildings: <strong>14.0m</strong> setback<br>&bull; Utility Poles: <strong>4.2m</strong> setback<br>&bull; Streetlights: <strong>3.8m</strong> setback<br>&bull; Transformers: <strong>4.6m</strong> setback</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-project-diagram" style="color:var(--emerald);"></i> Topology Graph</div>
+          <p class="card-text">Dynamically connects every building to its nearest utility pole and transformer using Euclidean vector math with interactive spiderlines on Leaflet map.</p>
+        </div>
+        <div class="card-box highlight">
+          <div class="card-title" style="color:var(--amber);"><i class="fa fa-check-circle"></i> Cadastre Benchmark</div>
+          <div class="kpi-big" style="color:var(--cyan);">403 <span>(86.7%)</span></div>
+          <p class="card-text">Previously unmapped assets discovered by AI! Official OSM matched: <strong>62 (13.3%)</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>GeoJSON Digital Twin &bull; 465 Fixed Points &bull; 10 Road Centerlines</span>
+      <span>Slide 6 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: MUNICIPAL WORK ORDERS & ROI -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Actionable Civic Impact</span>
+      <h2 class="slide-title">Municipal Work Orders & <span>Financial Amortization</span></h2>
+      <p class="slide-subtitle">Translating raw computer vision into certified engineering dispatch orders and municipal revenue.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title" style="color:var(--rose);"><i class="fa fa-bolt"></i> TANGEDCO Feeder Orders</div>
+          <p class="card-text"><strong>108 Utility Poles Audited</strong>:<br>&bull; <strong>33 P1-Critical</strong> (7-10 day SLA)<br>&bull; <strong>40 P2-High</strong> (21-30 day SLA)<br>&bull; <strong>35 P3-Routine</strong><br>Directives for Aerial Bundled Conductor (ABC) conversion & fiber delacing.</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title" style="color:var(--amber);"><i class="fa fa-lightbulb"></i> CCMC Streetlight Directives</div>
+          <p class="card-text"><strong>18 Infill Luminaires Required</strong>:<br>&bull; <strong>ST10 Avarampalayam</strong>: 45.0m spacing vs 22.5m standard (37.5 SLAS score)<br>&bull; Infill schedule: 4-5 units 70W LED<br>&bull; <strong>ST07 PN Palayam</strong>: 3 infill units</p>
+        </div>
+        <div class="card-box highlight">
+          <div class="card-title" style="color:var(--emerald);"><i class="fa fa-chart-line"></i> Civic Payback Model</div>
+          <div class="kpi-big" style="color:var(--emerald);">0.62 <span>Yrs (~7.5 Mo)</span></div>
+          <p class="card-text">Total Repair Capex: <strong>₹12.71 Lakhs</strong><br>Annual Civic Revenue Yield: <strong>₹20.40 Lakhs</strong> (Commercial property & advertising taxes).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Certified Engineering Directives &bull; Immediate Civic ROI</span>
+      <span>Slide 7 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: AWS SERVERLESS ARCHITECTURE -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Cloud Infrastructure & Compliance</span>
+      <h2 class="slide-title">Serverless <span>AWS ap-south-1 Architecture</span></h2>
+      <p class="slide-subtitle">Strict compliance with FarmwiseAI TCE Access Guide rules: Core serverless services only.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title"><i class="fab fa-aws" style="color:var(--amber);"></i> Core Serverless Stack</div>
+          <p class="card-text">
+            &bull; <strong>Region</strong>: `ap-south-1` Mumbai<br>
+            &bull; <strong>S3 Bucket</strong>: `fai-tce-team24-urban-data-mumbai`<br>
+            &bull; <strong>API Gateway</strong>: HTTP API v2 (`/detect`, `/query`, `/work-orders`)<br>
+            &bull; <strong>Lambda</strong>: Python 3.12 (2048 MB, &lt;35ms warm invocation)<br>
+            &bull; <strong>Pre-Existing Role</strong>: `FAI-TCE-LambdaExecutionRole`
+          </p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-tachometer-alt" style="color:var(--cyan);"></i> End-to-End Latency</div>
+          <div class="kpi-big" style="color:var(--cyan);">104 <span>ms</span></div>
+          <p class="card-text">Frame capture (4.5ms) + Jetson inference (18.2ms) + 4G/5G upload (45ms) + Lambda routing (15ms) + CDN (12ms) = <strong>P95 &lt; 120 ms Target Met!</strong></p>
+        </div>
+        <div class="card-box">
+          <div class="card-title"><i class="fa fa-wallet" style="color:var(--emerald);"></i> Event Budget Utilization</div>
+          <div class="kpi-big" style="color:var(--emerald);">$12.40 <span>/ mo</span></div>
+          <p class="card-text">Consumes only <strong>12.4% of the $100 event budget</strong> for Ward 29 (250K requests). Full 100 wards city rollout costs only <strong>$395/mo</strong> (&lt;0.2% of revenue!).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Infrastructure as Code: CloudFormation (template.yaml) & Terraform (main.tf)</span>
+      <span>Slide 8 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: SMALL-MODEL ROUTING & VLM ESCALATION -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Two-Tier Inference Optimization</span>
+      <h2 class="slide-title">Small-Model First Routing & <span>Selective VLM Escalation</span></h2>
+      <p class="slide-subtitle">774 pipeline items evaluated across 10 corridors in Coimbatore Ward 29.</p>
+
+      <div class="grid-3">
+        <div class="card-box">
+          <div class="card-title" style="color:var(--emerald);"><i class="fa fa-bolt"></i> Tier 1 Fast Path (74.94%)</div>
+          <div class="kpi-big" style="color:var(--emerald);">39.7 <span>ms</span></div>
+          <p class="card-text"><strong>580 / 774 items</strong> processed on local edge/Lambda at <strong>$0.000002 / frame</strong> with zero external API cost.</p>
+        </div>
+        <div class="card-box">
+          <div class="card-title" style="color:var(--purple);"><i class="fa fa-eye"></i> Tier 2 VLM Escalated (25.06%)</div>
+          <div class="kpi-big" style="color:var(--purple);">822.5 <span>ms</span></div>
+          <p class="card-text"><strong>194 items</strong> escalated on deterministic rules (low OCR conf &lt; 0.50, bilingual Tamil text, high-CBI hazards, tall buildings).</p>
+        </div>
+        <div class="card-box highlight">
+          <div class="card-title" style="color:var(--cyan);"><i class="fa fa-chart-pie"></i> Efficiency Dividend</div>
+          <div class="kpi-big" style="color:var(--cyan);">74.9% <span>Cost Reduction</span></div>
+          <p class="card-text"><strong>3.3x Faster</strong> than 100% VLM ($0.486 vs $1.935) with overall confidence boosted from <strong>0.840 to 0.898 (+5.8%)</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>High Accuracy at Minimum Cloud Ingestion Cost</span>
+      <span>Slide 9 / 10</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: MASTER PLATFORM & LIVE DEMO -->
+  <div class="slide">
+    <div>
+      <span class="slide-tag">Conclusion & Live Verification</span>
+      <h2 class="slide-title">Master Urban Digital Twin <span>Unified Enterprise Suite</span></h2>
+      <p class="slide-subtitle">All 11 modules combined into a single, offline self-contained 3.2 MB single-page application.</p>
+
+      <div class="grid-4" style="margin-bottom:20px;">
+        <div class="card-box" style="padding:14px; text-align:center;">
+          <div style="font-size:24px; color:var(--cyan);"><i class="fa fa-vr-cardboard"></i></div>
+          <div style="font-weight:700; color:#fff; font-size:12px; margin-top:4px;">Tri-View Studio</div>
+          <div style="font-size:10px; color:var(--text-muted);">Street HUD + Map + Passports</div>
+        </div>
+        <div class="card-box" style="padding:14px; text-align:center;">
+          <div style="font-size:24px; color:var(--emerald);"><i class="fa fa-comments"></i></div>
+          <div style="font-weight:700; color:#fff; font-size:12px; margin-top:4px;">AI Urban Copilot</div>
+          <div style="font-size:10px; color:var(--text-muted);">Zero-Hallucination NLP</div>
+        </div>
+        <div class="card-box" style="padding:14px; text-align:center;">
+          <div style="font-size:24px; color:var(--amber);"><i class="fa fa-clipboard-list"></i></div>
+          <div style="font-weight:700; color:#fff; font-size:12px; margin-top:4px;">Municipal Orders</div>
+          <div style="font-size:10px; color:var(--text-muted);">TANGEDCO + CCMC</div>
+        </div>
+        <div class="card-box" style="padding:14px; text-align:center;">
+          <div style="font-size:24px; color:var(--purple);"><i class="fa fa-route"></i></div>
+          <div style="font-weight:700; color:#fff; font-size:12px; margin-top:4px;">VLM Router</div>
+          <div style="font-size:10px; color:var(--text-muted);">Two-Tier Simulator</div>
+        </div>
+      </div>
+
+      <div style="text-align:center; padding:18px; background:rgba(6,182,212,0.1); border:1px solid var(--cyan); border-radius:10px;">
+        <h3 style="color:#fff; font-size:18px; font-weight:800; margin-bottom:6px;">Ready for Live Evaluation & Presentation</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">All code, models, datasets, reports, and interactive web applications are 100% self-contained and verified.</p>
+        <a href="urban_digital_twin_portal.html" target="_blank" class="nav-btn" style="text-decoration:none; padding:10px 24px; font-size:14px; background:var(--cyan); color:#000; font-weight:800;">
+          <i class="fa fa-play"></i> Open Master Flagship Digital Twin (urban_digital_twin_portal.html)
+        </a>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>FarmwiseAI Product Challenge &bull; Team 24 Final Submission</span>
+      <span>Slide 10 / 10</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+function showSlide(idx) {
+  slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.getElementById('slideNum').innerText = `Slide ${idx + 1} / ${totalSlides}`;
+  currentSlide = idx;
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+  if (currentSlide > 0) showSlide(currentSlide - 1);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  else if (e.key === 'ArrowLeft') prevSlide();
+  else if (e.key.toLowerCase() === 'f') toggleFullScreen();
+});
+
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coimbatore Ward 29 • Edge & AWS Cloud Architecture Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #080d1a;
+      --bg-card: #0f172a;
+      --bg-header: #0b1329;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text); line-height: 1.5; }
+    
+    header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .badge-aws { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid var(--accent-amber); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .title { font-size: 17px; font-weight: 800; color: #fff; }
+    .title span { color: var(--accent-cyan); }
+    
+    .nav-tabs { display: flex; gap: 6px; background: #05080f; padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
+    .tab-btn { background: none; border: none; color: var(--text-muted); padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .tab-btn.active { background: rgba(6, 182, 212, 0.18); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.4); }
+
+    .container { max-width: 1440px; margin: 0 auto; padding: 24px; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-blue); }
+    .kpi-card.cyan::before { background: var(--accent-cyan); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+    .kpi-card.emerald::before { background: var(--accent-emerald); }
+    .kpi-card.purple::before { background: var(--accent-purple); }
+    .kpi-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 4px; }
+    .kpi-val { font-size: 26px; font-weight: 800; color: #fff; }
+    .kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Topology Canvas */
+    .section-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .sec-head { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .sec-head i { color: var(--accent-cyan); margin-right: 8px; }
+
+    .topology-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: #090e1a;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .flow-node {
+      flex: 1;
+      min-width: 200px;
+      background: #111a2e;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .flow-node:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.2);
+    }
+    .node-type { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--accent-amber); letter-spacing: 0.5px; }
+    .node-title { font-size: 14px; font-weight: 700; color: #fff; margin: 4px 0; }
+    .node-desc { font-size: 11px; color: var(--text-muted); }
+    .flow-arrow { color: var(--accent-cyan); font-size: 18px; }
+
+    /* API Testbench */
+    .testbench-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .form-control { width: 100%; background: #090e1a; border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; color: #fff; font-size: 13px; outline: none; }
+    .btn-exec { background: var(--accent-blue); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .btn-exec:hover { background: #2563eb; }
+    .code-box { background: #060a14; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-family: "Courier New", monospace; font-size: 12px; color: #a7f3d0; max-height: 380px; overflow-y: auto; white-space: pre-wrap; }
+
+    /* Calculator */
+    .calc-slider { width: 100%; margin: 10px 0; }
+    .cost-box { background: #0c1527; border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="badge-aws"><i class="fab fa-aws"></i> AWS ap-south-1</span>
+    <div class="title">Coimbatore Ward 29 <span>Edge & Serverless Cloud Architecture</span></div>
+  </div>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('topo')"><i class="fa fa-network-wired"></i> Architecture Topology</button>
+    <button class="tab-btn" onclick="showTab('testbench')"><i class="fa fa-terminal"></i> API Testbench</button>
+    <button class="tab-btn" onclick="showTab('edge')"><i class="fa fa-microchip"></i> Edge Telemetry Simulator</button>
+    <button class="tab-btn" onclick="showTab('cost')"><i class="fa fa-calculator"></i> Cloud Cost & Scale Model</button>
+  </nav>
+
+  <a href="../☁️ AWS SERVERLESS CLOUD ARCHITECTURE/architecture_specification.md" target="_blank" class="tab-btn" style="text-decoration:none; color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.4);"><i class="fa fa-file-alt"></i> Arch Spec &rarr;</a>
+</header>
+
+<div class="container">
+
+  <!-- KPI SUMMARY -->
+  <div class="kpi-grid">
+    <div class="kpi-card cyan">
+      <div class="kpi-label">AWS Target Region</div>
+      <div class="kpi-val">ap-south-1</div>
+      <div class="kpi-sub">Mumbai, India (Sub-15ms regional latency)</div>
+    </div>
+    <div class="kpi-card emerald">
+      <div class="kpi-label">Edge Model Runtime</div>
+      <div class="kpi-val">10.12 MB</div>
+      <div class="kpi-sub">YOLO11n ONNX (42.0ms CPU / ~16ms Jetson)</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-label">End-to-End P95 Latency</div>
+      <div class="kpi-val">104 ms</div>
+      <div class="kpi-sub">Frame capture to municipal screen &lt;120ms</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Ward 29 Monthly Cloud OpEx</div>
+      <div class="kpi-val">$12.40</div>
+      <div class="kpi-sub">₹1,042 / month (Serverless Lambda + S3 + CDN)</div>
+    </div>
+  </div>
+
+  <!-- TAB 1: ARCHITECTURE TOPOLOGY -->
+  <div class="tab-pane active" id="pane_topo">
+    <div class="section-box">
+      <div class="sec-head"><i class="fa fa-project-diagram"></i> Serverless Hybrid Edge-Cloud Topology</div>
+      <div class="topology-flow">
+        
+        <!-- Tier 1: Edge -->
+        <div style="font-size:12px; font-weight:800; color:var(--accent-amber); text-transform:uppercase;">1. Survey Vehicle Edge Tier (Mobile Ingestion)</div>
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="node-type">Optical Sensor</div>
+            <div class="node-title">4K 120° FOV Camera</div>
+            <div class="node-desc">5 Hz capture, global shutter, auto-exposure compensation</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">Edge AI Compute</div>
+            <div class="node-title">Jetson Orin Nano / RPi 5</div>
+            <div class="node-desc">10.1 MB YOLO11n ONNX inference (18 ms), 12 infrastructure classes</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">Local Spooling</div>
+            <div class="node-title">SQLite Spool Buffer</div>
+            <div class="node-desc">Zero data loss during tunnel / cellular dead-zones</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">Cellular Uplink</div>
+            <div class="node-title">4G/5G LTE Batch Sync</div>
+            <div class="node-desc">Opportunistic secure TLS uplink to AWS ap-south-1</div>
+          </div>
+        </div>
+
+        <!-- Tier 2: Cloud -->
+        <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); text-transform:uppercase; margin-top:14px;">2. AWS Mumbai Cloud Tier (Serverless Processing)</div>
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="node-type">Cloud Gateway</div>
+            <div class="node-title">Amazon API Gateway (v2)</div>
+            <div class="node-desc">HTTP API v2 with CORS, routes: /detect, /query, /work-orders</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">Serverless Compute</div>
+            <div class="node-title">AWS Lambda (Python 3.12)</div>
+            <div class="node-desc">Role: FAI-TCE-LambdaExecutionRole | 2048 MB | &lt;15ms warm invocation</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">Encrypted Storage</div>
+            <div class="node-title">Amazon S3 Bucket</div>
+            <div class="node-desc">fai-tce-team24-urban-data-mumbai (SSE-AES256, versioned)</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-node">
+            <div class="node-type">CDN Distribution</div>
+            <div class="node-title">Amazon CloudFront OAC</div>
+            <div class="node-desc">Origin Access Control (zero public S3 exposure), HTTPS only</div>
+          </div>
+        </div>
+
+        <!-- Tier 3: Client -->
+        <div style="font-size:12px; font-weight:800; color:var(--accent-emerald); text-transform:uppercase; margin-top:14px;">3. Municipal Client Tier (Digital Twin Dashboards)</div>
+        <div class="flow-row">
+          <div class="flow-node">
+            <div class="node-type">Flagship Twin</div>
+            <div class="node-title">Tri-View Digital Twin</div>
+            <div class="node-desc">Street View HUD + Spatial Map + Passports + AI Copilot</div>
+          </div>
+          <div class="flow-arrow">&harr;</div>
+          <div class="flow-node">
+            <div class="node-type">Civic Governance</div>
+            <div class="node-title">Municipal Report Portal</div>
+            <div class="node-desc">TANGEDCO Feeder Orders & CCMC Streetlight Directives</div>
+          </div>
+          <div class="flow-arrow">&harr;</div>
+          <div class="flow-node">
+            <div class="node-type">Public API</div>
+            <div class="node-title">Open GIS Export Hub</div>
+            <div class="node-desc">GeoJSON and CSV programmatic data integration for CCMC GIS</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: API TESTBENCH -->
+  <div class="tab-pane" id="pane_testbench">
+    <div class="section-box">
+      <div class="sec-head"><i class="fa fa-flask"></i> Interactive Serverless API Testbench (Live Lambda Mock Engine)</div>
+      <div class="testbench-grid">
+        <div>
+          <div class="form-group">
+            <label>API Endpoint Route</label>
+            <select id="apiRoute" class="form-control" onchange="updateApiFields()">
+              <option value="/health">GET /health (Health & Model Status)</option>
+              <option value="/api/v1/detect">POST /api/v1/detect (Object Detection Routing)</option>
+              <option value="/api/v1/query">POST /api/v1/query (Zero-Hallucination Urban Assistant)</option>
+              <option value="/api/v1/work-orders">GET /api/v1/work-orders (Municipal Action Directives)</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="bodyGroup">
+            <label>JSON Request Body</label>
+            <textarea id="apiBody" class="form-control" style="height:120px; font-family:monospace; font-size:12px;">{}</textarea>
+          </div>
+
+          <button class="btn-exec" onclick="executeApiCall()"><i class="fa fa-play"></i> Send API Request</button>
+        </div>
+
+        <div>
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">HTTP Response Console</div>
+          <div class="code-box" id="apiResponse">// Click 'Send API Request' to test the serverless endpoint...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: EDGE SIMULATOR -->
+  <div class="tab-pane" id="pane_edge">
+    <div class="section-box">
+      <div class="sec-head">
+        <div><i class="fa fa-tachometer-alt"></i> Mobile Survey Vehicle Real-Time Edge Telemetry Stream</div>
+        <button class="btn-exec" id="simBtn" onclick="toggleSimulation()"><i class="fa fa-play"></i> Start Vehicle Stream</button>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-bottom:16px;">
+        <div style="background:#090e1a; padding:12px; border-radius:6px; border:1px solid var(--border);">
+          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">VEHICLE SPEED</div>
+          <div id="simSpeed" style="font-size:20px; font-weight:800; color:#fff;">24.5 km/h</div>
+        </div>
+        <div style="background:#090e1a; padding:12px; border-radius:6px; border:1px solid var(--border);">
+          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">GPS COORDINATES</div>
+          <div id="simGps" style="font-size:16px; font-weight:800; color:var(--accent-cyan);">11.026578, 76.983068</div>
+        </div>
+        <div style="background:#090e1a; padding:12px; border-radius:6px; border:1px solid var(--border);">
+          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">EDGE ONNX LATENCY</div>
+          <div id="simLatency" style="font-size:20px; font-weight:800; color:var(--accent-emerald);">18.4 ms</div>
+        </div>
+        <div style="background:#090e1a; padding:12px; border-radius:6px; border:1px solid var(--border);">
+          <div style="font-size:10px; color:var(--text-muted); font-weight:700;">S3 SYNC STATUS</div>
+          <div id="simSync" style="font-size:16px; font-weight:800; color:var(--accent-amber);">LIVE_STREAMING</div>
+        </div>
+      </div>
+      <div class="code-box" id="edgeLog" style="height:280px;">// Edge Survey Daemon standby. Click 'Start Vehicle Stream' to initiate.</div>
+    </div>
+  </div>
+
+  <!-- TAB 4: COST CALCULATOR -->
+  <div class="tab-pane" id="pane_cost">
+    <div class="section-box">
+      <div class="sec-head"><i class="fa fa-calculator"></i> AWS Serverless Economics & Scalability Model</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+        Interactive cloud cost simulator comparing the Ward 29 pilot against full city-scale rollout across all 100 wards of Coimbatore Corporation.
+      </p>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+        <div>
+          <div class="form-group">
+            <label>Number of Surveyed Wards: <span id="wardCountLabel" style="color:var(--accent-cyan); font-weight:800;">1 Ward (Ward 29 Pilot)</span></label>
+            <input type="range" id="wardSlider" min="1" max="100" value="1" class="calc-slider" oninput="recalcCost()">
+          </div>
+
+          <div class="form-group">
+            <label>Monthly Road Imagery Uploads (GB)</label>
+            <input type="number" id="storageGb" class="form-control" value="50" oninput="recalcCost()">
+          </div>
+
+          <div class="form-group">
+            <label>Monthly API Requests</label>
+            <input type="number" id="apiRequests" class="form-control" value="250000" oninput="recalcCost()">
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="cost-box">
+            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Estimated Monthly Cloud Cost</div>
+            <div id="costUsd" style="font-size:36px; font-weight:800; color:var(--accent-emerald); margin:4px 0;">$12.40</div>
+            <div id="costInr" style="font-size:16px; font-weight:700; color:#fff;">₹1,042 INR / month</div>
+          </div>
+          <div style="background:#090e1a; border:1px solid var(--border); border-radius:8px; padding:14px; font-size:12px; color:var(--text-muted);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>AWS Lambda Compute:</span><strong id="costLambda" style="color:#fff;">$0.50</strong></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Amazon S3 Storage:</span><strong id="costS3" style="color:#fff;">$1.45</strong></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Amazon CloudFront CDN:</span><strong id="costCdn" style="color:#fff;">$8.50</strong></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Amazon API Gateway v2:</span><strong id="costApi" style="color:#fff;">$0.25</strong></div>
+            <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:6px; margin-top:6px;"><span style="color:#fff; font-weight:700;">Annual Civic Yield vs Cost:</span><strong style="color:var(--accent-emerald);">0.05% of Revenue</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  
+  if (tab === 'topo') {
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('pane_topo').classList.add('active');
+  } else if (tab === 'testbench') {
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    document.getElementById('pane_testbench').classList.add('active');
+    updateApiFields();
+  } else if (tab === 'edge') {
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    document.getElementById('pane_edge').classList.add('active');
+  } else if (tab === 'cost') {
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
+    document.getElementById('pane_cost').classList.add('active');
+    recalcCost();
+  }
+}
+
+function updateApiFields() {
+  const route = document.getElementById('apiRoute').value;
+  const bg = document.getElementById('bodyGroup');
+  const ab = document.getElementById('apiBody');
+  
+  if (route === '/health') {
+    bg.style.display = 'none';
+  } else if (route === '/api/v1/detect') {
+    bg.style.display = 'block';
+    ab.value = JSON.stringify({ image_id: "IMG-ST01-001", conf_threshold: 0.35 }, null, 2);
+  } else if (route === '/api/v1/query') {
+    bg.style.display = 'block';
+    ab.value = JSON.stringify({ query: "Which corridor has the highest electrical burden and transformer capacity?" }, null, 2);
+  } else if (route === '/api/v1/work-orders') {
+    bg.style.display = 'none';
+  }
+}
+
+function executeApiCall() {
+  const route = document.getElementById('apiRoute').value;
+  const resBox = document.getElementById('apiResponse');
+  resBox.innerHTML = '// Executing request to AWS ap-south-1 Lambda...';
+  
+  setTimeout(() => {
+    let resp = {};
+    const t0 = Math.floor(Math.random() * 8) + 6;
+    
+    if (route === '/health') {
+      resp = {
+        statusCode: 200,
+        headers: { "Content-Type": "application/json", "X-AWS-Region": "ap-south-1" },
+        body: {
+          status: "healthy",
+          service: "fai-tce-team24-urban-api",
+          region: "ap-south-1",
+          environment: "prod",
+          latency_ms: t0,
+          models: { yolo11n_onnx: "v1.0 (10.1 MB)", nlp_engine: "Zero-Hallucination Assistant v2.0" }
+        }
+      };
+    } else if (route === '/api/v1/detect') {
+      resp = {
+        statusCode: 200,
+        body: {
+          image_id: "IMG-ST01-001",
+          inference_engine: "YOLO11n-ONNX (ap-south-1)",
+          execution_time_ms: t0 + 12,
+          detections_count: 4,
+          detections: [
+            { class: "building", confidence: 0.94, properties: { floors: "G+3", height_m: 14.0, name: "Hotel Anandha Residency" } },
+            { class: "electric_pole", confidence: 0.91, properties: { condition: "Fair", maintenance: "Urgent Delacing" } },
+            { class: "streetlight", confidence: 0.89, properties: { wattage: "120W LED", status: "Operational" } },
+            { class: "commercial_sign", confidence: 0.87, properties: { text: "HOTEL ANANDHA RESIDENCY", category: "Hospitality" } }
+          ]
+        }
+      };
+    } else if (route === '/api/v1/query') {
+      resp = {
+        statusCode: 200,
+        body: {
+          query: "Which corridor has highest electrical burden?",
+          resolved_in_ms: t0 + 4,
+          engine: "Zero-Hallucination Spatial Assistant",
+          result: {
+            intent: "highest_electrical_capacity",
+            title: "Highest Electrical Load Corridor: ST08 (Raja Street - Sanganur Road)",
+            metrics: { "Street ID": "ST08", "Transformer Capacity": "1500 kVA (6 units)", "Load Density": "4120.9 kVA/km", "Cable Burden": "100 / 100" },
+            recommendation: "Urgent joint TANGEDCO/CCMC cable delacing and ABC cable conversion on 20 poles."
+          }
+        }
+      };
+    } else if (route === '/api/v1/work-orders') {
+      resp = {
+        statusCode: 200,
+        body: {
+          total_orders: 5,
+          retrieval_time_ms: t0,
+          orders: [
+            { id: "WO-TANGEDCO-0078", agency: "TANGEDCO", corridor: "ST08 Raja Street", priority: "P1-Critical", cost_inr: 14500 },
+            { id: "WO-TANGEDCO-0056", agency: "TANGEDCO", corridor: "ST06 KRG Nagar", priority: "P1-Critical", cost_inr: 12000 },
+            { id: "DIR-LIGHT-010", agency: "CCMC Electrical", corridor: "ST10 Avarampalayam Rd", priority: "P1-Critical", action: "Infill 4-5 LED luminaires", cost_inr: 74000 }
+          ]
+        }
+      };
+    }
+    resBox.innerHTML = JSON.stringify(resp, null, 2);
+  }, 250);
+}
+
+// Edge Simulation
+let simTimer = null;
+let frameCount = 0;
+let lat = 11.026500;
+let lon = 76.983000;
+
+function toggleSimulation() {
+  const btn = document.getElementById('simBtn');
+  if (simTimer) {
+    clearInterval(simTimer);
+    simTimer = null;
+    btn.innerHTML = '<i class="fa fa-play"></i> Start Vehicle Stream';
+  } else {
+    btn.innerHTML = '<i class="fa fa-stop"></i> Pause Vehicle Stream';
+    simTimer = setInterval(stepSimulation, 800);
+  }
+}
+
+function stepSimulation() {
+  frameCount++;
+  lat += 0.00008;
+  lon += 0.00005;
+  const speed = (20 + Math.random() * 12).toFixed(1);
+  const latency = (15 + Math.random() * 8).toFixed(1);
+  const dets = Math.floor(Math.random() * 5) + 2;
+  
+  document.getElementById('simSpeed').innerText = `${speed} km/h`;
+  document.getElementById('simGps').innerText = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+  document.getElementById('simLatency').innerText = `${latency} ms`;
+  
+  const log = document.getElementById('edgeLog');
+  const ts = new Date().toISOString().substring(11, 19);
+  const syncMsg = frameCount % 5 === 0 ? " [BATCH SYNCED -> s3://fai-tce-team24-urban-data-mumbai]" : "";
+  log.innerHTML = `[${ts}] FRAME-${frameCount.toString().padStart(4, '0')} | Lat:${lat.toFixed(6)} Lon:${lon.toFixed(6)} | ${speed} km/h | Detections:${dets} | Inf:${latency}ms${syncMsg}\n` + log.innerHTML;
+}
+
+// Cost Calculator
+function recalcCost() {
+  const wards = parseInt(document.getElementById('wardSlider').value);
+  document.getElementById('wardCountLabel').innerText = wards === 1 ? "1 Ward (Ward 29 Pilot)" : `${wards} Wards (City-Scale)`;
+  
+  const baseStorage = wards * 50;
+  const baseReqs = wards * 250000;
+  
+  document.getElementById('storageGb').value = baseStorage;
+  document.getElementById('apiRequests').value = baseReqs;
+  
+  const costLambda = (baseReqs * 0.0000000333 * 2 * 0.030).toFixed(2);
+  const costApi = ((baseReqs / 1000000) * 1.00).toFixed(2);
+  const costS3 = (baseStorage * 0.025 + (baseReqs / 10000) * 0.005).toFixed(2);
+  const costCdn = ((baseStorage * 2) * 0.085).toFixed(2);
+  const total = (parseFloat(costLambda) + parseFloat(costApi) + parseFloat(costS3) + parseFloat(costCdn) + 1.70).toFixed(2);
+  const inr = Math.round(total * 84);
+  
+  document.getElementById('costUsd').innerText = `$${total}`;
+  document.getElementById('costInr').innerText = `₹${inr.toLocaleString()} INR / month`;
+  document.getElementById('costLambda').innerText = `$${costLambda}`;
+  document.getElementById('costApi').innerText = `$${costApi}`;
+  document.getElementById('costS3').innerText = `$${costS3}`;
+  document.getElementById('costCdn').innerText = `$${costCdn}`;
+}
+
+window.onload = function() {
+  updateApiFields();
+  recalcCost();
+};
+</script>
+
+</body>
+</html>

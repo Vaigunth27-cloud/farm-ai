@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corridor Intelligence & Density Dashboard — FarmwiseAI Task 5</title>
+<style>
+  :root {
+    --bg-dark: #070a12;
+    --panel-bg: #0f1624;
+    --panel-border: #1a273b;
+    --accent-cyan: #00f2fe;
+    --accent-emerald: #00ff88;
+    --accent-gold: #ffbe0b;
+    --accent-orange: #fb5607;
+    --accent-red: #ff0055;
+    --accent-magenta: #f72585;
+    --text-primary: #e6edf8;
+    --text-muted: #8496ad;
+    --card-bg: #131c2e;
+    --card-hover: #1b2842;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+  header {
+    background: linear-gradient(180deg, #101726 0%, #070b14 100%);
+    border-bottom: 1px solid var(--panel-border);
+    padding: 24px 36px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .badge-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: rgba(0, 242, 254, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 242, 254, 0.35);
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h1 span.title-gradient {
+    background: linear-gradient(90deg, #00f2fe, #00ff88, #ffbe0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 24px 36px;
+  }
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent-cyan);
+  }
+  .kpi-card.emerald::before { background: var(--accent-emerald); }
+  .kpi-card.gold::before { background: var(--accent-gold); }
+  .kpi-card.red::before { background: var(--accent-red); }
+  .kpi-k {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kpi-v {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 4px;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  /* Comparative Visual Analytics Box */
+  .charts-section {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .chart-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 80px 180px 1fr 90px;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+  }
+  .bar-id { font-family: monospace; font-weight: 700; color: var(--accent-cyan); }
+  .bar-name { color: #d0dced; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track {
+    background: #090e18;
+    border: 1px solid #1c2a3e;
+    height: 18px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00f2fe, #00ff88);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .bar-fill.burden {
+    background: linear-gradient(90deg, #ffbe0b, #ff0055);
+  }
+  .bar-val {
+    font-weight: 700;
+    text-align: right;
+    color: #fff;
+  }
+
+  /* Filter Bar */
+  .filter-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 7px 14px;
+    background: #0d1522;
+    border: 1px solid #1c2b40;
+    color: var(--text-muted);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  /* Scorecards Grid */
+  .scorecards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+  .sc-card {
+    background: var(--card-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .sc-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-cyan);
+  }
+  .sc-header {
+    padding: 14px 18px;
+    background: #0d1422;
+    border-bottom: 1px solid var(--panel-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sc-id {
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+  }
+  .grade-badge {
+    font-size: 14px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .grade-A-plus { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid #00ff88; }
+  .grade-A { background: rgba(0, 242, 254, 0.2); color: #00f2fe; border: 1px solid #00f2fe; }
+  .grade-B { background: rgba(255, 190, 11, 0.2); color: #ffbe0b; border: 1px solid #ffbe0b; }
+  .grade-C { background: rgba(255, 0, 85, 0.2); color: #ff0055; border: 1px solid #ff0055; }
+  
+  .sc-body {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+  }
+  .sc-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .sc-arch {
+    font-size: 11px;
+    color: var(--accent-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .sc-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: #0a101a;
+    border: 1px solid #182436;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+  .sc-m-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .sc-m-k { color: var(--text-muted); font-size: 10px; text-transform: uppercase; font-weight: 600; }
+  .sc-m-v { color: #e2ebf6; font-size: 13px; font-weight: 700; margin-top: 1px; }
+
+  .sc-action-box {
+    background: rgba(14, 22, 34, 0.8);
+    border: 1px solid #1c2b40;
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+  .sc-action-label {
+    color: var(--accent-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .sc-action-text {
+    color: #d8e4f4;
+    line-height: 1.4;
+  }
+  .sc-agency {
+    color: var(--text-muted);
+    font-size: 10px;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .sc-footer {
+    padding: 10px 18px;
+    background: #0c121e;
+    border-top: 1px solid var(--panel-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="max-width: 1600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span class="badge-tag">FarmwiseAI Task 5 &bull; Team 24</span>
+      <h1><span class="title-gradient">Corridor Intelligence & Urban Density Engine</span></h1>
+      <p class="subtitle">Cross-Corridor Comparative Diagnostics, Infrastructure Health Indices & Municipal Action Plans &bull; Coimbatore Ward 29</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="gis_digital_twin_baseline.html" style="text-decoration:none; padding: 8px 14px; background: #162438; border: 1px solid #2b3f5c; color: var(--accent-cyan); border-radius: 6px; font-size: 12px; font-weight: 700;">&larr; GIS Digital Twin</a>
+      <a href="building_explorer.html" style="text-decoration:none; padding: 8px 14px; background: #162438; border: 1px solid #2b3f5c; color: var(--accent-emerald); border-radius: 6px; font-size: 12px; font-weight: 700;">Building Explorer &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-k">Total Road Surveyed</div>
+      <div class="kpi-v">2.49 km</div>
+      <div class="kpi-sub">10 Surveyed Corridors</div>
+    </div>
+    <div class="kpi-card emerald">
+      <div class="kpi-k">Peak Asset Density</div>
+      <div class="kpi-v">267.2 /km</div>
+      <div class="kpi-sub">ST05 &bull; Gopalasamy Kovil St</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-k">Max Power Capacity</div>
+      <div class="kpi-v">4,120.9 kVA/km</div>
+      <div class="kpi-sub">ST08 &bull; Raja Street Arterial</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-k">Cable Burden Priority</div>
+      <div class="kpi-v">3 Corridors</div>
+      <div class="kpi-sub">ST03, ST06, ST08 (Grade C)</div>
+    </div>
+  </div>
+
+  <!-- Comparative Charts -->
+  <div class="charts-section">
+    <div class="chart-title">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-4zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/></svg>
+      Comparative Infrastructure Density per Kilometer (Assets / km)
+    </div>
+    <div class="bar-chart">
+      
+      <div class="bar-row">
+        <span class="bar-id">ST01</span>
+        <span class="bar-name">Sathy Road (NH 948)</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 58.3%;"></div>
+        </div>
+        <span class="bar-val">157.5 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST02</span>
+        <span class="bar-name">4th Street, Sridevi Nagar</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 55.0%;"></div>
+        </div>
+        <span class="bar-val">148.6 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST03</span>
+        <span class="bar-name">Ganapathy Pudur 3rd Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 77.3%;"></div>
+        </div>
+        <span class="bar-val">208.7 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST04</span>
+        <span class="bar-name">Gandhi Nagar Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 88.8%;"></div>
+        </div>
+        <span class="bar-val">239.8 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST05</span>
+        <span class="bar-name">Gopalasamy Kovil Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 98.8%;"></div>
+        </div>
+        <span class="bar-val">266.7 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST06</span>
+        <span class="bar-name">KRG Nagar - Kattabomman Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 87.1%;"></div>
+        </div>
+        <span class="bar-val">235.3 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST07</span>
+        <span class="bar-name">PN Palayam Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 61.7%;"></div>
+        </div>
+        <span class="bar-val">166.7 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST08</span>
+        <span class="bar-name">Raja Street - Sanganur Road</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 90.6%;"></div>
+        </div>
+        <span class="bar-val">244.5 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST09</span>
+        <span class="bar-name">Sri Ganapathy Gardens 3rd Street</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 57.0%;"></div>
+        </div>
+        <span class="bar-val">153.8 /km</span>
+      </div>
+      
+      <div class="bar-row">
+        <span class="bar-id">ST10</span>
+        <span class="bar-name">Ganapathy - Avarampalayam Road</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: 35.3%;"></div>
+        </div>
+        <span class="bar-val">95.2 /km</span>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-panel">
+    <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-right: 6px;">Archetype Filter:</span>
+    <div class="filter-btn active" onclick="filterArchetype('ALL')">All Corridors (10)</div>
+    <div class="filter-btn" onclick="filterArchetype('Highway')">Primary Arterials & Highway</div>
+    <div class="filter-btn" onclick="filterArchetype('Residential')">Residential Colonies</div>
+    <div class="filter-btn" onclick="filterArchetype('Mixed')">Mixed Commercial</div>
+    <div class="filter-btn" onclick="filterArchetype('Industrial')">Light Industrial</div>
+  </div>
+
+  <!-- Scorecards Grid -->
+  <div class="scorecards-grid" id="scorecardsGrid">
+    
+    <div class="sc-card" data-archetype="Arterial Commercial Highway Corridor">
+      <div class="sc-header">
+        <span class="sc-id">ST01 &bull; Primary Highway</span>
+        <span class="grade-badge grade-A">A</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Sathy Road (NH 948)</div>
+        <div class="sc-arch">Arterial Commercial Highway Corridor</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">292m &bull; 46 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">29.2m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ffbe0b">60 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#ffbe0b">80 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">750 kVA (2568 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">3.4 Fl &bull; Max 17.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Scheduled bundling of overhead telecom drops; verify photocell calibration on 90W LED luminaires.</div>
+          <div class="sc-agency">Primary Authority: TANGEDCO / CCMC Electrical</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>78.9/100</strong></span>
+        <span>Satisfactory / Minor Attention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Planned Residential Colony">
+      <div class="sc-header">
+        <span class="sc-id">ST02 &bull; Colony Access</span>
+        <span class="grade-badge grade-A">A</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">4th Street, Sridevi Nagar</div>
+        <div class="sc-arch">Planned Residential Colony</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">296m &bull; 44 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">26.9m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#00ff88">20 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#ffbe0b">85 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">0 kVA (0 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.0 Fl &bull; Max 10.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Residential colony baseline verified; recommend pilot EV charger installation at entrance.</div>
+          <div class="sc-agency">Primary Authority: CCMC Smart City Cell</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>82.9/100</strong></span>
+        <span>Satisfactory / Minor Attention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Dense Mixed Commercial & Residential">
+      <div class="sc-header">
+        <span class="sc-id">ST03 &bull; Urban Collector</span>
+        <span class="grade-badge grade-C">C</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Ganapathy Pudur 3rd Street</div>
+        <div class="sc-arch">Dense Mixed Commercial & Residential</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">206m &bull; 43 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">20.6m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ff0055">100 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">99 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">300 kVA (1456 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.1 Fl &bull; Max 10.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Urgent delacing of severe overhead telecom fiber bundles; high wire entanglement on 10 poles.</div>
+          <div class="sc-agency">Primary Authority: TANGEDCO Distribution Wing</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>64.2/100</strong></span>
+        <span>High Burden / Priority Intervention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Mixed Commercial & Institutional">
+      <div class="sc-header">
+        <span class="sc-id">ST04 &bull; Urban Collector</span>
+        <span class="grade-badge grade-A">A</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Gandhi Nagar Street</div>
+        <div class="sc-arch">Mixed Commercial & Institutional</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">196m &bull; 47 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">17.8m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#00ff88">20 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">98 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">300 kVA (1531 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.9 Fl &bull; Max 14.0m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Optimal mixed-use corridor; 17.8m luminaire spacing exceeds IRC safety standards.</div>
+          <div class="sc-agency">Primary Authority: CCMC Roads & Electrical</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>84.7/100</strong></span>
+        <span>Satisfactory / Minor Attention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Traditional Heritage & Temple Zone">
+      <div class="sc-header">
+        <span class="sc-id">ST05 &bull; Heritage Precinct</span>
+        <span class="grade-badge grade-A">A</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Gopalasamy Kovil Street</div>
+        <div class="sc-arch">Traditional Heritage & Temple Zone</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">150m &bull; 40 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">15.0m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ffbe0b">60 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">98 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">0 kVA (0 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.1 Fl &bull; Max 10.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Heritage pedestrian street; preserve warm-white 3000K lantern aesthetic; keep 15.0m luminaire density.</div>
+          <div class="sc-agency">Primary Authority: CCMC Heritage Division</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>76.9/100</strong></span>
+        <span>Satisfactory / Minor Attention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Light Industrial & Micro-Enterprise Strip">
+      <div class="sc-header">
+        <span class="sc-id">ST06 &bull; Industrial Access</span>
+        <span class="grade-badge grade-B">B</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">KRG Nagar - Kattabomman Street</div>
+        <div class="sc-arch">Light Industrial & Micro-Enterprise Strip</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">238m &bull; 56 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">18.3m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ff0055">100 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">98 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">400 kVA (1681 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.1 Fl &bull; Max 10.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Industrial workshop safety audit; 13 poles with severe 3-phase conductor loads require aerial bundled cable (ABC) retrofitting.</div>
+          <div class="sc-agency">Primary Authority: TANGEDCO Industrial Wing</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>66.2/100</strong></span>
+        <span>Moderate Burden / Action Required</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="High-Volume Commercial Feeder">
+      <div class="sc-header">
+        <span class="sc-id">ST07 &bull; Secondary Arterial</span>
+        <span class="grade-badge grade-B">B</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">PN Palayam Street</div>
+        <div class="sc-arch">High-Volume Commercial Feeder</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">276m &bull; 46 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">27.6m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ffbe0b">60 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#ffbe0b">83 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">300 kVA (1087 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.9 Fl &bull; Max 14.0m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Heavy commercial feeder; maintain 3 distribution transformers; trim vegetation near overhead conductors.</div>
+          <div class="sc-agency">Primary Authority: TANGEDCO / CCMC</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>65.9/100</strong></span>
+        <span>Moderate Burden / Action Required</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Primary Commercial Collector Arterial">
+      <div class="sc-header">
+        <span class="sc-id">ST08 &bull; Primary Arterial</span>
+        <span class="grade-badge grade-B">B</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Raja Street - Sanganur Road</div>
+        <div class="sc-arch">Primary Commercial Collector Arterial</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">364m &bull; 89 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">18.2m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#ff0055">100 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">98 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">1500 kVA (4121 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">4.0 Fl &bull; Max 17.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Major commercial arterial; 6 distribution transformers (1500 kVA); urgent joint cable decluttering drive on 20 poles.</div>
+          <div class="sc-agency">Primary Authority: TANGEDCO / CCMC Revenue</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>74.4/100</strong></span>
+        <span>Moderate Burden / Action Required</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Model Planned Residential Layout">
+      <div class="sc-header">
+        <span class="sc-id">ST09 &bull; Residential Avenue</span>
+        <span class="grade-badge grade-A">A</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Sri Ganapathy Gardens 3rd Street</div>
+        <div class="sc-arch">Model Planned Residential Layout</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">156m &bull; 24 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">26.1m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#00ff88">20 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#00ff88">87 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">0 kVA (0 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">2.0 Fl &bull; Max 10.5m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Model planned residential layout; neat aerial drops, 26.1m spacing, zero cable clutter.</div>
+          <div class="sc-agency">Primary Authority: CCMC Town Planning</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>83.5/100</strong></span>
+        <span>Satisfactory / Minor Attention</span>
+      </div>
+    </div>
+    
+    <div class="sc-card" data-archetype="Commercial & Industrial Fringe Corridor">
+      <div class="sc-header">
+        <span class="sc-id">ST10 &bull; Industrial Connector</span>
+        <span class="grade-badge grade-C">C</span>
+      </div>
+      <div class="sc-body">
+        <div class="sc-title">Ganapathy - Avarampalayam Road</div>
+        <div class="sc-arch">Commercial & Industrial Fringe Corridor</div>
+        
+        <div class="sc-metrics-grid">
+          <div class="sc-m-item">
+            <span class="sc-m-k">Length & Assets</span>
+            <span class="sc-m-v">315m &bull; 30 Assets</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Luminaire Spacing</span>
+            <span class="sc-m-v">45.0m</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Cable Burden (CBI)</span>
+            <span class="sc-m-v" style="color:#00ff88">20 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Lighting Score</span>
+            <span class="sc-m-v" style="color:#ff0055">38 / 100</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Transformer Load</span>
+            <span class="sc-m-v">200 kVA (635 /km)</span>
+          </div>
+          <div class="sc-m-item">
+            <span class="sc-m-k">Built Verticality</span>
+            <span class="sc-m-v">3.0 Fl &bull; Max 14.0m</span>
+          </div>
+        </div>
+
+        <div class="sc-action-box">
+          <div class="sc-action-label">Civic Action Plan</div>
+          <div class="sc-action-text">Streetlight Infill Required! Current spacing is 45.0m; recommend adding 4-5 intermediate 70W LED luminaires to meet IRC 25m guidelines.</div>
+          <div class="sc-agency">Primary Authority: CCMC Electrical Division</div>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span>Readiness Score: <strong>57.6/100</strong></span>
+        <span>High Burden / Priority Intervention</span>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+function filterArchetype(arch) {
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+
+  const cards = document.querySelectorAll(".sc-card");
+  cards.forEach(card => {
+    const a = card.getAttribute("data-archetype").toLowerCase();
+    if (arch === "ALL") {
+      card.style.display = "flex";
+    } else if (arch === "Highway" && (a.includes("highway") || a.includes("arterial"))) {
+      card.style.display = "flex";
+    } else if (arch === "Residential" && a.includes("residential")) {
+      card.style.display = "flex";
+    } else if (arch === "Mixed" && a.includes("mixed")) {
+      card.style.display = "flex";
+    } else if (arch === "Industrial" && a.includes("industrial")) {
+      card.style.display = "flex";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+</script>
+</body>
+</html>

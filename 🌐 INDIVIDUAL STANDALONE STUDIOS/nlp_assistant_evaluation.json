@@ -1,0 +1,293 @@
+[
+  {
+    "query": "Which corridor has the highest electrical burden and transformer capacity?",
+    "response": {
+      "intent": "highest_electrical_capacity",
+      "title": "Highest Electrical Load Corridor: ST08 (Raja Street - Sanganur Road)",
+      "summary": "Corridor ST08 (Raja Street - Sanganur Road) exhibits the highest electrical substation load in Ward 29 at 4120.9 kVA/km.",
+      "metrics": {
+        "Street ID": "ST08",
+        "Corridor Tier": "Primary Arterial",
+        "Total Transformer Capacity": "1500 kVA",
+        "Transformer Substations": "6 Units (250 kVA each)",
+        "Substation Load Density": "4120.9 kVA/km",
+        "Cable Burden Index": "100 / 100 (Severe)"
+      },
+      "recommendation": "Major commercial arterial; 6 distribution transformers (1500 kVA); urgent joint cable decluttering drive on 20 poles.",
+      "agency": "TANGEDCO / CCMC Revenue"
+    }
+  },
+  {
+    "query": "Show all utility poles requiring urgent cable decluttering and delacing",
+    "response": {
+      "intent": "cable_burden_audit",
+      "title": "Utility Poles Requiring Urgent Cable Decluttering (43 Poles Flagged)",
+      "summary": "A total of 43 electric utility poles in Ward 29 exhibit severe overhead wiring and telecom fiber suspension clutter requiring immediate municipal delacing.",
+      "metrics": {
+        "Total Flagged Poles": "43 / 108 (39.8%)",
+        "Affected Corridors": "ST08 (20 poles), ST06 (13 poles), ST03 (10 poles)",
+        "Primary Risk Factor": "Overhead telecom fiber coiling & unbundled LT service drops",
+        "Standard Operating Procedure": "TANGEDCO Aerial Bundled Conductor (ABC) Conversion"
+      },
+      "agency": "TANGEDCO Distribution Wing & CCMC Revenue Dept"
+    }
+  },
+  {
+    "query": "List all commercial buildings with 4 or more floors",
+    "response": {
+      "intent": "tall_buildings_query",
+      "title": "Multi-Story Buildings with 4+ Floors (G+3 and G+4) • 27 Structures",
+      "summary": "Detected 27 multi-story structures having 4 or more floors (heights 14.0m - 17.5m) in Ward 29.",
+      "buildings": [
+        {
+          "Building_ID": "BLDG-ST01-001",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Hotel & Dining",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-004",
+          "Name": "AutoZone Showroom & Service Hub",
+          "Floors": "G+4",
+          "Height": "17.5m",
+          "Usage": "Commercial Automobile & Corporate",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=AutoZone%20Showroom%20%26%20Service%20Hub%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-005",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Hotel & Dining",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-008",
+          "Name": "AutoZone Showroom & Service Hub",
+          "Floors": "G+4",
+          "Height": "17.5m",
+          "Usage": "Commercial Automobile & Corporate",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=AutoZone%20Showroom%20%26%20Service%20Hub%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-009",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Hotel & Dining",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST04-003",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST04-006",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST04-009",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Usage": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        }
+      ]
+    }
+  },
+  {
+    "query": "What is the streetlight spacing on Avarampalayam Road and what is the municipal recommendation?",
+    "response": {
+      "intent": "lighting_spacing_audit",
+      "title": "Street Lighting Diagnostic: ST10 (Ganapathy - Avarampalayam Road)",
+      "summary": "Corridor ST10 has an average luminaire spacing of 45.0m, which exceeds Indian Road Congress (IRC:SP:72) safety criteria (20m - 25m), resulting in dark-spot hazard zones.",
+      "metrics": {
+        "Current Luminaire Spacing": "45.0 meters",
+        "IRC Urban Standard": "20.0 to 25.0 meters",
+        "Lighting Adequacy Score (SLAS)": "37.5 / 100 (Critical)",
+        "Existing Luminaires": "7 Units (120W Industrial LED)",
+        "Recommended Infill": "4 to 5 additional 70W LED streetlights"
+      },
+      "recommendation": "Streetlight Infill Required! Current spacing is 45.0m; recommend adding 4-5 intermediate 70W LED luminaires to meet IRC 25m guidelines.",
+      "agency": "CCMC Electrical Division"
+    }
+  },
+  {
+    "query": "Show all hotels and hospitality establishments in Ward 29",
+    "response": {
+      "intent": "hospitality_intelligence",
+      "title": "Commercial Hotels & Hospitality Properties (15 Surveyed)",
+      "summary": "Identified 15 commercial lodging and dining establishments across the surveyed corridors.",
+      "hotels": [
+        {
+          "Building_ID": "BLDG-ST01-001",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Multi-cuisine restaurant, 24h lodging & AC banquet",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-005",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Multi-cuisine restaurant, 24h lodging & AC banquet",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST01-009",
+          "Name": "Hotel Anandha Residency",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Multi-cuisine restaurant, 24h lodging & AC banquet",
+          "Street": "Sathy Road (NH 948)",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Anandha%20Residency%2C%20Sathy%20Road%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-002",
+          "Name": "Hotel Green Park Residency & Veg Mess",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Budget hotel lodging with traditional South Indian banana leaf dining",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Green%20Park%20Residency%20%26%20Veg%20Mess%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-005",
+          "Name": "Hotel Green Park Residency & Veg Mess",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Budget hotel lodging with traditional South Indian banana leaf dining",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Green%20Park%20Residency%20%26%20Veg%20Mess%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-008",
+          "Name": "Hotel Green Park Residency & Veg Mess",
+          "Floors": "G+3",
+          "Height": "14.0m",
+          "Special": "Budget hotel lodging with traditional South Indian banana leaf dining",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Hotel%20Green%20Park%20Residency%20%26%20Veg%20Mess%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        }
+      ]
+    }
+  },
+  {
+    "query": "What is the nearest transformer to Hotel Anandha Residency and how far is it?",
+    "response": {
+      "intent": "spatial_topology_query",
+      "title": "Spatial Topology for Hotel Anandha Residency",
+      "summary": "The nearest distribution transformer to Hotel Anandha Residency (BLDG-ST01-001) is TRANS-ST01-003 located at a spatial distance of 67.83 meters.",
+      "topology": {
+        "Building ID": "BLDG-ST01-001",
+        "Nearest Transformer": "TRANS-ST01-003",
+        "Transformer Distance": "67.83 meters",
+        "Substation Scope": "Corridor Substation",
+        "Nearest Utility Pole": "POLE-ST01-001 (18.99m)",
+        "Corridor Chainage": "0.0 meters along Sathy Road (NH 948)",
+        "Road Setback Offset": "14.79 meters (Right of Roadway)"
+      }
+    }
+  },
+  {
+    "query": "Find all healthcare clinics and pharmacies in the study area",
+    "response": {
+      "intent": "healthcare_intelligence",
+      "title": "Healthcare & Pharmaceutical Establishments (7 Surveyed)",
+      "summary": "Found 7 licensed medical facilities and pharmacies across surveyed corridors.",
+      "facilities": [
+        {
+          "Building_ID": "BLDG-ST04-003",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Type": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST04-006",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Type": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST04-009",
+          "Name": "Aarthy Health Centre & Clinic",
+          "Type": "Commercial Healthcare & Offices",
+          "Street": "Gandhi Nagar Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Aarthy%20Health%20Centre%20%26%20Clinic%2C%20Gandhi%20Nagar%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-001",
+          "Name": "Sri Sai Medicals & Doctor Clinic",
+          "Type": "Commercial Pharmacy & Clinic",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Sri%20Sai%20Medicals%20%26%20Doctor%20Clinic%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-004",
+          "Name": "Sri Sai Medicals & Doctor Clinic",
+          "Type": "Commercial Pharmacy & Clinic",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Sri%20Sai%20Medicals%20%26%20Doctor%20Clinic%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-007",
+          "Name": "Sri Sai Medicals & Doctor Clinic",
+          "Type": "Commercial Pharmacy & Clinic",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Sri%20Sai%20Medicals%20%26%20Doctor%20Clinic%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        },
+        {
+          "Building_ID": "BLDG-ST07-010",
+          "Name": "Sri Sai Medicals & Doctor Clinic",
+          "Type": "Commercial Pharmacy & Clinic",
+          "Street": "PN Palayam Street",
+          "Official_Link": "https://www.google.com/maps/search/?api=1&query=Sri%20Sai%20Medicals%20%26%20Doctor%20Clinic%2C%20PN%20Palayam%20Street%2C%20Ganapathy%2C%20Coimbatore%2C%20Tamil%20Nadu"
+        }
+      ]
+    }
+  },
+  {
+    "query": "Give me an urban intelligence overview of Ward 29",
+    "response": {
+      "intent": "general_overview",
+      "title": "Coimbatore Ward 29 Urban Intelligence Overview",
+      "summary": "Ward 29 (North Zone, Coimbatore) surveyed across 10 corridors (2.49 km) cataloging 465 fixed urban assets, 108 building envelopes, and 201 commercial OCR signboards.",
+      "key_metrics": {
+        "Total Fixed Assets": 465,
+        "Utility Poles": 108,
+        "Streetlights": 108,
+        "Transformers": 24,
+        "Traffic Signals": 9,
+        "Cataloged Buildings": 108,
+        "Surveyed Road Network": "2.49 km",
+        "Reference Matched (OSM)": "62 assets (13.3%)",
+        "New AI Discoveries": "403 assets (86.7%)"
+      }
+    }
+  }
+]

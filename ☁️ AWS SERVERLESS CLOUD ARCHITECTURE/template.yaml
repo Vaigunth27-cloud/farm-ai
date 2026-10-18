@@ -1,0 +1,218 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  FarmwiseAI Product Challenge (TCE) - Task 5 (Team 24)
+  Urban Digital Twin Serverless Platform
+  Account: 387039786704 | Region: ap-south-1 (Mumbai) | Prefix: fai-tce-team24-*
+  Pre-existing Role: FAI-TCE-LambdaExecutionRole (No IAM Role Creation)
+
+Parameters:
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, stage, prod]
+    Description: Deployment environment tier.
+
+  TeamPrefix:
+    Type: String
+    Default: fai-tce-team24
+    Description: Resource naming prefix enforced by FarmwiseAI controls.
+
+  ExistingLambdaRoleArn:
+    Type: String
+    Default: "arn:aws:iam::387039786704:role/FAI-TCE-LambdaExecutionRole"
+    Description: Pre-created IAM Execution Role provided by FarmwiseAI organizers.
+
+  LambdaMemorySize:
+    Type: Number
+    Default: 2048
+    MinValue: 512
+    MaxValue: 10240
+    Description: Memory allocation (MB) for AI inference and spatial routing.
+
+  LambdaTimeout:
+    Type: Number
+    Default: 30
+    MinValue: 5
+    MaxValue: 900
+    Description: Execution timeout (seconds).
+
+Resources:
+  # =========================================================================
+  # 1. CORE SERVICE: AMAZON S3 STORAGE
+  # =========================================================================
+  UrbanDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${TeamPrefix}-urban-data-mumbai"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, HEAD, PUT, POST]
+            AllowedOrigins: ['*']
+            MaxAge: 3600
+
+  # =========================================================================
+  # 2. CORE SERVICE: AMAZON DYNAMODB (NOSQL ASSET & WORK ORDER REPOSITORIES)
+  # =========================================================================
+  UrbanAssetsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${TeamPrefix}-urban-assets"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: Asset_ID
+          AttributeType: S
+        - AttributeName: Street_ID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Asset_ID
+          KeyType: HASH
+        - AttributeName: Street_ID
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  WorkOrdersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${TeamPrefix}-work-orders"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: Work_Order_ID
+          AttributeType: S
+        - AttributeName: Priority_Level
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Work_Order_ID
+          KeyType: HASH
+        - AttributeName: Priority_Level
+          KeyType: RANGE
+
+  # =========================================================================
+  # 3. CORE SERVICE: AWS LAMBDA (USES PRE-EXISTING ROLE: FAI-TCE-LambdaExecutionRole)
+  # =========================================================================
+  UrbanApiLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${TeamPrefix}-urban-api"
+      Description: "FarmwiseAI Task 5 Team 24 - Serverless Urban AI Assistant & Detection Routing"
+      Runtime: python3.12
+      Handler: lambda_function.lambda_handler
+      MemorySize: !Ref LambdaMemorySize
+      Timeout: !Ref LambdaTimeout
+      Role: !Ref ExistingLambdaRoleArn
+      Code:
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {
+                  "statusCode": 200,
+                  "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"},
+                  "body": json.dumps({"status": "healthy", "service": "fai-tce-team24-urban-api", "region": "ap-south-1"})
+              }
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref UrbanDataBucket
+          DYNAMO_ASSETS_TABLE: !Ref UrbanAssetsTable
+          DYNAMO_ORDERS_TABLE: !Ref WorkOrdersTable
+          APP_PREFIX: !Ref TeamPrefix
+          ENVIRONMENT: !Ref Environment
+
+  # =========================================================================
+  # 4. CORE SERVICE: AMAZON API GATEWAY (HTTP API V2)
+  # =========================================================================
+  HttpApiGateway:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "${TeamPrefix}-urban-gateway"
+      ProtocolType: HTTP
+      Description: "HTTP API Gateway for Coimbatore Ward 29 Urban Intelligence"
+      CorsConfiguration:
+        AllowOrigins: ['*']
+        AllowMethods: [GET, POST, OPTIONS]
+        AllowHeaders: ['Content-Type', 'Authorization', 'X-Api-Key']
+        MaxAge: 3600
+
+  ApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt UrbanApiLambda.Arn
+      PayloadFormatVersion: '2.0'
+
+  # API Gateway Routes
+  DetectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      RouteKey: "POST /api/v1/detect"
+      Target: !Sub "integrations/${ApiIntegration}"
+
+  QueryRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      RouteKey: "POST /api/v1/query"
+      Target: !Sub "integrations/${ApiIntegration}"
+
+  WorkOrdersRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      RouteKey: "GET /api/v1/work-orders"
+      Target: !Sub "integrations/${ApiIntegration}"
+
+  HealthRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      RouteKey: "GET /health"
+      Target: !Sub "integrations/${ApiIntegration}"
+
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApiGateway
+      StageName: !Ref Environment
+      AutoDeploy: true
+
+  LambdaApiPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref UrbanApiLambda
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApiGateway}/*/*"
+
+Outputs:
+  ApiEndpoint:
+    Description: Live API Gateway Endpoint URL
+    Value: !Sub "https://${HttpApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+
+  S3BucketName:
+    Description: S3 Storage Bucket
+    Value: !Ref UrbanDataBucket
+
+  DynamoAssetsTableName:
+    Description: DynamoDB Urban Assets Table
+    Value: !Ref UrbanAssetsTable
+
+  DynamoOrdersTableName:
+    Description: DynamoDB Work Orders Table
+    Value: !Ref WorkOrdersTable
+
+  LambdaFunctionArn:
+    Description: Lambda Function ARN
+    Value: !GetAtt UrbanApiLambda.Arn

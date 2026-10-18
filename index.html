@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous Street View Urban Digital Twin — Master Suite Launcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(16, 24, 40, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 30px 40px;
+    }
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto 30px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .top-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .header-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .header-title h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header-title p {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* KPI STATS BAR */
+    .kpi-bar {
+      max-width: 1400px;
+      margin: 0 auto 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 16px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--accent-cyan);
+    }
+    .kpi-card.emerald::before { background: var(--accent-emerald); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+    .kpi-card.purple::before { background: var(--accent-purple); }
+    .kpi-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .kpi-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* SEARCH FILTER BAR */
+    .filter-container {
+      max-width: 1400px;
+      margin: 0 auto 25px auto;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .search-input {
+      flex: 1;
+      background: rgba(16, 24, 40, 0.85);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* CATEGORIES GRID */
+    .sections-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .section-block {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 12px;
+    }
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-tag {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .file-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .file-card:hover {
+      background: rgba(6, 182, 212, 0.08);
+      border-color: rgba(6, 182, 212, 0.35);
+      transform: translateY(-2px);
+    }
+    .file-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .file-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .file-title-wrap {
+      flex: 1;
+    }
+    .file-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+    }
+    .file-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .file-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 11px;
+      color: #64748b;
+    }
+    .file-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+    }
+
+    footer {
+      max-width: 1400px;
+      margin: 40px auto 10px auto;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div class="top-badges">
+      <span class="badge badge-cyan">FarmwiseAI TCE Product Challenge 2026</span>
+      <span class="badge badge-emerald">Team 24</span>
+      <span class="badge badge-purple">Coimbatore Ward 29 (LGD: 29)</span>
+      <span class="badge badge-amber">100% Phase 1-18 Complete</span>
+    </div>
+
+    <div class="header-main">
+      <div class="header-title">
+        <h1>Autonomous Street View Urban Digital Twin</h1>
+        <p>Master Enterprise Suite Launcher & Unified Repository Navigation System</p>
+      </div>
+      <div class="header-actions">
+        <a href="🌟 MASTER UNIFIED PLATFORM/urban_digital_twin_portal.html" class="btn btn-primary" target="_blank">
+          🌟 Launch 11-in-1 Master Platform
+        </a>
+        <a href="🌟 MASTER UNIFIED PLATFORM/HACKATHON_PRESENTATION.html" class="btn btn-secondary" target="_blank">
+          📑 Pitch Deck (Press F)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI RIBBON -->
+  <div class="kpi-bar">
+    <div class="kpi-card">
+      <div class="kpi-val">11-in-1</div>
+      <div class="kpi-lbl">Unified Portals</div>
+    </div>
+    <div class="kpi-card emerald">
+      <div class="kpi-val">465</div>
+      <div class="kpi-lbl">Fixed Assets Tracked</div>
+    </div>
+    <div class="kpi-card emerald">
+      <div class="kpi-val">108</div>
+      <div class="kpi-lbl">Building Blueprints</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-val">₹20.40 L</div>
+      <div class="kpi-lbl">Annual Tax Unlocked</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">10.12 MB</div>
+      <div class="kpi-lbl">ONNX Model (42ms)</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-val">74.9%</div>
+      <div class="kpi-lbl">Fast Path VLM Bypass</div>
+    </div>
+    <div class="kpi-card emerald">
+      <div class="kpi-val">100.0%</div>
+      <div class="kpi-lbl">AI NLP Precision</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">$14.38/mo</div>
+      <div class="kpi-lbl">AWS Serverless Cost</div>
+    </div>
+  </div>
+
+  <!-- QUICK SEARCH -->
+  <div class="filter-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search any platform, studio, dataset, script, or model file... (e.g. 'yolo', 'tax', 'gis', 'work orders', 'onnx')">
+  </div>
+
+  <div class="sections-container">
+
+    <!-- 1. 🌟 MASTER UNIFIED PLATFORM -->
+    <div class="section-block" data-section="master">
+      <div class="section-header">
+        <h2>🌟 1. Master Unified Platform</h2>
+        <span class="section-tag">🌟 MASTER UNIFIED PLATFORM/</span>
+      </div>
+      <div class="file-grid">
+        <a href="🌟 MASTER UNIFIED PLATFORM/urban_digital_twin_portal.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🌟</div>
+            <div class="file-title-wrap">
+              <div class="file-name">urban_digital_twin_portal.html</div>
+              <div class="file-desc">Flagship 11-in-1 Platform unifying 3D GIS, Street View HUD, Building Blueprints, OCR, AI Assistant & Work Orders.</div>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span class="file-badge">3.21 MB</span>
+            <span>Master Enterprise Hub</span>
+          </div>
+        </a>
+
+        <a href="🌟 MASTER UNIFIED PLATFORM/HACKATHON_PRESENTATION.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📑</div>
+            <div class="file-title-wrap">
+              <div class="file-name">HACKATHON_PRESENTATION.html</div>
+              <div class="file-desc">Interactive 10-slide executive pitch deck with live metrics, diagrams & keyboard controls (Press 'F' for fullscreen).</div>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span class="file-badge">27 KB</span>
+            <span>Presentation Deck</span>
+          </div>
+        </a>
+
+        <a href="🌟 MASTER UNIFIED PLATFORM/HACKATHON_PRESENTATION.md" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📝</div>
+            <div class="file-title-wrap">
+              <div class="file-name">HACKATHON_PRESENTATION.md</div>
+              <div class="file-desc">Complete presentation slides markdown text, speaker notes, and architectural talking points.</div>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span class="file-badge">7.2 KB</span>
+            <span>Markdown Deck</span>
+          </div>
+        </a>
+
+        <a href="🌟 MASTER UNIFIED PLATFORM/DEMO_VIDEO_WALKTHROUGH_SCRIPT.md" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🎬</div>
+            <div class="file-title-wrap">
+              <div class="file-name">DEMO_VIDEO_WALKTHROUGH_SCRIPT.md</div>
+              <div class="file-desc">Time-coded 3-minute executive video script & 5-minute deep-dive screen recording guide.</div>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span class="file-badge">7.4 KB</span>
+            <span>Recording Script</span>
+          </div>
+        </a>
+
+        <a href="🌟 MASTER UNIFIED PLATFORM/SUBMISSION_MANIFEST.md" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📋</div>
+            <div class="file-title-wrap">
+              <div class="file-name">SUBMISSION_MANIFEST.md</div>
+              <div class="file-desc">Comprehensive judge index verifying all 18 phases, team details, AWS specs, and deliverables.</div>
+            </div>
+          </div>
+          <div class="file-meta">
+            <span class="file-badge">16.6 KB</span>
+            <span>Submission Manifest</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. 🌐 INDIVIDUAL STANDALONE STUDIOS -->
+    <div class="section-block" data-section="studios">
+      <div class="section-header">
+        <h2>🌐 2. Individual Standalone Studios</h2>
+        <span class="section-tag">🌐 INDIVIDUAL STANDALONE STUDIOS/</span>
+      </div>
+      <div class="file-grid">
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/tri_view_studio.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🧭</div>
+            <div class="file-title-wrap">
+              <div class="file-name">tri_view_studio.html</div>
+              <div class="file-desc">Synchronized 3-pane interface: Street View Camera HUD + GIS Map + Live Asset Digital Passports.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">1.13 MB</span><span>Tri-View Studio</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/gis_digital_twin_baseline.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🗺️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">gis_digital_twin_baseline.html</div>
+              <div class="file-desc">Full GIS Digital Twin with 10 surveyed corridors, asset layers, and dual-point distance measuring tool.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">720 KB</span><span>GIS Map</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/building_explorer.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🏢</div>
+            <div class="file-title-wrap">
+              <div class="file-name">building_explorer.html</div>
+              <div class="file-desc">108 surveyed buildings with 10 property parameters, setbacks, floor counts, and visual blueprint overlays.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">208 KB</span><span>Building Explorer</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/ocr_search_explorer.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🔤</div>
+            <div class="file-title-wrap">
+              <div class="file-name">ocr_search_explorer.html</div>
+              <div class="file-desc">201 commercial signboards with Tamil/English multi-lingual search across 11 trade sectors.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">158 KB</span><span>OCR Explorer</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/asset_inventory_explorer.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🏷️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">asset_inventory_explorer.html</div>
+              <div class="file-desc">465 fixed infrastructure assets with digital passports, clearance vectors, and maintenance grades.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">805 KB</span><span>Asset Passports</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/corridor_intelligence_dashboard.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📊</div>
+            <div class="file-title-wrap">
+              <div class="file-name">corridor_intelligence_dashboard.html</div>
+              <div class="file-desc">Corridor Burden Index (CBI) & Street Lighting Adequacy Score (SLAS) scorecards for all 10 streets.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">36 KB</span><span>Corridor Scorecard</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/urban_ai_assistant.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🤖</div>
+            <div class="file-title-wrap">
+              <div class="file-name">urban_ai_assistant.html</div>
+              <div class="file-desc">Zero-hallucination NLP assistant with 100% precision across 8 benchmark municipal queries.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">1.12 MB</span><span>AI Assistant</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/municipal_report_portal.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📋</div>
+            <div class="file-title-wrap">
+              <div class="file-name">municipal_report_portal.html</div>
+              <div class="file-desc">TANGEDCO utility pole repair directives, CCMC dark spot infill, and ₹20.40 L property tax ledger.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">158 KB</span><span>Municipal Portal</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/cloud_architecture_dashboard.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">☁️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">cloud_architecture_dashboard.html</div>
+              <div class="file-desc">AWS Lambda serverless topology, ONNX edge runtime simulator, and cost breakdown calculator.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">26 KB</span><span>AWS Dashboard</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/vlm_routing_visualizer.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🔀</div>
+            <div class="file-title-wrap">
+              <div class="file-name">vlm_routing_visualizer.html</div>
+              <div class="file-desc">Interactive visualizer for small-model first routing (74.9% fast path, 74.9% cost reduction).</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">29 KB</span><span>Routing Engine</span></div>
+        </a>
+
+        <a href="🌐 INDIVIDUAL STANDALONE STUDIOS/urban_annotation_studio.html" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🎯</div>
+            <div class="file-title-wrap">
+              <div class="file-name">urban_annotation_studio.html</div>
+              <div class="file-desc">Interactive inspection studio for YOLO bounding box labels across all 108 corridor frames.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">132 KB</span><span>Annotation Studio</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3. 🧠 MACHINE LEARNING MODELS & ROUTING -->
+    <div class="section-block" data-section="ml">
+      <div class="section-header">
+        <h2>🧠 3. Machine Learning Models & Routing</h2>
+        <span class="section-tag">🧠 MACHINE LEARNING MODELS & ROUTING/</span>
+      </div>
+      <div class="file-grid">
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/Train_YOLO11_Urban_Digital_Twin.ipynb" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🚀</div>
+            <div class="file-title-wrap">
+              <div class="file-name">Train_YOLO11_Urban_Digital_Twin.ipynb</div>
+              <div class="file-desc">1-Click Google Colab Notebook for 50-epoch training on free NVIDIA T4 GPU with auto-download.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">Colab GPU</span><span>Jupyter Notebook</span></div>
+        </a>
+
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/urban_intelligence_dataset.zip" class="file-card" download>
+          <div class="file-card-top">
+            <div class="file-icon">📦</div>
+            <div class="file-title-wrap">
+              <div class="file-name">urban_intelligence_dataset.zip</div>
+              <div class="file-desc">Pre-packaged 47.7 MB dataset zip (108 corridor frames & YOLO labels) ready for Colab upload.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">47.7 MB</span><span>Dataset ZIP</span></div>
+        </a>
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/prototype_model/best.onnx" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">⚡</div>
+            <div class="file-title-wrap">
+              <div class="file-name">best.onnx</div>
+              <div class="file-desc">10.12 MB ONNX artifact (Opset 18). Benchmarked at 42.0ms on CPU, ~16ms on Jetson Orin Nano.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">10.12 MB</span><span>ONNX Model</span></div>
+        </a>
+
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/prototype_model/best.pt" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🔥</div>
+            <div class="file-title-wrap">
+              <div class="file-name">best.pt</div>
+              <div class="file-desc">PyTorch YOLO11n trained model weights across all 9 infrastructure classes.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">5.45 MB</span><span>PyTorch Weights</span></div>
+        </a>
+
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/vlm_routing_engine/routing_engine.py" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🐍</div>
+            <div class="file-title-wrap">
+              <div class="file-name">routing_engine.py</div>
+              <div class="file-desc">Two-tier routing decision logic optimizing cost, confidence thresholds, and VLM escalation.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">8.2 KB</span><span>Routing Engine</span></div>
+        </a>
+
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/vlm_routing_engine/routing_decisions.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📊</div>
+            <div class="file-title-wrap">
+              <div class="file-name">routing_decisions.csv</div>
+              <div class="file-desc">774 classified pipeline items with tier assignments, latency, cost savings, and confidence scores.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">201 KB</span><span>Decisions Ledger</span></div>
+        </a>
+
+        <a href="🧠 MACHINE LEARNING MODELS & ROUTING/vlm_routing_engine/routing_benchmark_results.json" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📈</div>
+            <div class="file-title-wrap">
+              <div class="file-name">routing_benchmark_results.json</div>
+              <div class="file-desc">Empirical routing benchmark: 74.94% Fast Path, 3.3x speedup, 74.87% cost reduction, +5.8% accuracy.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">5.6 KB</span><span>Benchmark JSON</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 4. ☁️ AWS SERVERLESS CLOUD ARCHITECTURE -->
+    <div class="section-block" data-section="aws">
+      <div class="section-header">
+        <h2>☁️ 4. AWS Serverless Cloud Architecture</h2>
+        <span class="section-tag">☁️ AWS SERVERLESS CLOUD ARCHITECTURE/</span>
+      </div>
+      <div class="file-grid">
+        <a href="☁️ AWS SERVERLESS CLOUD ARCHITECTURE/template.yaml" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📄</div>
+            <div class="file-title-wrap">
+              <div class="file-name">template.yaml</div>
+              <div class="file-desc">AWS CloudFormation infrastructure: Lambda (Python 3.12, 1024MB), S3 Buckets, and API Gateway v2.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">7.1 KB</span><span>CloudFormation</span></div>
+        </a>
+
+        <a href="☁️ AWS SERVERLESS CLOUD ARCHITECTURE/terraform/main.tf" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🏗️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">terraform/main.tf</div>
+              <div class="file-desc">Terraform IaC deployment using pre-existing FAI-TCE-LambdaExecutionRole in Mumbai (ap-south-1).</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">5.2 KB</span><span>Terraform</span></div>
+        </a>
+
+        <a href="☁️ AWS SERVERLESS CLOUD ARCHITECTURE/lambda_function.py" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">λ</div>
+            <div class="file-title-wrap">
+              <div class="file-name">lambda_function.py</div>
+              <div class="file-desc">Production serverless inference handler with ONNX Runtime, bounding box parsing, and geo-enrichment.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">9.4 KB</span><span>AWS Lambda</span></div>
+        </a>
+
+        <a href="☁️ AWS SERVERLESS CLOUD ARCHITECTURE/test_lambda_local.py" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">✅</div>
+            <div class="file-title-wrap">
+              <div class="file-name">test_lambda_local.py</div>
+              <div class="file-desc">Complete test suite passing 6/6 unit tests in 0.001s: warm-up, mock S3, base64 payload, and error handling.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">3.8 KB</span><span>Unit Tests</span></div>
+        </a>
+
+        <a href="☁️ AWS SERVERLESS CLOUD ARCHITECTURE/edge_capture_daemon.py" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📡</div>
+            <div class="file-title-wrap">
+              <div class="file-name">edge_capture_daemon.py</div>
+              <div class="file-desc">Vehicle edge camera daemon with local queue, GPS tagging, and retry buffer for offline resilience.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">6.3 KB</span><span>Edge Daemon</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 5. 📋 MUNICIPAL REPORTS & WORK ORDERS -->
+    <div class="section-block" data-section="municipal">
+      <div class="section-header">
+        <h2>📋 5. Municipal Reports & Work Orders</h2>
+        <span class="section-tag">📋 MUNICIPAL REPORTS & WORK ORDERS/</span>
+      </div>
+      <div class="file-grid">
+        <a href="📋 MUNICIPAL REPORTS & WORK ORDERS/tangedco_feeder_work_orders.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">⚡</div>
+            <div class="file-title-wrap">
+              <div class="file-name">tangedco_feeder_work_orders.csv</div>
+              <div class="file-desc">108 TANGEDCO utility poles with 33 P1-Critical clearance violation repairs & lean corrections.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">18.2 KB</span><span>TANGEDCO Orders</span></div>
+        </a>
+
+        <a href="📋 MUNICIPAL REPORTS & WORK ORDERS/ccmc_streetlight_infill_directives.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">💡</div>
+            <div class="file-title-wrap">
+              <div class="file-name">ccmc_streetlight_infill_directives.csv</div>
+              <div class="file-desc">18 photometric dark spot installations with GPS coordinates, wattage recommendations & cost estimates.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">4.1 KB</span><span>Lighting Infill</span></div>
+        </a>
+
+        <a href="📋 MUNICIPAL REPORTS & WORK ORDERS/ccmc_commercial_tax_ledger.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">💰</div>
+            <div class="file-title-wrap">
+              <div class="file-name">ccmc_commercial_tax_ledger.csv</div>
+              <div class="file-desc">201 identified commercial properties unlocking ₹20,40,000/year in unassessed property taxes.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">32.6 KB</span><span>Tax Recovery</span></div>
+        </a>
+
+        <a href="📋 MUNICIPAL REPORTS & WORK ORDERS/municipal_reporting_summary.json" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📊</div>
+            <div class="file-title-wrap">
+              <div class="file-name">municipal_reporting_summary.json</div>
+              <div class="file-desc">Executive financial summary: ₹12.71 L capex payback in 0.62 years (7.4 months) with ₹7.69 L annual surplus.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">2.8 KB</span><span>Financial ROI</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 6. 🗺️ MASTER GIS & TABULAR DATASETS -->
+    <div class="section-block" data-section="datasets">
+      <div class="section-header">
+        <h2>🗺️ 6. Master GIS & Tabular Datasets</h2>
+        <span class="section-tag">🗺️ MASTER GIS & TABULAR DATASETS/</span>
+      </div>
+      <div class="file-grid">
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/urban_assets_digital_twin.geojson" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📍</div>
+            <div class="file-title-wrap">
+              <div class="file-name">urban_assets_digital_twin.geojson</div>
+              <div class="file-desc">465 point features with full digital passports, spatial vectors, and maintenance grades.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">847 KB</span><span>GeoJSON Assets</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/road_network_topology.geojson" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🛣️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">road_network_topology.geojson</div>
+              <div class="file-desc">10 surveyed corridor centerlines with chainage stationing, widths, and surface condition attributes.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">15.1 KB</span><span>Road Topology</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/building_intelligence.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🏢</div>
+            <div class="file-title-wrap">
+              <div class="file-name">building_intelligence.csv</div>
+              <div class="file-desc">108 surveyed buildings with 10 property parameters, setback distances, and cadastre match IDs.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">110 KB</span><span>Building Records</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/ocr_intelligence.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🔤</div>
+            <div class="file-title-wrap">
+              <div class="file-name">ocr_intelligence.csv</div>
+              <div class="file-desc">201 commercial signboards categorized into 11 trade sectors with confidence ratings and keywords.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">56 KB</span><span>OCR Dataset</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/detections.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🎯</div>
+            <div class="file-title-wrap">
+              <div class="file-name">detections.csv</div>
+              <div class="file-desc">465 fixed infrastructure bounding boxes with normalized coordinates, class names, and confidence scores.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">113 KB</span><span>Detections CSV</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/spatial_relationships.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📐</div>
+            <div class="file-title-wrap">
+              <div class="file-name">spatial_relationships.csv</div>
+              <div class="file-desc">Perpendicular road setbacks, nearest-neighbor graph edges, and street side assignments (L/R).</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">44 KB</span><span>Spatial Relationships</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/corridor_intelligence_scorecard.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📊</div>
+            <div class="file-title-wrap">
+              <div class="file-name">corridor_intelligence_scorecard.csv</div>
+              <div class="file-desc">10 corridor archetypes with Corridor Burden Index (CBI), SLAS scores, and letter grades (A-D).</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">3.9 KB</span><span>Scorecard CSV</span></div>
+        </a>
+
+        <a href="🗺️ MASTER GIS & TABULAR DATASETS/master_metadata.csv" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📑</div>
+            <div class="file-title-wrap">
+              <div class="file-name">master_metadata.csv</div>
+              <div class="file-desc">108 rows with 29 standardized attributes per image frame: GPS, heading, lighting, road type, etc.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">47 KB</span><span>Metadata Master</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 7. 🐍 COMPLETE PIPELINE CODE ARCHIVE -->
+    <div class="section-block" data-section="pipeline">
+      <div class="section-header">
+        <h2>🐍 7. Complete Pipeline Code Archive</h2>
+        <span class="section-tag">🐍 COMPLETE PIPELINE CODE ARCHIVE/</span>
+      </div>
+      <div class="file-grid">
+        <a href="🐍 COMPLETE PIPELINE CODE ARCHIVE/pipeline_scripts/" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📦</div>
+            <div class="file-title-wrap">
+              <div class="file-name">pipeline_scripts/</div>
+              <div class="file-desc">42 production-grade Python generator, spatial calculation, ML training, and municipal audit scripts.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">42 Scripts</span><span>Full Python Codebase</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 8. 📸 RAW & ANNOTATED CORRIDOR IMAGERY -->
+    <div class="section-block" data-section="imagery">
+      <div class="section-header">
+        <h2>📸 8. Raw & Annotated Corridor Imagery</h2>
+        <span class="section-tag">📸 RAW & ANNOTATED CORRIDOR IMAGERY/</span>
+      </div>
+      <div class="file-grid">
+        <a href="📸 RAW & ANNOTATED CORRIDOR IMAGERY/annotated_images/" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🖼️</div>
+            <div class="file-title-wrap">
+              <div class="file-name">annotated_images/</div>
+              <div class="file-desc">108 frames labeled with YOLO infrastructure bounding boxes and class designations.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">108 Images</span><span>YOLO Annotations</span></div>
+        </a>
+
+        <a href="📸 RAW & ANNOTATED CORRIDOR IMAGERY/building_annotated_images/" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🏢</div>
+            <div class="file-title-wrap">
+              <div class="file-name">building_annotated_images/</div>
+              <div class="file-desc">108 architectural overlays showing building heights, floor lines, and setback distances.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">108 Overlays</span><span>Blueprint Overlays</span></div>
+        </a>
+
+        <a href="📸 RAW & ANNOTATED CORRIDOR IMAGERY/ocr_annotated_images/" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">🔤</div>
+            <div class="file-title-wrap">
+              <div class="file-name">ocr_annotated_images/</div>
+              <div class="file-desc">Commercial signboards bounded with text recognition regions and trade sector tags.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">201 Detections</span><span>OCR Regions</span></div>
+        </a>
+
+        <a href="📸 RAW & ANNOTATED CORRIDOR IMAGERY/Sathy Road/" class="file-card" target="_blank">
+          <div class="file-card-top">
+            <div class="file-icon">📷</div>
+            <div class="file-title-wrap">
+              <div class="file-name">Raw Corridors (ST01 - ST10)</div>
+              <div class="file-desc">High-resolution street-level survey imagery across all 10 surveyed Coimbatore corridors.</div>
+            </div>
+          </div>
+          <div class="file-meta"><span class="file-badge">10 Corridors</span><span>Original Street View</span></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>FarmwiseAI TCE Product Challenge 2026 • Team 24 • Autonomous Street View Urban Digital Twin</p>
+    <p style="margin-top: 4px;">Coimbatore City Municipal Corporation (CCMC) — Ward 29 (LGD: 29) • All Deliverables Verified</p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.file-card');
+    const sections = document.querySelectorAll('.section-block');
+
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      sections.forEach(sec => {
+        const visibleCards = sec.querySelectorAll('.file-card[style="display: flex;"]');
+        if (q === '' || visibleCards.length > 0) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
