@@ -1,0 +1,8 @@
+# FarmwiseAI Task 5 — Urban Intelligence Dataset Configuration
+path: D:\farm ai\yolo_annotations
+train: images/train
+val: images/val
+test: images/test
+
+nc: 12
+names: ['building', 'electric_pole', 'streetlight', 'commercial_sign', 'traffic_signal', 'road_sign', 'transformer', 'drain', 'sidewalk', 'waste_bin', 'bus_stop', 'other_urban_asset']

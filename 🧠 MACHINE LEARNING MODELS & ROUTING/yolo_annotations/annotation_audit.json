@@ -1,0 +1,35 @@
+{
+  "annotation_system": "Human-in-the-Loop Urban Infrastructure Annotation Engine",
+  "version": "1.0-Task5",
+  "classes_defined": [
+    "building",
+    "electric_pole",
+    "streetlight",
+    "commercial_sign",
+    "traffic_signal",
+    "road_sign",
+    "transformer",
+    "drain",
+    "sidewalk",
+    "waste_bin",
+    "bus_stop",
+    "other_urban_asset"
+  ],
+  "total_images_annotated": 108,
+  "total_bounding_boxes": 465,
+  "average_boxes_per_image": 4.31,
+  "class_counts": {
+    "building": 108,
+    "electric_pole": 108,
+    "streetlight": 108,
+    "commercial_sign": 108,
+    "traffic_signal": 9,
+    "road_sign": 0,
+    "transformer": 24,
+    "drain": 0,
+    "sidewalk": 0,
+    "waste_bin": 0,
+    "bus_stop": 0,
+    "other_urban_asset": 0
+  }
+}

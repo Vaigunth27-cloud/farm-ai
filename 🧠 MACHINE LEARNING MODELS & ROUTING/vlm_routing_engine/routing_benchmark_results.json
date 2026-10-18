@@ -1,0 +1,147 @@
+{
+  "evaluation_timestamp": "2026-10-03T04:34:57Z",
+  "target_area": "Coimbatore Ward 29 (North Zone)",
+  "survey_corridors_count": 10,
+  "total_pipeline_items": 774,
+  "items_breakdown": {
+    "fixed_infrastructure_assets": 465,
+    "commercial_ocr_signboards": 201,
+    "building_envelopes": 108
+  },
+  "routing_distribution": {
+    "tier1_small_model_fast_path": {
+      "count": 580,
+      "percentage": 74.94,
+      "mean_latency_ms": 39.7,
+      "cost_per_item_usd": 2e-06
+    },
+    "tier2_vlm_escalated_path": {
+      "count": 194,
+      "percentage": 25.06,
+      "mean_latency_ms": 822.5,
+      "cost_per_item_usd": 0.0025
+    }
+  },
+  "performance_and_latency_comparison": {
+    "tier1_small_model_alone_ms": 39.7,
+    "hybrid_router_mean_latency_ms": 235.9,
+    "hybrid_router_p95_latency_ms": 863.7,
+    "pure_vlm_100pct_baseline_ms": 780.0,
+    "latency_speedup_vs_pure_vlm": "3.3x Faster"
+  },
+  "economic_and_cost_savings": {
+    "hybrid_routing_total_cost_usd": 0.4862,
+    "pure_vlm_100pct_baseline_cost_usd": 1.935,
+    "net_cost_savings_usd": 1.4488,
+    "cost_reduction_percent": "74.87% Cheaper"
+  },
+  "accuracy_and_confidence_boost": {
+    "initial_pipeline_confidence_mean": 0.84,
+    "final_escalated_confidence_mean": 0.898,
+    "overall_confidence_delta": 0.058,
+    "accuracy_gain_percent": "+5.8%"
+  },
+  "escalation_triggers_breakdown": {
+    "Critical Electrical Hazard Audit (Corridor CBI: 100 >= 85.0)": 56,
+    "Truncated / Fragmented Text Signage": 21,
+    "High-Rise Commercial Structure (4 Floors, 14.0m) - Municipal Height Verification": 18,
+    "High-Rise Commercial Structure (5 Floors, 17.5m) - Municipal Height Verification": 9,
+    "Low OCR Confidence (0.39 < 0.5) - Suspected Multilingual Script": 7,
+    "Low OCR Confidence (0.27 < 0.5) - Suspected Multilingual Script": 7,
+    "Low OCR Confidence (0.26 < 0.5) - Suspected Multilingual Script": 6,
+    "Low OCR Confidence (0.34 < 0.5) - Suspected Multilingual Script": 5,
+    "Low OCR Confidence (0.36 < 0.5) - Suspected Multilingual Script": 5,
+    "Low OCR Confidence (0.31 < 0.5) - Suspected Multilingual Script": 5,
+    "Low OCR Confidence (0.45 < 0.5) - Suspected Multilingual Script": 5,
+    "Low OCR Confidence (0.28 < 0.5) - Suspected Multilingual Script": 5,
+    "Low OCR Confidence (0.43 < 0.5) - Suspected Multilingual Script": 4,
+    "Low OCR Confidence (0.33 < 0.5) - Suspected Multilingual Script": 4,
+    "Low OCR Confidence (0.29 < 0.5) - Suspected Multilingual Script": 4,
+    "Low OCR Confidence (0.35 < 0.5) - Suspected Multilingual Script": 4,
+    "Low OCR Confidence (0.47 < 0.5) - Suspected Multilingual Script": 3,
+    "Low OCR Confidence (0.38 < 0.5) - Suspected Multilingual Script": 3,
+    "Low OCR Confidence (0.32 < 0.5) - Suspected Multilingual Script": 3,
+    "Low OCR Confidence (0.49 < 0.5) - Suspected Multilingual Script": 3,
+    "Low OCR Confidence (0.41 < 0.5) - Suspected Multilingual Script": 3,
+    "Low OCR Confidence (0.46 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.37 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.48 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.50 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.25 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.42 < 0.5) - Suspected Multilingual Script": 2,
+    "Low OCR Confidence (0.44 < 0.5) - Suspected Multilingual Script": 1,
+    "Low OCR Confidence (0.30 < 0.5) - Suspected Multilingual Script": 1
+  },
+  "corridor_distribution": {
+    "ST01": {
+      "street_name": "Sathy Road (NH 948)",
+      "total_items": 71,
+      "tier1_fast_path": 59,
+      "tier2_escalated": 12,
+      "escalation_rate_pct": 16.9
+    },
+    "ST02": {
+      "street_name": "4th Street, Sridevi Nagar",
+      "total_items": 74,
+      "tier1_fast_path": 60,
+      "tier2_escalated": 14,
+      "escalation_rate_pct": 18.9
+    },
+    "ST03": {
+      "street_name": "Ganapathy Pudur 3rd Street",
+      "total_items": 69,
+      "tier1_fast_path": 47,
+      "tier2_escalated": 22,
+      "escalation_rate_pct": 31.9
+    },
+    "ST04": {
+      "street_name": "Gandhi Nagar Street",
+      "total_items": 72,
+      "tier1_fast_path": 64,
+      "tier2_escalated": 8,
+      "escalation_rate_pct": 11.1
+    },
+    "ST05": {
+      "street_name": "Gopalasamy Kovil Street",
+      "total_items": 76,
+      "tier1_fast_path": 56,
+      "tier2_escalated": 20,
+      "escalation_rate_pct": 26.3
+    },
+    "ST06": {
+      "street_name": "KRG Nagar - Kattabomman Street",
+      "total_items": 98,
+      "tier1_fast_path": 60,
+      "tier2_escalated": 38,
+      "escalation_rate_pct": 38.8
+    },
+    "ST07": {
+      "street_name": "PN Palayam Street",
+      "total_items": 66,
+      "tier1_fast_path": 60,
+      "tier2_escalated": 6,
+      "escalation_rate_pct": 9.1
+    },
+    "ST08": {
+      "street_name": "Raja Street - Sanganur Road",
+      "total_items": 160,
+      "tier1_fast_path": 98,
+      "tier2_escalated": 62,
+      "escalation_rate_pct": 38.8
+    },
+    "ST09": {
+      "street_name": "Sri Ganapathy Gardens 3rd Street",
+      "total_items": 36,
+      "tier1_fast_path": 35,
+      "tier2_escalated": 1,
+      "escalation_rate_pct": 2.8
+    },
+    "ST10": {
+      "street_name": "Ganapathy - Avarampalayam Road",
+      "total_items": 52,
+      "tier1_fast_path": 41,
+      "tier2_escalated": 11,
+      "escalation_rate_pct": 21.2
+    }
+  }
+}

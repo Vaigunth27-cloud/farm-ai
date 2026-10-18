@@ -1,0 +1,12 @@
+building
+electric_pole
+streetlight
+commercial_sign
+traffic_signal
+road_sign
+transformer
+drain
+sidewalk
+waste_bin
+bus_stop
+other_urban_asset
