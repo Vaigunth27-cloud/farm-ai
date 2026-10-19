@@ -1,0 +1,63 @@
+flowchart TD
+    subgraph Phase1["Phase 1: Street Scene Understanding via Vision-Language Model (VLM)"]
+        IMG["Raw Street View / Corridor Image<br/><i>(108 Curated Frames or Dashcam Video)</i>"]
+        VLM["Foundation Vision-Language Model (VLM)<br/><i>(e.g., Qwen2-VL / Florence-2 / PaliGemma / LLaVA)</i>"]
+        IMG --> VLM
+        
+        VLM_OUT["Open-Vocabulary Visual Reasoning & Parameter Discovery:<br/>- Identifies hidden/occluded utility assets<br/>- Discovers visual parameters: cable clutter, leaning angles, mounting styles<br/>- Extracts text semantics: shop names, regulatory signboards"]
+        VLM --> VLM_OUT
+    end
+
+    subgraph Phase2["Phase 2: LLM Reasoning & Structured Prior Generation"]
+        LLM["Large Language Model (LLM) Reasoning Engine<br/><i>(Llama-3 / Mistral / Qwen / Claude)</i>"]
+        VLM_OUT --> LLM
+        
+        PRIORS["Structured Detection Priors & Grounding Coordinates:<br/>1. Candidate BBoxes (Normalized coordinates [x, y, w, h])<br/>2. Disambiguated Class IDs (12 Urban Infrastructure Classes)<br/>3. Condition Parameters (Hazard flags, dark spot gaps, tax flags)<br/>4. Spatial Regions of Interest (ROI bounding guidance)"]
+        LLM --> PRIORS
+    end
+
+    subgraph Phase3["Phase 3: High-Quality Dataset Generation (Teacher-Student Distillation)"]
+        AUTO_LABELS["VLM-Generated Pseudo-Labels<br/><i>(YOLO format: class x_c y_c w h)</i>"]
+        PRIORS --> AUTO_LABELS
+        
+        CONF_GATE{"Confidence / Ambiguity Filter<br/>Does VLM agree with Spatial Rules?"}
+        AUTO_LABELS --> CONF_GATE
+        
+        CONF_GATE -- "Low Confidence / Conflicting" --> HUMAN_QA["Human-in-the-Loop QA Verification<br/><i>(Tri-View Studio Review & Rapid Box Adjustment)</i>"]
+        CONF_GATE -- "High Confidence" --> CLEAN_DATA["Verified & Enriched Urban Training Dataset<br/><i>(Corridor Stratified Splits: Train / Val / Test)</i>"]
+        HUMAN_QA --> CLEAN_DATA
+    end
+
+    subgraph Phase4["Phase 4: YOLO Fine-Tuning & Knowledge Transfer"]
+        YOLO_INIT["Base Ultralytics YOLO11 Model<br/><i>(yolo11n.pt / yolo11s.pt)</i>"]
+        CLEAN_DATA --> TRAIN_LOOP["YOLO11 Hyperparameter Fine-Tuning Loop<br/>- Trained on VLM-discovered utility features<br/>- Learns subtle cues: bracket mounts, concrete textures, cable nests<br/>- Epochs: 50-100, Imgsz: 640x640, Optimizer: AdamW/SGD"]
+        YOLO_INIT --> TRAIN_LOOP
+        
+        EVAL_VAL["Validation on Unseen Corridors (ST09 & ST10)<br/>- Evaluate mAP50, mAP50-95, Precision, Recall<br/>- Verify elimination of tree-vs-pole false positives"]
+        TRAIN_LOOP --> EVAL_VAL
+        
+        BEST_WEIGHTS["Production Fine-Tuned Weights<br/><i>(best.pt / best.onnx)</i>"]
+        EVAL_VAL --> BEST_WEIGHTS
+    end
+
+    subgraph Phase5["Phase 5: Real-Time Dual-Speed Hybrid Inference"]
+        NEW_IMAGE["Live Camera / Survey Feed"] --> FAST_YOLO["Fine-Tuned YOLO11 Edge Detector<br/><i>(Runs at 30-60 FPS / ~25ms on Edge Device)</i>"]
+        BEST_WEIGHTS --> FAST_YOLO
+        
+        EDGE_GATE{"Detection Confidence < 0.35<br/>or Complex Visual Edge Case?"}
+        FAST_YOLO --> EDGE_GATE
+        
+        EDGE_GATE -- "Routine Detections (High Conf)" --> ASSET_PASS["Direct Output: Urban Asset Passports & Municipal Ledgers"]
+        EDGE_GATE -- "Ambiguous Occlusion" --> VLM_ARBIT["Fallback to VLM/LLM for Deep Arbitration"]
+        VLM_ARBIT --> ASSET_PASS
+    end
+
+    style Phase1 fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Phase2 fill:#1C2541,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
+    style Phase3 fill:#0B132B,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
+    style Phase4 fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Phase5 fill:#0B132B,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
+    style CONF_GATE fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style EDGE_GATE fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style BEST_WEIGHTS fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style ASSET_PASS fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B

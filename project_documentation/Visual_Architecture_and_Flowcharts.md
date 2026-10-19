@@ -143,3 +143,19 @@ Both high-resolution PNG image files and editable Mermaid `.mmd` source files ar
 ![Deployment Architecture](diagrams/12_deployment_architecture.png)
 
 > **Architectural Description**: Displays the active local Windows runtime environment (Python 3.12, FastAPI on port 8000, Static web server on port 5500, local file stores) alongside the configured AWS Serverless cloud architecture (Terraform modules, S3 ingestion bucket, Lambda inference handler, and RDS PostGIS database).
+
+---
+
+## 13. VLM $\to$ LLM Guided YOLO Training & Distillation Flowchart (Diagram 13)
+
+**File Path**: [`diagrams/13_vlm_llm_guided_yolo_training.png`](file:///D:/farm%20ai/project_documentation/diagrams/13_vlm_llm_guided_yolo_training.png)  
+**Mermaid Source**: [`diagrams/13_vlm_llm_guided_yolo_training.mmd`](file:///D:/farm%20ai/project_documentation/diagrams/13_vlm_llm_guided_yolo_training.mmd)
+
+![VLM-LLM Guided YOLO Training and Distillation Flowchart](diagrams/13_vlm_llm_guided_yolo_training.png)
+
+> **Architectural Description**: Detailed 5-phase flowchart answering the examiner's architectural mandate:
+> 1. **Phase 1 (VLM Visual Understanding)**: Foundation Vision-Language Model (Qwen2-VL / Florence-2 / PaliGemma) conducts open-vocabulary reasoning across complex urban street imagery, discovering hidden utilities, cable nests, leaning angles, and signage semantics.
+> 2. **Phase 2 (LLM Reasoning & Structured Priors)**: High-level LLM parses multimodal observations into structured candidate bounding boxes, disambiguated class IDs, condition parameters, and region-of-interest (ROI) masks.
+> 3. **Phase 3 (Teacher-Student Distillation)**: Automated pseudo-label generator creates YOLO formatted labels with a confidence/ambiguity gating filter and human-in-the-loop QA via Tri-View Studio.
+> 4. **Phase 4 (YOLO Fine-Tuning & Training Loop)**: Base YOLO11 model is fine-tuned on the VLM-enriched ground truth, learning subtle urban features across 100 epochs, validated against unseen test corridors (ST09 & ST10).
+> 5. **Phase 5 (Dual-Speed Hybrid Production Inference)**: Lightweight fine-tuned YOLO11 runs at edge speed (30–60 FPS, ~25ms latency), falling back to the heavy VLM/LLM only on ambiguous visual edge cases.
