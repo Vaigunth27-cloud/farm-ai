@@ -1,41 +1,33 @@
 flowchart LR
-    subgraph Capture_Methods["Data Acquisition Modalities"]
-        subgraph Option_A["Option A: Search & Capture [IMPLEMENTED]"]
-            SRCH_INPUT["User enters Street / Landmark<br/>(e.g., 'Gopalasamy Kovil', 'Gandhi Nagar')"]
-            GEOCODE["Nominatim Geocoder API"]
-            MAP_VIEW["Leaflet Viewport centers on coordinates"]
-            STREET_VIEW["Interactive Street Panorama / Tile Canvas"]
-            CAP_BTN["CAPTURE CURRENT STREET VIEW Button"]
-            CANVAS_DUMP["HTML5 Canvas to Blob / Base64 DataURL"]
+    subgraph Option_A["Option A: Search & Capture [IMPLEMENTED]"]
+        SRCH_INPUT["User enters Street / Landmark<br/>(e.g., Gopalasamy Kovil, Gandhi Nagar)"]
+        GEOCODE["Nominatim Geocoder API"]
+        MAP_VIEW["Leaflet Viewport centers on coordinates"]
+        STREET_VIEW["Interactive Street Panorama / Tile Canvas"]
+        CAP_BTN["CAPTURE CURRENT STREET VIEW Button"]
+        CANVAS_DUMP["HTML5 Canvas to Blob / Base64 DataURL"]
 
-            SRCH_INPUT --> GEOCODE --> MAP_VIEW --> STREET_VIEW --> CAP_BTN --> CANVAS_DUMP
-        end
+        SRCH_INPUT --> GEOCODE --> MAP_VIEW --> STREET_VIEW --> CAP_BTN --> CANVAS_DUMP
+    end
 
-        subgraph Option_B["Option B: Direct Image Upload [IMPLEMENTED]"]
-            DROPZONE["Drag-and-Drop Dropzone or File Picker"]
-            QUEUE["Local Upload Queue & Thumbnail Previews"]
-            EXIF_PARSE["ExifRead Client/Server GPS Inspector"]
-            CORR_SELECT["Corridor Dropdown Assignment (ST01-ST10)"]
+    subgraph Option_B["Option B: Direct Image Upload [IMPLEMENTED]"]
+        DROPZONE["Drag-and-Drop Dropzone or File Picker"]
+        QUEUE["Local Upload Queue & Thumbnail Previews"]
+        EXIF_PARSE["ExifRead Client/Server GPS Inspector"]
+        CORR_SELECT["Corridor Dropdown Assignment (ST01-ST10)"]
 
-            DROPZONE --> QUEUE --> EXIF_PARSE --> CORR_SELECT
-        end
-
-        subgraph Existing_Archive["Curated Local Corridor Archive [IMPLEMENTED]"]
-            HIST_IMGS["108 Street Frames stored in:<br/>dashboard_redesign_prototype/assets/raw_frames/<br/>and RAW & ANNOTATED CORRIDOR IMAGERY/"]
-        end
+        DROPZONE --> QUEUE --> EXIF_PARSE --> CORR_SELECT
     end
 
     subgraph Unified_Payload["Normalized Ingestion Payload"]
-        PAYLOAD["Image Bytes (JPEG/PNG)<br/>+ Street Code (ST01-ST10)<br/>+ Latitude / Longitude (EXIF or Map Pin)<br/>+ Capture Timestamp<br/>+ Source Modality (A / B / Archive)"]
+        PAYLOAD["Image Bytes (JPEG/PNG)<br/>+ Street Code (ST01-ST10)<br/>+ Latitude / Longitude<br/>+ Capture Timestamp<br/>+ Source Modality"]
     end
 
     CANVAS_DUMP --> PAYLOAD
     CORR_SELECT --> PAYLOAD
-    HIST_IMGS --> PAYLOAD
 
     PAYLOAD --> API["HTTP POST /api/analyze-street<br/>(Shared Backend Analysis Engine)"]
 
     style Option_A fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
     style Option_B fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
-    style Existing_Archive fill:#0B132B,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
     style Unified_Payload fill:#1C2541,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF

@@ -20,19 +20,19 @@ graph TB
         COLAB_GPU["Cloud GPU Training Pods<br/><i>(Google Colab T4 / EC2 G4dn)</i>"]
     end
 
-    MUNI -->|Access Tax Audits & Infill Directives| DASHBOARD
-    UTIL -->|Review Feeder Work Orders| DASHBOARD
-    URBAN_PLANNER -->|Explore 3D Digital Twin & GIS Layers| DASHBOARD
-    SURVEYOR -->|Upload Dashcam & Street Photos| DASHBOARD
+    MUNI --> DASHBOARD
+    UTIL --> DASHBOARD
+    URBAN_PLANNER --> DASHBOARD
+    SURVEYOR --> DASHBOARD
 
-    DASHBOARD <-->|REST API / JSON / Multipart| API_GW
-    API_GW <-->|Tensor Inference & OCR Execution| AI_CORE
-    API_GW <-->|Query & Persist Asset Ledgers| GEO_STORE
-    DASHBOARD <-->|Load Base Tiles| MAP_TILES
-    DASHBOARD <-->|Search Place Coordinates| GEOCODING
+    DASHBOARD <--> API_GW
+    API_GW <--> AI_CORE
+    API_GW <--> GEO_STORE
+    DASHBOARD <--> MAP_TILES
+    DASHBOARD <--> GEOCODING
 
-    AI_CORE -.->|Model Checkpoints best.pt / best.onnx| COLAB_GPU
-    GEO_STORE -.->|Optional PostGIS Replication| AWS_CLOUD
+    AI_CORE -.-> COLAB_GPU
+    GEO_STORE -.-> AWS_CLOUD
 
     style Users fill:#0B132B,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
     style FarmwiseAI fill:#1C2541,stroke:#48E5C2,stroke-width:3px,color:#FFFFFF

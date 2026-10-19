@@ -2,29 +2,29 @@ flowchart TD
     DET["Image Detection Records<br/>(BBoxes, Class IDs, Image Coordinates)"]
     GEO["Camera Geolocation & Heading<br/>(Lat/Lon from EXIF or Map Pin)"]
     
-    DET --> PROJ[1. Coordinate Projection & Depth Estimation<br/><i>Estimate real-world coordinate from camera pose & box bottom-center</i>]
+    DET --> PROJ["1. Coordinate Projection & Depth Estimation<br/><i>Estimate real-world coordinate from camera pose</i>"]
     GEO --> PROJ
     
-    PROJ --> TOPO[2. Corridor Polyline Spatial Association<br/><i>Snap projected point to nearest corridor axis in road_network_topology.geojson</i>]
+    PROJ --> TOPO["2. Corridor Polyline Spatial Association<br/><i>Snap point to nearest corridor axis in road_network_topology.geojson</i>"]
     
-    TOPO --> DEDUP{3. Proximity Matching with<br/>Existing Real-World Assets<br/><i>(Distance delta < 5.0m & same class)</i>}
+    TOPO --> DEDUP{"3. Proximity Matching with Existing Real-World Assets<br/>(Distance delta < 5.0m & same class)"}
     
-    DEDUP -- Match Found (>= 0.85 Conf) --> MERGE[Merge Observation<br/>- Append new detection frame to asset history<br/>- Re-calculate weighted average coordinate<br/>- Increment observation counter]
+    DEDUP -- "Match Found (>= 0.85 Conf)" --> MERGE["Merge Observation<br/>- Append detection frame to history<br/>- Re-calculate weighted coordinate<br/>- Increment observation counter"]
     
-    DEDUP -- Match Ambiguous (2.0m - 8.0m) --> FLAG_QA[Flag as Uncertain Duplicate<br/>Send to Manual QA Queue for verification]
+    DEDUP -- "Match Ambiguous (2.0m - 8.0m)" --> FLAG_QA["Flag as Uncertain Duplicate<br/>Send to Manual QA Queue for verification"]
     
-    DEDUP -- No Match (Distance > 8.0m) --> NEW_ASSET[Register New Unique Real-World Asset<br/>Generate UID: e.g., 'AST-ST01-POLE-004']
+    DEDUP -- "No Match (Distance > 8.0m)" --> NEW_ASSET["Register New Unique Real-World Asset<br/>Generate UID: e.g., AST-ST01-POLE-004"]
     
-    MERGE --> UPDATE_REG[Update Master Asset Registry]
+    MERGE --> UPDATE_REG["Update Master Asset Registry"]
     FLAG_QA --> UPDATE_REG
     NEW_ASSET --> UPDATE_REG
     
-    UPDATE_REG --> PASS_GEN[4. Generate Asset Passport<br/><i>UID, Class, Street, GPS, Verified Status, Photo Evidence</i>]
+    UPDATE_REG --> PASS_GEN["4. Generate Asset Passport<br/><i>UID, Class, Street, GPS, Verified Status, Photo Evidence</i>"]
     
-    PASS_GEN --> GEOJSON_EXP[urban_assets_digital_twin.geojson]
-    PASS_GEN --> MUNI_TAX[CCMC Commercial Tax Assessment Ledger]
-    PASS_GEN --> MUNI_ELEC[TANGEDCO Electric Feeder Work Orders]
-    PASS_GEN --> MUNI_LIGHT[CCMC Streetlight Infill Directives]
+    PASS_GEN --> GEOJSON_EXP["urban_assets_digital_twin.geojson"]
+    PASS_GEN --> MUNI_TAX["CCMC Commercial Tax Assessment Ledger"]
+    PASS_GEN --> MUNI_ELEC["TANGEDCO Electric Feeder Work Orders"]
+    PASS_GEN --> MUNI_LIGHT["CCMC Streetlight Infill Directives"]
 
     style DEDUP fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B
     style NEW_ASSET fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B

@@ -20,15 +20,15 @@ graph TB
         POSTGIS["Amazon RDS PostgreSQL + PostGIS<br/>(Spatial Asset Database / Schema Seeded)"]
         EDGE["Edge Capture Daemon<br/>(edge_capture_daemon.py for IoT/Dashcam Ingestion)"]
 
-        TF -.->|Provisions| S3
-        TF -.->|Provisions| LAMBDA
-        TF -.->|Provisions| POSTGIS
-        EDGE -.->|Uploads Stream| S3
-        S3 -.->|Triggers S3 Event| LAMBDA
-        LAMBDA -.->|Queries & Inserts| POSTGIS
+        TF -.-> S3
+        TF -.-> LAMBDA
+        TF -.-> POSTGIS
+        EDGE -.-> S3
+        S3 -.-> LAMBDA
+        LAMBDA -.-> POSTGIS
     end
 
-    FASTAPI_SRV -.->|Optional Cloud Sync (migrate_to_postgis.py)| POSTGIS
+    FASTAPI_SRV -.->|"Optional Cloud Sync (migrate_to_postgis.py)"| POSTGIS
 
     style Local_Dev fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
     style AWS_Cloud fill:#1C2541,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF

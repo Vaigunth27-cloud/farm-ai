@@ -10,23 +10,23 @@ sequenceDiagram
     Note over Client,FastAPI: Execution Flow for Street Intelligence Analysis
     Client->>FastAPI: POST /api/analyze-street (file=image.png, street_code="ST01")
     FastAPI->>Validator: Validate content-type, file length, extract EXIF GPS
-    Validator-->>FastAPI: Validated PIL Image + GPS coords [11.0284, 76.9741]
+    Validator-->>FastAPI: Validated PIL Image + GPS coords
     
     FastAPI->>YOLO: model.predict(image, conf=0.25, imgsz=640)
-    YOLO-->>FastAPI: Boxes, Class IDs (building, pole, streetlight), Confidences
+    YOLO-->>FastAPI: Boxes, Class IDs, Confidences
     
     opt When commercial_sign is detected
         FastAPI->>OCR: reader.readtext(crop_image)
-        OCR-->>FastAPI: Extracted shop text (e.g. "Sri Krishna Medicals")
+        OCR-->>FastAPI: Extracted shop text
     end
     
     FastAPI->>Store: Generate Asset Passports & Correlate with Corridor ST01
     Store-->>FastAPI: Enriched Asset Records & Summary Counts
-    FastAPI-->>Client: HTTP 200 OK: {success: true, detections: [...], summary: {...}}
+    FastAPI-->>Client: HTTP 200 OK: success, detections, summary
 
     Note over Client,FastAPI: Execution Flow for Urban AI Agent Assistant
-    Client->>FastAPI: POST /api/chat {query: "How many streetlights need repair on Raja Street?"}
+    Client->>FastAPI: POST /api/chat (query="How many streetlights need repair?")
     FastAPI->>Store: Lookup corridor_intelligence_scorecard.csv & infill directives
-    Store-->>FastAPI: Matched records for ST08 (Raja Street)
+    Store-->>FastAPI: Matched records for ST08
     FastAPI->>FastAPI: Synthesize Contextual Answer with Evidence Citations
-    FastAPI-->>Client: HTTP 200 OK: {answer: "Raja Street (ST08) has 14 streetlights...", sources: [...]}
+    FastAPI-->>Client: HTTP 200 OK: answer, sources

@@ -1,32 +1,32 @@
 flowchart TD
-    START([Start: Image Ingestion]) --> RCV[Receive Street Image File or DataURL]
-    RCV --> VAL{Validate Image<br/>Format, Resolution, Non-Empty?}
+    START([Start: Image Ingestion]) --> RCV["Receive Street Image File or DataURL"]
+    RCV --> VAL{"Validate Image: Format, Resolution, Non-Empty?"}
     
-    VAL -- No / Corrupted --> ERR_IMG[Return HTTP 400: Invalid Image Payload] --> END_ERR([Abort])
-    VAL -- Yes --> PREPROC[Preprocess Image<br/>- Convert RGB<br/>- Extract EXIF GPS Lat/Lon<br/>- Downscale/Letterbox to 640x640]
+    VAL -- No / Corrupted --> ERR_IMG["Return HTTP 400: Invalid Image Payload"] --> END_ERR([Abort])
+    VAL -- Yes --> PREPROC["Preprocess Image:<br/>- Convert RGB<br/>- Extract EXIF GPS Lat/Lon<br/>- Downscale/Letterbox to 640x640"]
     
-    PREPROC --> INFER[Execute YOLO11 Model Inference<br/>Forward Pass on PyTorch / ONNX Runtime]
-    INFER --> RAW_BBOX[Extract Raw Bounding Boxes, Class IDs, Confidence Scores]
+    PREPROC --> INFER["Execute YOLO11 Model Inference<br/>Forward Pass on PyTorch / ONNX Runtime"]
+    INFER --> RAW_BBOX["Extract Raw Bounding Boxes, Class IDs, Confidence Scores"]
     
-    RAW_BBOX --> CONF_CHECK{Confidence Score >= tau?<br/><i>(Default tau = 0.25)</i>}
-    CONF_CHECK -- Below Threshold --> DROP[Filter out Low-Confidence Noise]
-    CONF_CHECK -- Above Threshold --> OCR_CHECK{Class is Commercial Sign<br/>or Infrastructure Label?}
+    RAW_BBOX --> CONF_CHECK{"Confidence Score >= tau?<br/>(Default tau = 0.25)"}
+    CONF_CHECK -- Below Threshold --> DROP["Filter out Low-Confidence Noise"]
+    CONF_CHECK -- Above Threshold --> OCR_CHECK{"Class is Commercial Sign or Label?"}
     
-    OCR_CHECK -- Yes --> RUN_OCR[Execute EasyOCR Text Extraction on Bounding Crop]
-    OCR_CHECK -- No --> PASS_DETECT[Retain Detection Record]
-    RUN_OCR --> ATTACH_TEXT[Attach Extracted Text String to Asset Attributes]
+    OCR_CHECK -- Yes --> RUN_OCR["Execute EasyOCR Text Extraction on Bounding Crop"]
+    OCR_CHECK -- No --> PASS_DETECT["Retain Detection Record"]
+    RUN_OCR --> ATTACH_TEXT["Attach Extracted Text String to Asset Attributes"]
     ATTACH_TEXT --> PASS_DETECT
     
-    PASS_DETECT --> SPATIAL_ASSOC[Associate GPS Coordinates with Nearest Corridor Polyline]
-    SPATIAL_ASSOC --> REVIEW_CHECK{Human QA Review<br/>Required?}
+    PASS_DETECT --> SPATIAL_ASSOC["Associate GPS Coordinates with Nearest Corridor Polyline"]
+    SPATIAL_ASSOC --> REVIEW_CHECK{"Human QA Review Required?"}
     
-    REVIEW_CHECK -- Yes (Low Conf / Flagged) --> MANUAL_REV[Display in Tri-View Studio<br/>User Accepts, Adjusts Box, or Re-classes]
-    REVIEW_CHECK -- No (High Confidence) --> AUTO_ACC[Auto-accept Detection]
-    MANUAL_REV --> GEN_REC[Generate Structured Asset Record<br/>UID, Class, Lat/Lon, Street Code, Timestamp]
+    REVIEW_CHECK -- "Yes (Low Conf / Flagged)" --> MANUAL_REV["Display in Tri-View Studio<br/>User Accepts, Adjusts Box, or Re-classes"]
+    REVIEW_CHECK -- "No (High Confidence)" --> AUTO_ACC["Auto-accept Detection"]
+    MANUAL_REV --> GEN_REC["Generate Structured Asset Record<br/>UID, Class, Lat/Lon, Street Code, Timestamp"]
     AUTO_ACC --> GEN_REC
     
-    GEN_REC --> PERSIST[(Save to detections.csv & Passports JSON)]
-    PERSIST --> RESP[Return JSON Response with BBoxes, Summary Metrics & Passport]
+    GEN_REC --> PERSIST[("Save to detections.csv & Passports JSON")]
+    PERSIST --> RESP["Return JSON Response with BBoxes, Summary Metrics & Passport"]
     RESP --> END_SUCCESS([End: Successful Asset Registration])
 
     style START fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B

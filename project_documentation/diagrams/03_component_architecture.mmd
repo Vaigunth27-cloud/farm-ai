@@ -47,9 +47,9 @@ graph LR
         YOLO_MGR -.-> IMG_ARCHIVE
     end
 
-    OPT_A_PAGE -->|HTTP POST Form/JSON| EP_ANALYZE
-    OPT_B_PAGE -->|HTTP POST Multipart/File| EP_ANALYZE
-    AGENT_MODAL -->|HTTP POST JSON Query| EP_CHAT
+    OPT_A_PAGE --> EP_ANALYZE
+    OPT_B_PAGE --> EP_ANALYZE
+    AGENT_MODAL --> EP_CHAT
 
     style Frontend_Presentation fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
     style Backend_Services fill:#1C2541,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
