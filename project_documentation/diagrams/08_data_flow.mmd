@@ -1,0 +1,47 @@
+flowchart LR
+    USER((User / Operator))
+    
+    subgraph Data_Stores["Data Storage Repositories"]
+        DS_RAW[(raw_frames/<br/>108 PNGs)]
+        DS_SPLITS[(dataset_splits/<br/>images & labels)]
+        DS_WEIGHTS[(prototype_model/<br/>best.pt, best.onnx)]
+        DS_GIS[(MASTER GIS DATASETS<br/>CSVs & JSONs)]
+        DS_GEOJSON[(road_network_topology<br/>.geojson)]
+        DS_REPORTS[(MUNICIPAL REPORTS<br/>CSVs & MDs)]
+    end
+
+    subgraph Processing_Nodes["Processing & Service Nodes"]
+        P1["UI Layer (Browser Client)"]
+        P2["FastAPI Server (urban_agent_server.py)"]
+        P3["YOLO11 Detection Engine"]
+        P4["EasyOCR Engine"]
+        P5["RAG Query Dispatcher"]
+        P6["Spatial Aggregator"]
+    end
+
+    USER -->|1. Upload Image / Place Query| P1
+    P1 -->|2. HTTP Request Multipart / JSON| P2
+    
+    P2 -->|3. Image Array| P3
+    DS_WEIGHTS -.->|Model Weights| P3
+    P3 -->|4. Bounding Boxes & Confidence| P2
+    
+    P2 -->|5. Sign Crops| P4
+    P4 -->|6. Extracted Text Strings| P2
+    
+    P2 -->|7. Raw Detections + Text + EXIF| P6
+    DS_GEOJSON -.->|Corridor Geometries| P6
+    P6 -->|8. Structured Passports & Summary| DS_GIS
+    P6 -->|9. Work Orders & Tax Ledgers| DS_REPORTS
+    
+    P1 -->|10. Natural Language Question| P2
+    P2 -->|11. Query String| P5
+    DS_GIS -.->|Contextual Data| P5
+    P5 -->|12. AI Answer & Evidence Sources| P1
+    
+    P6 -->|13. Formatted Analysis Report| P1
+    P1 -->|14. Interactive Visualizations & Exports| USER
+
+    style Data_Stores fill:#0B132B,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
+    style Processing_Nodes fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style USER fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B

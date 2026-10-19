@@ -1,0 +1,74 @@
+graph TB
+    subgraph Data_Acquisition["1. Data Acquisition Subsystem"]
+        IMG_SRC["Street Level Imagery Sources"]
+        IMG_SRC --> OPT_A["Option A: Place Search & Viewport Capture<br/><i>(MapLibre / Geocoding / Canvas Capture)</i> [IMPLEMENTED]"]
+        IMG_SRC --> OPT_B["Option B: Batch Image Upload<br/><i>(Drag & Drop / Multi-file / EXIF Parser)</i> [IMPLEMENTED]"]
+        IMG_SRC --> CAM_ARCH["Historical Dashcam / Corridor Archive<br/><i>(108 frames / 10 Corridors in Ward 29)</i> [IMPLEMENTED]"]
+    end
+
+    subgraph Preprocessing_Validation["2. Ingestion & Quality Control"]
+        VAL["Image Format & Integrity Validator [IMPLEMENTED]"]
+        EXIF["EXIF Metadata & GPS Coordinate Extractor [IMPLEMENTED]"]
+        NORM["Aspect Ratio Normalizer & Letterboxing [IMPLEMENTED]"]
+        OPT_A --> VAL
+        OPT_B --> VAL
+        CAM_ARCH --> VAL
+        VAL --> EXIF
+        VAL --> NORM
+    end
+
+    subgraph AI_Inference_Engine["3. AI Perception & Routing Engine"]
+        YOLO["YOLO11 Object Detector<br/><i>(yolo11n.pt / yolo11s.pt / best.pt)</i><br/>12 Urban Classes [IMPLEMENTED]"]
+        CONF_FILT["Dynamic Confidence Filter (tau >= 0.25) [IMPLEMENTED]"]
+        OCR["EasyOCR Commercial Signage Engine [IMPLEMENTED]"]
+        VLM_ROUTER["VLM Zero-Shot Agent Dispatcher [IMPLEMENTED]"]
+
+        NORM --> YOLO
+        YOLO --> CONF_FILT
+        NORM --> OCR
+        CONF_FILT --> VLM_ROUTER
+    end
+
+    subgraph Human_Verification["4. Human Verification & Active Learning"]
+        QA_REV["Tri-View Studio & QA Slider Review<br/><i>(Original vs Detection vs 3D)</i> [IMPLEMENTED]"]
+        LABEL_ADJ["Bounding Box & Class Correction [IN PROGRESS]"]
+        RETRAIN_SPLIT["Corridor-Based Split & Retraining Loop [IN PROGRESS]"]
+
+        CONF_FILT --> QA_REV
+        QA_REV --> LABEL_ADJ
+        LABEL_ADJ --> RETRAIN_SPLIT
+        RETRAIN_SPLIT -.->|Fine-tuned Weights| YOLO
+    end
+
+    subgraph Spatial_Association["5. Geospatial & Asset Passport Engine"]
+        SPATIAL_MATCH["Spatial Topology Association<br/><i>(Corridor Polyline & Cadastral Buffer)</i> [IMPLEMENTED]"]
+        DEDUP["Cross-Frame Asset Deduplication<br/><i>(Hungarian / Proximity Matching)</i> [PARTIALLY IMPLEMENTED]"]
+        PASSPORT["Urban Asset Passport Builder<br/><i>(Unique UID, Class, GPS, Condition)</i> [IMPLEMENTED]"]
+
+        CONF_FILT --> SPATIAL_MATCH
+        OCR --> SPATIAL_MATCH
+        EXIF --> SPATIAL_MATCH
+        SPATIAL_MATCH --> DEDUP
+        DEDUP --> PASSPORT
+    end
+
+    subgraph Presentation_Reporting["6. Dashboard, Analytics & Export"]
+        DASH["FarmwiseAI Master Digital Twin Portal [IMPLEMENTED]"]
+        AI_AGENT["Urban AI Intelligence Agent (RAG Chat) [IMPLEMENTED]"]
+        STUDIOS["Individual Specialized Studios [IMPLEMENTED]<br/><i>(Building, OCR, Tri-View, Corridor)</i>"]
+        MUNI_REPORTS["Municipal Audit Reports & Directives [IMPLEMENTED]<br/><i>(CCMC Tax Ledger, TANGEDCO Work Orders)</i>"]
+        EXPORTS["Structured Data Exports [IMPLEMENTED]<br/><i>(GeoJSON, CSV, JSON Asset Ledgers)</i>"]
+
+        PASSPORT --> DASH
+        PASSPORT --> AI_AGENT
+        PASSPORT --> STUDIOS
+        PASSPORT --> MUNI_REPORTS
+        MUNI_REPORTS --> EXPORTS
+    end
+
+    style Data_Acquisition fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Preprocessing_Validation fill:#1C2541,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
+    style AI_Inference_Engine fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Human_Verification fill:#1C2541,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
+    style Spatial_Association fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Presentation_Reporting fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF

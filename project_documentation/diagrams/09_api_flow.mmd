@@ -1,0 +1,32 @@
+sequenceDiagram
+    autonumber
+    actor Client as Browser Client (Option A / B / Chat)
+    participant FastAPI as FastAPI Router (urban_agent_server.py)
+    participant Validator as Payload & EXIF Validator
+    participant YOLO as Ultralytics YOLO Engine
+    participant OCR as EasyOCR Engine
+    participant Store as Master GIS / JSON Storage
+
+    Note over Client,FastAPI: Execution Flow for Street Intelligence Analysis
+    Client->>FastAPI: POST /api/analyze-street (file=image.png, street_code="ST01")
+    FastAPI->>Validator: Validate content-type, file length, extract EXIF GPS
+    Validator-->>FastAPI: Validated PIL Image + GPS coords [11.0284, 76.9741]
+    
+    FastAPI->>YOLO: model.predict(image, conf=0.25, imgsz=640)
+    YOLO-->>FastAPI: Boxes, Class IDs (building, pole, streetlight), Confidences
+    
+    opt When commercial_sign is detected
+        FastAPI->>OCR: reader.readtext(crop_image)
+        OCR-->>FastAPI: Extracted shop text (e.g. "Sri Krishna Medicals")
+    end
+    
+    FastAPI->>Store: Generate Asset Passports & Correlate with Corridor ST01
+    Store-->>FastAPI: Enriched Asset Records & Summary Counts
+    FastAPI-->>Client: HTTP 200 OK: {success: true, detections: [...], summary: {...}}
+
+    Note over Client,FastAPI: Execution Flow for Urban AI Agent Assistant
+    Client->>FastAPI: POST /api/chat {query: "How many streetlights need repair on Raja Street?"}
+    FastAPI->>Store: Lookup corridor_intelligence_scorecard.csv & infill directives
+    Store-->>FastAPI: Matched records for ST08 (Raja Street)
+    FastAPI->>FastAPI: Synthesize Contextual Answer with Evidence Citations
+    FastAPI-->>Client: HTTP 200 OK: {answer: "Raja Street (ST08) has 14 streetlights...", sources: [...]}

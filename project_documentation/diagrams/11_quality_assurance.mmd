@@ -1,0 +1,31 @@
+flowchart TD
+    INPUT[Input Image / Request] --> T1{Image File<br/>Corrupt or Empty?}
+    T1 -- Yes --> E1[<b>Handling [IMPLEMENTED]:</b><br/>Return HTTP 400 Bad Request with descriptive JSON error]
+    T1 -- No --> T2{Resolution / Quality<br/>Too Low or Blurry?}
+    
+    T2 -- Yes --> E2[<b>Handling [PROPOSED / QA]:</b><br/>Flag as 'Low Quality Frame', request operator re-capture]
+    T2 -- No --> T3{EXIF GPS Missing<br/>or Inaccurate?}
+    
+    T3 -- Yes --> E3[<b>Handling [IMPLEMENTED]:</b><br/>Fallback to manual corridor georeferencing or map pin coordinates]
+    T3 -- No --> T4{Detection Confidence<br/>tau < 0.25?}
+    
+    T4 -- Yes --> E4[<b>Handling [IMPLEMENTED]:</b><br/>Suppress low-confidence noise from automated reports]
+    T4 -- No --> T5{Class Classification<br/>Ambiguous / Disputed?}
+    
+    T5 -- Yes --> E5[<b>Handling [IMPLEMENTED IN STUDIOS]:</b><br/>Surface in Tri-View Studio slider for Human-in-the-Loop validation]
+    T5 -- No --> T6{Duplicate Observation<br/>Across Adjacent Frames?}
+    
+    T6 -- Yes --> E6[<b>Handling [PARTIALLY IMPLEMENTED]:</b><br/>Cluster within 5m buffer & merge into single unique asset passport]
+    T6 -- No --> T7{Backend Server / Model<br/>Offline or Failing?}
+    
+    T7 -- Yes --> E7[<b>Handling [IMPLEMENTED]:</b><br/>Display graceful frontend error toast & fallback to offline mock data]
+    T7 -- No --> SUCCESS[Generate Verified Asset Record & Update Ledgers]
+
+    style E1 fill:#E63946,stroke:#0B132B,stroke-width:2px,color:#FFFFFF
+    style E2 fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style E3 fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style E4 fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style E5 fill:#E0A96D,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style E6 fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style E7 fill:#E63946,stroke:#0B132B,stroke-width:2px,color:#FFFFFF
+    style SUCCESS fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B

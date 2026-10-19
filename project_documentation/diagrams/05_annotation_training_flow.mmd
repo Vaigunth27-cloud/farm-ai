@@ -1,0 +1,35 @@
+flowchart TD
+    A[1. Field Imagery Collection<br/><i>108 Raw Frames across 10 Corridors in Ward 29</i><br/><b>[COMPLETED]</b>] --> B[2. Metadata Auditing & Deduplication<br/><i>Corridor Assignment ST01 - ST10 & EXIF Verification</i><br/><b>[COMPLETED]</b>]
+    
+    B --> C[3. Define 12 Urban Asset Classes<br/><i>building, electric_pole, streetlight, commercial_sign,<br/>traffic_signal, road_sign, transformer, drain, sidewalk,<br/>waste_bin, bus_stop, other_urban_asset</i><br/><b>[COMPLETED]</b>]
+    
+    C --> D[4. Bounding Box Annotation<br/><i>Drawing ground-truth boxes in YOLO format (class x_c y_c w h)</i><br/><b>[ONGOING - Manual labeling of actual street photos]</b>]
+    
+    D --> E[5. Annotation Quality Review & Class Harmonization<br/><i>Verify consistency, remove overlapping duplicate boxes</i><br/><b>[IN PROGRESS]</b>]
+    
+    E --> F[6. Corridor-Stratified Dataset Split<br/><i>Train: 84 frames | Val: 18 frames | Test: 6 frames<br/>Zero data leakage across corridor boundaries</i><br/><b>[COMPLETED]</b>]
+    
+    F --> G[7. YOLO11 Model Training<br/><i>Epochs: 50-100, Imgsz: 640, Batch: 16, Optimizer: AdamW/SGD<br/>Runs on GPU: Google Colab T4 / Local PyTorch</i><br/><b>[IN PROGRESS / EXPERIMENTAL RUNS]</b>]
+    
+    G --> H[8. Model Validation & Metric Logging<br/><i>Evaluate mAP50, mAP50-95, Precision, Recall, Confusion Matrix<br/>Logged in runs/detect/val-1 to val-34</i><br/><b>[COMPLETED FOR PROTOTYPE RUNS]</b>]
+    
+    H --> I{Accuracy & Generalization<br/>Meets Target Criteria?<br/><i>(mAP50 >= 0.70 on unseen streets)</i>}
+    
+    I -- No (Errors, Confusions, Missing Poles) --> J[9. Error Analysis & Active Feedback<br/><i>Identify false positives, hard negatives, occlusions</i><br/><b>[ONGOING]</b>]
+    J --> D
+    
+    I -- Yes --> K[10. Export Best Production Weights<br/><i>best.pt (PyTorch) & best.onnx (Optimized Inference)</i><br/><b>[COMPLETED FOR PROTOTYPE]</b>]
+    
+    K --> L[11. Deploy into FastAPI Backend Service<br/><i>Integrated into /api/analyze-street endpoint</i><br/><b>[COMPLETED]</b>]
+
+    style A fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style B fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style C fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style D fill:#0B132B,stroke:#E0A96D,stroke-width:3px,color:#FFFFFF
+    style E fill:#0B132B,stroke:#E0A96D,stroke-width:3px,color:#FFFFFF
+    style F fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style G fill:#0B132B,stroke:#E0A96D,stroke-width:3px,color:#FFFFFF
+    style H fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style J fill:#0B132B,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
+    style K fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style L fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF

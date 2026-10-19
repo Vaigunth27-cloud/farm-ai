@@ -1,0 +1,48 @@
+flowchart TD
+    START([Open Application: index.html]) --> VIEW_SELECT{Choose Workflow<br/>from Left Navigation}
+    
+    VIEW_SELECT -->|Option A| OPT_A_FLOW[1. Find a Place & Capture Street View]
+    VIEW_SELECT -->|Option B| OPT_B_FLOW[2. Upload Street Images & Analyze]
+    VIEW_SELECT -->|AI Agent| CHAT_FLOW[3. Urban AI Agent Assistant]
+    VIEW_SELECT -->|GIS Studios| STUDIO_FLOW[4. Specialized Standalone Studios]
+    
+    subgraph Flow_A["Option A Execution"]
+        OPT_A_FLOW --> A_INPUT[Enter street name or landmark in search field]
+        A_INPUT --> A_LOCATE[Locate on Leaflet map viewport]
+        A_LOCATE --> A_NAV[Navigate street-level imagery panorama]
+        A_NAV --> A_CAP[Click 'CAPTURE CURRENT STREET VIEW']
+        A_CAP --> A_PREV[Review captured snapshot preview]
+        A_PREV --> A_RUN[Click 'PROCEED WITH AI ANALYSIS']
+    end
+    
+    subgraph Flow_B["Option B Execution"]
+        OPT_B_FLOW --> B_DROP[Drag & drop street images into upload zone]
+        B_DROP --> B_QUEUE[Inspect queued files, thumbnail previews & metadata]
+        B_QUEUE --> B_CORR[Assign corridor identifier ST01-ST10]
+        B_CORR --> B_RUN[Click 'START STREET INTELLIGENCE ANALYSIS']
+    end
+    
+    A_RUN --> BACKEND_CALL[Send to /api/analyze-street backend]
+    B_RUN --> BACKEND_CALL
+    
+    BACKEND_CALL --> RESULTS_VIEW[5. Inspect Analysis Dashboard]
+    RESULTS_VIEW --> RES_BBOX[Examine annotated image with bounding box overlays]
+    RESULTS_VIEW --> RES_METRICS[Review asset counts: buildings, poles, lights, signs]
+    RESULTS_VIEW --> RES_PASS[Inspect generated Urban Asset Passports]
+    
+    subgraph Flow_Chat["Interactive Chat & Exports"]
+        CHAT_FLOW --> C_ASK[Ask questions about ward infrastructure, taxes, defects]
+        C_ASK --> C_ANS[Review AI response with municipal ledger citations]
+        
+        STUDIO_FLOW --> S_EXPLORE[Explore Tri-View, Building Footprints, OCR Index]
+        
+        RESULTS_VIEW --> EXPORT_DATA[Click 'EXPORT DATASET' -> Download GeoJSON / CSV]
+    end
+
+    EXPORT_DATA --> FINISH([End: Operational Action Taken])
+
+    style START fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style FINISH fill:#48E5C2,stroke:#0B132B,stroke-width:2px,color:#0B132B
+    style Flow_A fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Flow_B fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Flow_Chat fill:#0B132B,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF

@@ -1,0 +1,57 @@
+graph LR
+    subgraph Frontend_Presentation["Frontend Layer (HTML5 / Vanilla ES6 / CSS3)"]
+        MASTER_PORTAL["urban_digital_twin_portal.html<br/><i>(Master Unified Hub)</i>"]
+        PROTO_APP["dashboard_redesign_prototype/index.html<br/><i>(Modern Redesign)</i>"]
+        OPT_A_PAGE["Option A: Find & Capture Street View"]
+        OPT_B_PAGE["Option B: Upload Street Images & Analyze"]
+        AGENT_MODAL["Urban AI Agent Floating Interface"]
+        STUDIOS_GROUP["Standalone Studios:<br/>- tri_view_studio.html<br/>- ocr_search_explorer.html<br/>- building_explorer.html<br/>- gis_digital_twin_baseline.html"]
+
+        PROTO_APP --> OPT_A_PAGE
+        PROTO_APP --> OPT_B_PAGE
+        PROTO_APP --> AGENT_MODAL
+        MASTER_PORTAL -.-> STUDIOS_GROUP
+    end
+
+    subgraph Backend_Services["Backend Layer (FastAPI / Uvicorn Server)"]
+        SRV["urban_agent_server.py<br/><i>(FastAPI App Instance)</i>"]
+        EP_HEALTH["GET /health<br/><i>(System & Model Diagnostics)</i>"]
+        EP_ANALYZE["POST /api/analyze-street<br/><i>(YOLO Detection & Metadata Ingestion)</i>"]
+        EP_CHAT["POST /api/chat<br/><i>(Contextual Urban RAG Q&A)</i>"]
+
+        SRV --> EP_HEALTH
+        SRV --> EP_ANALYZE
+        SRV --> EP_CHAT
+    end
+
+    subgraph Model_Inference["AI Inference Core"]
+        YOLO_MGR["Ultralytics YOLO Engine<br/><i>(Loads yolo11s.pt / prototype best.pt)</i>"]
+        OCR_MGR["EasyOCR Pipeline<br/><i>(Tamil + English Character Extraction)</i>"]
+        EXIF_MGR["ExifRead Geolocation Extractor"]
+        RAG_MGR["Urban Intelligence RAG Engine<br/><i>(Rule-based dispatch & knowledge lookup)</i>"]
+
+        EP_ANALYZE --> YOLO_MGR
+        EP_ANALYZE --> OCR_MGR
+        EP_ANALYZE --> EXIF_MGR
+        EP_CHAT --> RAG_MGR
+    end
+
+    subgraph Data_Repository["Data & Storage Repositories"]
+        GIS_STORE["MASTER GIS & TABULAR DATASETS<br/><i>(building_intelligence.csv, detections.csv,<br/>corridor_intelligence_scorecard.csv)</i>"]
+        GEOJSON_STORE["road_network_topology.geojson<br/>urban_assets_digital_twin.geojson"]
+        IMG_ARCHIVE["raw_frames/ (108 corridor images)<br/>runs/detect/ (Training validation runs)"]
+
+        EP_ANALYZE --> GIS_STORE
+        RAG_MGR --> GIS_STORE
+        RAG_MGR --> GEOJSON_STORE
+        YOLO_MGR -.-> IMG_ARCHIVE
+    end
+
+    OPT_A_PAGE -->|HTTP POST Form/JSON| EP_ANALYZE
+    OPT_B_PAGE -->|HTTP POST Multipart/File| EP_ANALYZE
+    AGENT_MODAL -->|HTTP POST JSON Query| EP_CHAT
+
+    style Frontend_Presentation fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style Backend_Services fill:#1C2541,stroke:#3A506B,stroke-width:2px,color:#FFFFFF
+    style Model_Inference fill:#0B132B,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
+    style Data_Repository fill:#1C2541,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF

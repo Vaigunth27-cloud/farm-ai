@@ -1,0 +1,34 @@
+graph TB
+    subgraph Local_Dev["Local Production / Development Environment [VERIFIED ACTIVE]"]
+        WIN["Host Machine: Windows OS (D:\farm ai)"]
+        PYTHON_RT["Python 3.12 Runtime"]
+        FASTAPI_SRV["FastAPI Backend (Uvicorn on 127.0.0.1:8000)"]
+        STATIC_SRV["Static Web Server / Direct Browser Client (Port 5500 / 8080)"]
+        LOCAL_STORAGE["Local File System:<br/>- 108 Raw Corridor PNGs<br/>- PyTorch Weights (yolo11s.pt, best.pt)<br/>- GeoJSON Layers & CSV Ledgers"]
+
+        WIN --> PYTHON_RT
+        PYTHON_RT --> FASTAPI_SRV
+        WIN --> STATIC_SRV
+        FASTAPI_SRV <--> LOCAL_STORAGE
+        STATIC_SRV <--> LOCAL_STORAGE
+    end
+
+    subgraph AWS_Cloud["AWS Serverless Architecture [CONFIGURED IN TERRAFORM / SCRIPTS]"]
+        TF["Terraform IaC Configurations<br/>(main.tf, variables.tf)"]
+        S3["Amazon S3 Bucket<br/>(Urban Street Imagery Archive)"]
+        LAMBDA["AWS Lambda Serverless Handler<br/>(lambda_function.py / Container Image)"]
+        POSTGIS["Amazon RDS PostgreSQL + PostGIS<br/>(Spatial Asset Database / Schema Seeded)"]
+        EDGE["Edge Capture Daemon<br/>(edge_capture_daemon.py for IoT/Dashcam Ingestion)"]
+
+        TF -.->|Provisions| S3
+        TF -.->|Provisions| LAMBDA
+        TF -.->|Provisions| POSTGIS
+        EDGE -.->|Uploads Stream| S3
+        S3 -.->|Triggers S3 Event| LAMBDA
+        LAMBDA -.->|Queries & Inserts| POSTGIS
+    end
+
+    FASTAPI_SRV -.->|Optional Cloud Sync (migrate_to_postgis.py)| POSTGIS
+
+    style Local_Dev fill:#0B132B,stroke:#48E5C2,stroke-width:2px,color:#FFFFFF
+    style AWS_Cloud fill:#1C2541,stroke:#E0A96D,stroke-width:2px,color:#FFFFFF
